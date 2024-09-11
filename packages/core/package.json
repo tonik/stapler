@@ -8,8 +8,7 @@
     "dev": "tsc -w"
   },
   "dependencies": {
-    "fs-extra": "^11.2.0",
-    "@create-tonik-app/templates": "workspace:*"
+    "fs-extra": "^11.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
