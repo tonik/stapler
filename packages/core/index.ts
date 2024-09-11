@@ -17,17 +17,18 @@ export async function createProject(options: ProjectOptions) {
 
   if (useInngest) {
     console.log('Adding Inngest...');
-    process.chdir(projectName);
-    execSync('npm install inngest', { stdio: 'inherit' });
+//     process.chdir(projectName);
+//     execSync('npm install inngest', { stdio: 'inherit' });
     
-    // Add Inngest setup code
-    const inngestSetup = `
-import { Inngest } from 'inngest';
+//     // Add Inngest setup code
+//     const inngestSetup = `
+// import { Inngest } from 'inngest';
 
-export const inngest = new Inngest({ name: 'My App' });
-    `;
-    fs.writeFileSync(path.join(process.cwd(), 'src', 'inngest.ts'), inngestSetup);
-  }
+// export const inngest = new Inngest({ name: 'My App' });
+//     `;
+//     fs.writeFileSync(path.join(process.cwd(), 'src', 'inngest.ts'), inngestSetup);
+    }
+
 
   console.log('Your awesome app is ready!');
 }

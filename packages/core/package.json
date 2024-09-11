@@ -1,5 +1,5 @@
 {
-  "name": "@create-awesome-app/core",
+  "name": "@create-tonik-app/core",
   "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "fs-extra": "^11.2.0",
-    "@create-awesome-app/templates": "workspace:*"
+    "@create-tonik-app/templates": "workspace:*"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

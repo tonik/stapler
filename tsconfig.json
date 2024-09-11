@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "target": "ES2018",
+      "module": "CommonJS",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "declaration": true,
+      "lib": ["ES2018"],
+      "types": [],
+      "noImplicitAny": true,
+    },
+    "exclude": ["node_modules", "dist"],
+    "references": [
+      { "path": "./packages/cli" },
+      { "path": "./packages/core" }
+    ]
+  }

@@ -1,14 +1,17 @@
 {
-  "name": "@create-awesome-app/cli",
+  "name": "@create-tonik-app/cli",
   "version": "0.1.0",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "create-tonik-app": "./dist/index.js"
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsup index.ts --out-dir dist --format esm,cjs --dts",
     "dev": "tsc -w"
   },
   "dependencies": {
-    "@create-awesome-app/core": "workspace:*",
+    "@create-tonik-app/core": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "inquirer": "^10.2.2"
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.5.4",
+    "tsup": "^8.2.4",
     "typescript": "^5.6.2"
   }
 }
