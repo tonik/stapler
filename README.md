@@ -31,5 +31,5 @@ create-tonik-app create
 Or you can do it in one simple command!
 
 ```
-pnpm install && pnpm build && cd packages/cli && npm link && create-tonik-app create
+pnpm clean && pnpm install && pnpm build && cd packages/cli && npm link && cd ../../ && mkdir -p project_template && cd project_template && create-tonik-app create
 ```
