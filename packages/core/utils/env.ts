@@ -3,10 +3,16 @@ import * as path from 'path';
 
 // Define required and optional env variables
 const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
+  NEXT_PUBLIC_SUPABASE_URL:"required",
+  NEXT_PUBLIC_SUPABASE_ANON_KEY:"required",
   SUPABASE_URL: "required",
   SUPABASE_ANON_KEY: "required",
-  INNGEST_API_KEY: "required",
-  INNGEST_API_SECRET: "optional",
+  SUPABASE_JWT_SECRET:"required",
+  SUPABASE_SERVICE_ROLE_KEY:"required",
+  POSTGRES_URL:"required",
+  PAYLOAD_SECRET:"required",
+  // INNGEST_API_KEY: "required",
+  // INNGEST_API_SECRET: "optional",
 };
 
 // Path to the .env file
