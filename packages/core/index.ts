@@ -11,13 +11,8 @@ interface ProjectOptions {
 export async function createProject(options: ProjectOptions) {
   const { projectName, useInngest } = options;
 
-<<<<<<< Updated upstream
   console.log('Creating your tonik-infused app...');
 
-=======
-  console.log('Creating your awesome app...');
-  createEnvFile();
->>>>>>> Stashed changes
   // Create T3 app
   execSync(`npx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`, { stdio: 'inherit' });
 
@@ -35,10 +30,6 @@ export async function createProject(options: ProjectOptions) {
 //     fs.writeFileSync(path.join(process.cwd(), 'src', 'inngest.ts'), inngestSetup);
     }
 
-<<<<<<< Updated upstream
 
   console.log('Your tonik-infused app is ready!');
-=======
-  console.log('Your awesome app is ready!');
->>>>>>> Stashed changes
 }
