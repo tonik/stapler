@@ -1,6 +1,4 @@
 import { execSync } from 'child_process';
-import fs from 'fs-extra';
-import path from 'path';
 import { createEnvFile } from './utils/env';
 
 interface ProjectOptions {
@@ -12,7 +10,7 @@ export async function createProject(options: ProjectOptions) {
   const { projectName, useInngest } = options;
 
   console.log('Creating your tonik-infused app...');
-
+  createEnvFile();  
   // Create T3 app
   execSync(`npx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`, { stdio: 'inherit' });
 
