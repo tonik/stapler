@@ -1,10 +1,10 @@
 {
   "name": "@create-tonik-app/cli",
   "version": "0.1.0",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
-    "create-tonik-app": "./dist/index.js"
+    "create-tonik-app": "./dist/index.mjs"
   },
   "scripts": {
     "build": "tsup index.ts --out-dir dist --format esm --dts",
