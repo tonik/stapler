@@ -18,14 +18,14 @@ const asciiArt = `
 
 function displayHeader() {
   console.log(chalk.hex("#3100F5").bold(asciiArt));
-  console.log(chalk.bold("\nWelcome to Create Awesome App!\n"));
+  console.log(chalk.bold("\nWelcome to Create Tonik App!\n"));
 }
 
 const program = new Command();
 
 program
   .name("create-tonik-app")
-  .description("CLI to bootstrap a new awesome app")
+  .description("CLI to bootstrap a new tonik-infused app")
   .version("0.1.0")
   .hook("preAction", () => {
     displayHeader();
@@ -33,14 +33,14 @@ program
 
 program
   .command("create")
-  .description("Create a new awesome app")
+  .description("Create a new tonik-infused app")
   .action(async () => {
     const answers = await inquirer.prompt([
       {
         type: "input",
         name: "projectName",
         message: "What is your project named?",
-        default: "my-awesome-app",
+        default: "my-tonik-app",
       },
       {
         type: "confirm",

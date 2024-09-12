@@ -10,7 +10,7 @@ interface ProjectOptions {
 export async function createProject(options: ProjectOptions) {
   const { projectName, useInngest } = options;
 
-  console.log('Creating your awesome app...');
+  console.log('Creating your tonik-infused app...');
 
   // Create T3 app
   execSync(`npx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`, { stdio: 'inherit' });
@@ -30,5 +30,5 @@ export async function createProject(options: ProjectOptions) {
     }
 
 
-  console.log('Your awesome app is ready!');
+  console.log('Your tonik-infused app is ready!');
 }
