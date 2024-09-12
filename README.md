@@ -33,3 +33,14 @@ Or you can do it in one simple command!
 ```
 pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../project_template/ && create-tonik-app create
 ```
+
+## MVP Checklist
+
+- [ ] Sync env variables with turbo after initalization
+- [ ] Discover a way of packages installation to recreate the boring-stack project
+- [ ] Include:
+    - [ ] Turbo env variables
+    - [ ] Establish our tooling packages with shared pnpm catalog workspec, this will include: 
+          eslint, prettier, tailwind.
+    - [] Supabase integration with authentication and payload cms working
+
