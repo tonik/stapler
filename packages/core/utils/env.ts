@@ -38,7 +38,6 @@ export const createEnvFile = () => {
 
   fs.writeFileSync(envPath, envTemplate);
   console.log('Please fill in the env values in the .env file.');
-  process.exit(0);
 };
 
 // Function to check if all required values are present in the .env file
@@ -66,7 +65,6 @@ const checkEnvValues = () => {
   if (missingEnvVariables.length > 0) {
     console.log(`Missing values for: ${missingEnvVariables.join(', ')}`);
     console.log('Please update your .env file.');
-    process.exit(1);
   } else {
     console.log('.env file is properly configured! 🎉');
   }
