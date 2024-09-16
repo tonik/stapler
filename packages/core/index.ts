@@ -19,7 +19,10 @@ export async function createProject(options: ProjectOptions) {
   execSync(`pnpm up next@15.0.0-canary.156 react@rc react-dom@rc eslint-config-next@rc`, { stdio: 'inherit' });
   execSync(`pnpm dlx create-payload-app@beta`)
   process.chdir('../..');
-  execSync(`pnpm install @supabase/supabase-js`, { stdio: 'inherit' });
+  // make supabase directory and install supabase
+  execSync(`mkdir -p supabase`);
+  process.chdir('supabase');
+  execSync(`pnpm add @supabase/supabase-js`, { stdio: 'inherit' });
 
   if (useInngest) {
     console.log('Adding Inngest...');
