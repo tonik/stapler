@@ -53,7 +53,7 @@ export async function createProject(options: ProjectOptions) {
   // make supabase directory and install supabase
   console.log('Adding Supabase...');
   addSupabaseToWorkspace()
-  execSync(`mkdir supabase && cd supabase && pnpm init -y`, { stdio: 'inherit' });
+  execSync(`mkdir supabase && cd supabase && pnpm init`, { stdio: 'inherit' });
   console.log('Installing supabase-js...');
    execSync(`pnpm add @supabase/supabase-js`, { stdio: 'inherit' });
 
