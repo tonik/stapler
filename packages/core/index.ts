@@ -21,7 +21,9 @@ export async function createProject(options: ProjectOptions) {
   process.chdir('../..');
   // make supabase directory and install supabase
   execSync(`mkdir -p supabase`);
+  console.log('Adding Supabase...');
   process.chdir('supabase');
+  console.log('Installing supabase-js...');
   execSync(`pnpm add @supabase/supabase-js`, { stdio: 'inherit' });
 
   if (useInngest) {
