@@ -17,7 +17,7 @@ export async function createProject(options: ProjectOptions) {
   process.chdir('apps');
   process.chdir('web');
   execSync(`pnpm up next@15.0.0-canary.156 react@rc react-dom@rc eslint-config-next@rc`, { stdio: 'inherit' });
-  execSync(`dlx create-payload-app@beta`)
+  execSync(`pnpm dlx create-payload-app@beta`)
   process.chdir('../../..');
   execSync(`pnpm install @supabase/supabase-js`, { stdio: 'inherit' });
 
