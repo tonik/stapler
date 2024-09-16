@@ -20,7 +20,7 @@ export async function createProject(options: ProjectOptions) {
   execSync(`pnpm dlx create-payload-app@beta`)
   process.chdir('../..');
   // make supabase directory and install supabase
-  execSync(`mkdir -p supabase`);
+  execSync(`pnpm init -w supabase`);
   console.log('Adding Supabase...');
   process.chdir('supabase');
   console.log('Installing supabase-js...');
