@@ -1,36 +1,5 @@
 import { execSync } from 'child_process';
 import { createEnvFile } from './utils/env';
-import fs from 'fs';
-import path from 'path';
-
-const addSupabaseToWorkspace = (): void => {
-  const workspaceFilePath: string = path.join(process.cwd(), 'pnpm-workspace.yaml');
-
-  // Check if the pnpm-workspace.yaml file exists
-  if (!fs.existsSync(workspaceFilePath)) {
-    console.error('Error: pnpm-workspace.yaml not found!');
-    return;
-  }
-
-  // Read the content of the pnpm-workspace.yaml file
-  const workspaceContent: string = fs.readFileSync(workspaceFilePath, 'utf-8');
-
-  // Check if 'packages/supabase/*' is already in the workspace file
-  if (workspaceContent.includes('packages/supabase/*')) {
-    console.log('Supabase already exists in pnpm-workspace.yaml');
-    return;
-  }
-
-  // Modify the workspace file content by appending the 'packages/supabase/*' line
-  const updatedContent: string = workspaceContent.replace(/packages:\s*\[[^\]]+\]/, (match: string) => {
-    const updatedPackages: string = match.replace(/\]$/, `  - 'packages/supabase/*'\n]`);
-    return updatedPackages;
-  });
-
-  // Write the updated content back to the pnpm-workspace.yaml file
-  fs.writeFileSync(workspaceFilePath, updatedContent, 'utf-8');
-  console.log('Added packages/supabase/* to pnpm-workspace.yaml');
-}
 
 interface ProjectOptions {
   projectName: string;
@@ -52,10 +21,9 @@ export async function createProject(options: ProjectOptions) {
   process.chdir('../..');
   // make supabase directory and install supabase
   console.log('Adding Supabase...');
-  addSupabaseToWorkspace()
   execSync(`mkdir supabase && cd supabase && pnpm init`, { stdio: 'inherit' });
   console.log('Installing supabase-js...');
-   execSync(`pnpm add @supabase/supabase-js`, { stdio: 'inherit' });
+   execSync(`pnpm add -w @supabase/supabase-js`, { stdio: 'inherit' });
 
   if (useInngest) {
     console.log('Adding Inngest...');
