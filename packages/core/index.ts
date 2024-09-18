@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
-import { createEnvFile } from './utils/env';
-
+import path from 'path';
+import { createEnvFile } from './utils/env/env';
+import nodePlop from 'node-plop';
 interface ProjectOptions {
   projectName: string;
   useInngest: boolean;
@@ -10,35 +11,25 @@ export async function createProject(options: ProjectOptions) {
   const { projectName, useInngest } = options;
 
   createEnvFile();  
-  console.log('Creating your tonik-infused app...');
+  console.log('Creating your Stapler...');
   // Create T3 app
-  execSync(`npx create-turbo@latest ${projectName}`, { stdio: 'inherit' });
+  execSync(`npx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`, { stdio: 'inherit' });
   process.chdir(projectName);
-  process.chdir('apps');
-  process.chdir('web');
-  execSync(`pnpm up next@15.0.0-canary.156 react@rc react-dom@rc eslint-config-next@rc`, { stdio: 'inherit' });
-  execSync(`pnpm dlx create-payload-app@beta`)
-  process.chdir('../..');
+  // update next js to 15 beta and react to react rc
+  console.log('Updating Next.js to 15 beta and React to 18 rc...');
+  execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc`, { stdio: 'inherit' });
+  // install payload to next
+  console.log('Installing payload to Next.js...');
+  execSync(`npx create-payload-app@beta`, { stdio: 'inherit' });
   // make supabase directory and install supabase
-  console.log('Adding Supabase...');
-  execSync(`mkdir supabase && cd supabase && pnpm init`, { stdio: 'inherit' });
   console.log('Installing supabase-js...');
-   execSync(`pnpm add -w @supabase/supabase-js`, { stdio: 'inherit' });
+  execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
+   // Run Plop for Supabase files
+   console.log('Adding Supabase Files...');
+   const plop = await nodePlop(path.join(__dirname, 'plopfile.js')); // Adjust path if necessary
+   const supabaseGenerator = plop.getGenerator('installSupabase');
+   const answers = {};
+   await supabaseGenerator.runActions(answers);
 
-  if (useInngest) {
-    console.log('Adding Inngest...');
-//     process.chdir(projectName);
-//     execSync('npm install inngest', { stdio: 'inherit' });
-    
-//     // Add Inngest setup code
-//     const inngestSetup = `
-// import { Inngest } from 'inngest';
-
-// export const inngest = new Inngest({ name: 'My App' });
-//     `;
-//     fs.writeFileSync(path.join(process.cwd(), 'src', 'inngest.ts'), inngestSetup);
-    }
-
-
-  console.log('Your tonik-infused app is ready!');
+  console.log(`Your Stapled ${projectName !== "." ? projectName : ''} app is ready!`);
 }

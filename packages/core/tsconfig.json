@@ -8,4 +8,6 @@
       "rootDir": ".",
       "composite": true
     },
+    "include": ["utils/**/*.ts", "index.ts"],
+    "exclude": ["node_modules", "dist", "templates/supabase/**/*"],
   }
