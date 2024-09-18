@@ -9,10 +9,21 @@ interface ProjectOptions {
 export async function createProject(options: ProjectOptions) {
   const { projectName, useInngest } = options;
 
-  console.log('Creating your tonik-infused app...');
   createEnvFile();  
+  console.log('Creating your tonik-infused app...');
   // Create T3 app
-  execSync(`npx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`, { stdio: 'inherit' });
+  execSync(`npx create-turbo@latest ${projectName}`, { stdio: 'inherit' });
+  process.chdir(projectName);
+  process.chdir('apps');
+  process.chdir('web');
+  execSync(`pnpm up next@15.0.0-canary.156 react@rc react-dom@rc eslint-config-next@rc`, { stdio: 'inherit' });
+  execSync(`pnpm dlx create-payload-app@beta`)
+  process.chdir('../..');
+  // make supabase directory and install supabase
+  console.log('Adding Supabase...');
+  execSync(`mkdir supabase && cd supabase && pnpm init`, { stdio: 'inherit' });
+  console.log('Installing supabase-js...');
+   execSync(`pnpm add -w @supabase/supabase-js`, { stdio: 'inherit' });
 
   if (useInngest) {
     console.log('Adding Inngest...');

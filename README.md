@@ -42,5 +42,5 @@ pnpm install && pnpm build --no-cache && mkdir -p project_template && cd package
     - [ ] Turbo env variables
     - [ ] Establish our tooling packages with shared pnpm catalog workspec, this will include: 
           eslint, prettier, tailwind.
-    - [] Supabase integration with authentication and payload cms working
+    - [ ] Supabase integration with authentication and payload cms working
 
