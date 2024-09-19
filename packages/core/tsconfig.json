@@ -1,11 +1,15 @@
 {
-    "compilerOptions": {
-      "target": "ES2018",
-      "module": "CommonJS",
-      "strict": true,
-      "esModuleInterop": true,
-      "outDir": "./dist",
-      "rootDir": ".",
-      "composite": true
-    },
-  }
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "composite": true,
+    "declaration": true,          // Ensure TypeScript generates declaration files
+    "emitDeclarationOnly": true   // Only emit declaration files without compiling the code
+  },
+  "include": ["index.ts", "utils/**/*.ts", "templates/supabase/installConfig.ts"],
+  "exclude": ["node_modules", "dist", "templates/supabase/files/**/*"]
+}
