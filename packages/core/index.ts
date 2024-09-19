@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
-import path from 'path';
 import { createEnvFile } from './utils/env/env';
-import nodePlop from 'node-plop';
+import { templateGenerator } from './utils/generator/generator';
+import { supabaseFiles } from './templates/supabase/installConfig';
 interface ProjectOptions {
   projectName: string;
   useInngest: boolean;
@@ -26,10 +26,8 @@ export async function createProject(options: ProjectOptions) {
   execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
    // Run Plop for Supabase files
    console.log('Adding Supabase Files...');
-   const plop = await nodePlop(path.join(__dirname, 'plopfile.js')); // Adjust path if necessary
-   const supabaseGenerator = plop.getGenerator('installSupabase');
-   const answers = {};
-   await supabaseGenerator.runActions(answers);
+   const projectDirectory = process.cwd();
+   templateGenerator(supabaseFiles, projectDirectory)
 
   console.log(`Your Stapled ${projectName !== "." ? projectName : ''} app is ready!`);
 }

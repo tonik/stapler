@@ -1,4 +1,4 @@
-export const supabase = [
+export const supabaseFiles = [
     {
         path: 'supabase',
         files: [
