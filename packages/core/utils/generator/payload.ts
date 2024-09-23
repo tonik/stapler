@@ -16,20 +16,23 @@ export const preparePayload = (template: string) => {
     stdio: "inherit",
   });
 
+  console.log("Moving files to (app) directory...");
   if (template === "create-turbo") {
-    process.chdir("apps/web/app");
+    execSync(
+      `mkdir -p ./apps/web/app/\(app\) && find . -maxdepth 1 -exec mv {} ./apps/web/app/\(app\)/ \;)`,
+      {
+        stdio: "inherit",
+      }
+    );
   }
   if (template === "create-t3-app") {
-    process.chdir("src/app");
+    execSync(
+      `mkdir -p ./src/app/\(app\) && find . -maxdepth 1 -exec mv {} ./src/app/\(app\)/ \;)`,
+      {
+        stdio: "inherit",
+      }
+    );
   }
-
-  console.log("Moving files to (app) directory...");
-  execSync(
-    `mkdir -p \(app\) && find . -maxdepth 1 -exec mv {} ./\(app\)/ \;)`,
-    {
-      stdio: "inherit",
-    }
-  );
 
   console.log("Payload installed!");
 };
