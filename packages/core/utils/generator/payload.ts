@@ -1,9 +1,6 @@
 import { execSync } from "child_process";
 
-export const preparePayload = (template: string) => {
-  console.log("Installing payload to Next.js...");
-  execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
-
+const updatePackages = () => {
   console.log(
     "Updating Next and React to their respective release candidates..."
   );
@@ -15,9 +12,13 @@ export const preparePayload = (template: string) => {
   execSync(`pnpm up pg`, {
     stdio: "inherit",
   });
+};
 
+export const preparePayload = (template: string) => {
   console.log("Moving files to (app) directory...");
   if (template === "create-turbo") {
+    process.chdir("./apps/web/");
+    updatePackages();
     execSync(
       `mkdir -p ./apps/web/app/\(app\) && find . -maxdepth 1 -exec mv {} ./apps/web/app/\(app\)/ \;)`,
       {
@@ -26,6 +27,8 @@ export const preparePayload = (template: string) => {
     );
   }
   if (template === "create-t3-app") {
+    process.chdir("./src/");
+    updatePackages();
     execSync(
       `mkdir -p ./src/app/\(app\) && find . -maxdepth 1 -exec mv {} ./src/app/\(app\)/ \;)`,
       {
@@ -33,6 +36,9 @@ export const preparePayload = (template: string) => {
       }
     );
   }
+
+  console.log("Installing Payload to Next.js...");
+  execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
 
   console.log("Payload installed!");
 };
