@@ -43,6 +43,21 @@ program
         default: "my-tonik-app",
       },
       {
+        type: "list",
+        name: "createTemplate",
+        message: "Select the project structure you want to use",
+        choices: [
+          {
+            name: "create-turbo",
+            value: "create-turbo",
+          },
+          {
+            name: "create-t3-app",
+            value: "create-t3-app",
+          },
+        ],
+      },
+      {
         type: "confirm",
         name: "useInngest",
         message: "Would you like to add Inngest to your app?",
