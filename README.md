@@ -31,7 +31,7 @@ create-tonik-app create
 Or you can do it in one simple command!
 
 ```
-pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../project_template/ && create-tonik-app create
+pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../project_template/
 ```
 
 ## MVP Checklist
