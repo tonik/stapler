@@ -14,7 +14,7 @@ export async function createProject(options: ProjectOptions) {
   createEnvFile();
   console.log("Creating your Stapler...");
   // Create T3 app
-  execSync(`pnpm dlx create-t3-turbo@latest ${projectName}`, {
+  execSync(`pnpm dlx create-turbo@latest ${projectName}`, {
     stdio: "inherit",
   });
   process.chdir(projectName);
