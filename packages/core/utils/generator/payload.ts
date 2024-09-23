@@ -35,5 +35,9 @@ export const preparePayload = (template: string) => {
   console.log("Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
 
+  // TODO: change tsconfig to include the following:
+  // "compilerOptions"."plugins"."paths": {"@payload-config": ["./payload.config.ts"]}
+  // and change dev script from:
+  // "dev": "next dev --turbo" to "dev": "next dev",
   console.log("Payload installed!");
 };
