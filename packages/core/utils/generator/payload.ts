@@ -24,13 +24,13 @@ export const preparePayload = (template: string) => {
     updatePackages();
   }
 
+  console.log("Moving files to (app) directory...");
   execSync(
-    `mkdir -p "./app/\(app\)" && find ./app -maxdepth 1 -exec mv {} "./app/\(app\)/" \;`,
+    `mkdir -p ./app/\(app\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\(app\)' -exec mv {} ./app/\(app\)/ \;`,
     {
       stdio: "inherit",
     }
   );
-  console.log("Moving files to (app) directory...");
 
   console.log("Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
