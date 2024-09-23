@@ -40,6 +40,6 @@ export async function createProject(options: ProjectOptions) {
   //  templateGenerator(supabaseFiles, projectDirectory)
 
   console.log(
-    `Your Stapled ${projectName !== "." ? projectName : ""} app is ready!`
+    `Your Stapled ${projectName !== "." ? projectName : "app"} is ready!`
   );
 }
