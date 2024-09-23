@@ -29,10 +29,12 @@ export async function createProject(options: ProjectOptions) {
       stdio: "inherit",
     });
   }
+  console.log("Changing directory...");
   process.chdir(projectName);
+  console.log("Done changing directory...?");
   // preparePayload(createTemplate);
   // make supabase directory and install supabase
-  console.log("Installing supabase-js...");
+  // console.log("Installing supabase-js...");
   // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
   // Run Plop for Supabase files
   //  console.log('Adding Supabase Files...');
