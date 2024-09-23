@@ -15,27 +15,22 @@ const updatePackages = () => {
 };
 
 export const preparePayload = (template: string) => {
-  console.log("Moving files to (app) directory...");
   if (template === "create-turbo") {
     process.chdir("./apps/web/");
     updatePackages();
-    execSync(
-      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;`,
-      {
-        stdio: "inherit",
-      }
-    );
   }
   if (template === "create-t3-app") {
     process.chdir("./src/");
     updatePackages();
-    execSync(
-      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;`,
-      {
-        stdio: "inherit",
-      }
-    );
   }
+
+  execSync(
+    `mkdir -p ./app/\(app\) && find ./app -maxdepth 1-exec mv {} ./app/\(app\)/ \;`,
+    {
+      stdio: "inherit",
+    }
+  );
+  console.log("Moving files to (app) directory...");
 
   console.log("Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
