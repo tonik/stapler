@@ -30,7 +30,7 @@ export async function createProject(options: ProjectOptions) {
     });
   }
   process.chdir(projectName);
-  preparePayload(createTemplate);
+  // preparePayload(createTemplate);
   // make supabase directory and install supabase
   console.log("Installing supabase-js...");
   // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
