@@ -38,13 +38,13 @@ program
     const answers = await inquirer.prompt([
       {
         type: "input",
-        name: "projectName",
+        name: "name",
         message: "What is your project named?",
         default: "my-tonik-app",
       },
       {
         type: "list",
-        name: "createTemplate",
+        name: "template",
         message: "Select the project structure you want to use",
         choices: [
           {

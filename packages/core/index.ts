@@ -4,34 +4,35 @@ import { templateGenerator } from "./utils/generator/generator";
 import { supabaseFiles } from "./templates/supabase/installConfig";
 import { preparePayload } from "./utils/generator/payload";
 interface ProjectOptions {
-  projectName: string;
+  name: string;
+  template: `create-turbo` | `create-t3-app`;
   useInngest: boolean;
-  createTemplate: `create-turbo` | `create-t3-app`;
 }
 
-// pnpm dlx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres
+// pnpm dlx create-t3-app@latest ${name} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres
 
 export async function createProject(options: ProjectOptions) {
-  const { projectName, useInngest, createTemplate } = options;
+  const { name, useInngest, template } = options;
 
   createEnvFile();
   console.log("Creating your Stapler...");
-  if (createTemplate === "create-t3-app") {
+  if (template === "create-t3-app") {
     execSync(
-      `pnpm dlx create-t3-app@latest ${projectName} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`,
+      `pnpm dlx create-t3-app@latest ${name} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`,
       {
         stdio: "inherit",
       }
     );
   }
-  if (createTemplate === "create-turbo") {
-    execSync(`pnpm dlx create-turbo@latest ${projectName}`, {
+  if (template === "create-turbo") {
+    execSync(`pnpm dlx create-turbo@latest ${name}`, {
       stdio: "inherit",
     });
   }
-  process.chdir(projectName);
-  // preparePayload(createTemplate);
-  // make supabase directory and install supabase
+  process.chdir(name);
+
+  preparePayload(template);
+
   // console.log("Installing supabase-js...");
   // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
   // Run Plop for Supabase files
@@ -39,7 +40,5 @@ export async function createProject(options: ProjectOptions) {
   //  const projectDirectory = process.cwd();
   //  templateGenerator(supabaseFiles, projectDirectory)
 
-  console.log(
-    `Your Stapled ${projectName === "." ? "app" : projectName} is ready!`
-  );
+  console.log(`Your Stapled ${name === "." ? "app" : name} is ready!`);
 }
