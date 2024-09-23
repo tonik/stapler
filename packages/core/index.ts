@@ -15,7 +15,7 @@ export async function createProject(options: ProjectOptions) {
   const { name, useInngest, template } = options;
 
   createEnvFile();
-  console.log("Creating your Stapler...");
+  console.log("🍸 Creating your Stapler...");
   if (template === "create-t3-app") {
     execSync(
       `pnpm dlx create-t3-app@latest ${name} --CI --noGit --noInstall --appRouter --trpc --drizzle --nextAuth false --tailwind --dbProvider postgres`,
@@ -33,12 +33,12 @@ export async function createProject(options: ProjectOptions) {
 
   preparePayload(template);
 
-  // console.log("Installing supabase-js...");
+  // console.log("🍸 Installing supabase-js...");
   // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
   // Run Plop for Supabase files
-  //  console.log('Adding Supabase Files...');
+  //  console.log('🍸 Adding Supabase Files...');
   //  const projectDirectory = process.cwd();
   //  templateGenerator(supabaseFiles, projectDirectory)
 
-  console.log(`Your Stapled ${name === "." ? "app" : name} is ready!`);
+  console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }

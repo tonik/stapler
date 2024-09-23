@@ -2,13 +2,13 @@ import { execSync } from "child_process";
 
 const updatePackages = () => {
   console.log(
-    "Updating Next and React to their respective release candidates..."
+    "🍸 Updating Next and React to their respective release candidates..."
   );
   execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc`, {
     stdio: "inherit",
   });
 
-  console.log("Installing necessary packages...");
+  console.log("🍸 Installing necessary packages...");
   execSync(`pnpm up pg`, {
     stdio: "inherit",
   });
@@ -24,7 +24,7 @@ export const preparePayload = (template: string) => {
     updatePackages();
   }
 
-  console.log("Moving files to (app) directory...");
+  console.log("🍸 Moving files to (app) directory...");
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
@@ -32,12 +32,12 @@ export const preparePayload = (template: string) => {
     }
   );
 
-  console.log("Installing Payload to Next.js...");
+  console.log("🍸 Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
 
   // TODO: change tsconfig to include the following:
   // "compilerOptions"."plugins"."paths": {"@payload-config": ["./payload.config.ts"]}
   // and change dev script from:
   // "dev": "next dev --turbo" to "dev": "next dev",
-  console.log("Payload installed!");
+  console.log("🍸 Payload installed!");
 };

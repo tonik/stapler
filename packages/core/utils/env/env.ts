@@ -21,10 +21,10 @@ const envPath = path.resolve(process.cwd(), '.env');
 // Function to check if .env file exists
 const checkEnvFile = () => {
   if (!fs.existsSync(envPath)) {
-    console.log('.env file does not exist, creating one...');
+    console.log('🍸 .env file does not exist, creating one...');
     createEnvFile();
   } else {
-    console.log('.env file exists, checking values...');
+    console.log('🍸 .env file exists, checking values...');
     checkEnvValues();
   }
 };
@@ -37,7 +37,7 @@ export const createEnvFile = () => {
   }
 
   fs.writeFileSync(envPath, envTemplate);
-  console.log('Please fill in the env values in the .env file.');
+  console.log('🍸 Please fill in the env values in the .env file.');
 };
 
 // Function to check if all required values are present in the .env file
@@ -63,10 +63,10 @@ const checkEnvValues = () => {
   }
 
   if (missingEnvVariables.length > 0) {
-    console.log(`Missing values for: ${missingEnvVariables.join(', ')}`);
-    console.log('Please update your .env file.');
+    console.log(`🍸 Missing values for: ${missingEnvVariables.join(', ')}`);
+    console.log('🍸 Please update your .env file.');
   } else {
-    console.log('.env file is properly configured! 🎉');
+    console.log('🍸 .env file is properly configured! 🎉');
   }
 };
 
