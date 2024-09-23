@@ -20,7 +20,7 @@ export const preparePayload = (template: string) => {
     process.chdir("./apps/web/");
     updatePackages();
     execSync(
-      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;)`,
+      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;`,
       {
         stdio: "inherit",
       }
@@ -30,7 +30,7 @@ export const preparePayload = (template: string) => {
     process.chdir("./src/");
     updatePackages();
     execSync(
-      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;)`,
+      `mkdir -p ./app/\(app\) && find . -maxdepth 1 -exec mv {} ./app/\(app\)/ \;`,
       {
         stdio: "inherit",
       }
