@@ -26,7 +26,7 @@ export const preparePayload = (template: string) => {
 
   console.log("Moving files to (app) directory...");
   execSync(
-    `mkdir -p ./app/\(app\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\(app\)' -exec mv {} ./app/\(app\)/ \;`,
+    `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
       stdio: "inherit",
     }
