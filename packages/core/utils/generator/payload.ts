@@ -19,4 +19,14 @@ export const preparePayload = (createTemplate: string) => {
   if (createTemplate === "create-t3-app") {
     process.chdir("src/app");
   }
+
+  console.log("Moving files to (app) directory...");
+  execSync(
+    `mkdir -p \(app\) && find . -maxdepth 1 -exec mv {} ./\(app\)/ \;)`,
+    {
+      stdio: "inherit",
+    }
+  );
+
+  console.log("Payload installed!");
 };

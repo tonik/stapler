@@ -22,16 +22,16 @@ cd packages/cli
 npm link
 ```
 
+Or you can do it in one simple command!
+
+```
+pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../
+```
+
 Then you can run the following command to create a new project in desired directory on your local machine:
 
 ```
 create-tonik-app create
-```
-
-Or you can do it in one simple command!
-
-```
-pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../project_template/
 ```
 
 ## MVP Checklist
@@ -39,8 +39,7 @@ pnpm install && pnpm build --no-cache && mkdir -p project_template && cd package
 - [ ] Sync env variables with turbo after initalization
 - [ ] Discover a way of packages installation to recreate the boring-stack project
 - [ ] Include:
-    - [ ] Turbo env variables
-    - [ ] Establish our tooling packages with shared pnpm catalog workspec, this will include: 
-          eslint, prettier, tailwind.
-    - [ ] Supabase integration with authentication and payload cms working
-
+  - [ ] Turbo env variables
+  - [ ] Establish our tooling packages with shared pnpm catalog workspec, this will include:
+        eslint, prettier, tailwind.
+  - [ ] Supabase integration with authentication and payload cms working

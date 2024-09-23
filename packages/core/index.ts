@@ -29,9 +29,7 @@ export async function createProject(options: ProjectOptions) {
       stdio: "inherit",
     });
   }
-  console.log("Changing directory...");
   process.chdir(projectName);
-  console.log("Done changing directory...?");
   // preparePayload(createTemplate);
   // make supabase directory and install supabase
   // console.log("Installing supabase-js...");
@@ -42,6 +40,6 @@ export async function createProject(options: ProjectOptions) {
   //  templateGenerator(supabaseFiles, projectDirectory)
 
   console.log(
-    `Your Stapled ${projectName !== "." ? projectName : "app"} is ready!`
+    `Your Stapled ${projectName === "." ? "app" : projectName} is ready!`
   );
 }
