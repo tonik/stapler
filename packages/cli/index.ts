@@ -38,9 +38,24 @@ program
     const answers = await inquirer.prompt([
       {
         type: "input",
-        name: "projectName",
+        name: "name",
         message: "What is your project named?",
         default: "my-tonik-app",
+      },
+      {
+        type: "list",
+        name: "template",
+        message: "Select the project structure you want to use",
+        choices: [
+          {
+            name: "create-turbo",
+            value: "create-turbo",
+          },
+          {
+            name: "create-t3-app",
+            value: "create-t3-app",
+          },
+        ],
       },
       {
         type: "confirm",
