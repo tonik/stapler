@@ -1,24 +1,17 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { join } from "path";
-import { removeTurboFlag } from "../removeTurboFlag";
-
-const updatePackages = () => {
-  console.log(
-    "🍸 Updating Next and React to their respective release candidates..."
-  );
-  execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc`, {
-    stdio: "inherit",
-  });
-
-  console.log("🍸 Installing necessary packages...");
-  execSync(`pnpm up pg`, {
-    stdio: "inherit",
-  });
-};
+import { removeTurboFlag } from "./removeTurboFlag";
+import { prepareTsConfig } from "./prepareTsConfig";
+import { updatePackages } from "./updatePackages";
 
 export const preparePayload = () => {
+  console.log("🍸 Initializing Payload...");
+
   process.chdir("./apps/web/");
+
+  prepareTsConfig();
+
   updatePackages();
 
   // Payload doesn't work with Turbopack yet
@@ -39,9 +32,7 @@ export const preparePayload = () => {
 
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");
-  if (existsSync(payloadConfigPath)) {
-    console.log("🍸 Payload installed successfully!");
-  } else {
+  if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
   }
 };
