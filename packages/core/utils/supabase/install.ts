@@ -11,6 +11,7 @@ export const installSupabase = () => {
 
   // Correctly set the template directory
   const templateDirectory = path.join(__dirname, '../../templates/supabase/files');
-  templateGenerator(supabaseFiles, templateDirectory);
+  const destinationDirectory = process.cwd();
+  templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
   console.log(`🍸 Supabase installed successfully!`)
 };

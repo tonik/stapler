@@ -11,12 +11,12 @@ interface TemplateFilesObject {
 }
 export type Template = TemplateFilesObject[];
 
-export const templateGenerator = (template: Template, templateDir: string) => {
+export const templateGenerator = (template: Template, templateDir: string, destinationDir: string) => {
   template.forEach((templateFilesObject) => {
     templateFilesObject.files.forEach((file) => {
       // Construct source and destination paths
       const source = path.join(templateDir, templateFilesObject.path, file);
-      const destination = path.join(process.cwd(), templateFilesObject.path, file);
+      const destination = path.join(destinationDir, templateFilesObject.path, file);
       fs.copyFileSync(source, destination);
 
       // Handle file renaming if needed
