@@ -19,13 +19,10 @@ export async function createProject(options: ProjectOptions) {
   });
 
   process.chdir(name);
+  preparePayload();
 
   const currentDir = process.cwd();
-  console.log(`🍸 Current directory...${currentDir}`);
-  const templateDirectory = path.join(currentDir, "templates");
-  
-  preparePayload();
-  installSupabase(templateDirectory, currentDir);
+  installSupabase(currentDir);
 
   console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }
