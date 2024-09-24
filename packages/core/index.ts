@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { createEnvFile } from "./utils/env/env";
 import { preparePayload } from "./utils/payload/install";
+import { installSupabase } from "./utils/supabase/install";
 interface ProjectOptions {
   name: string;
   useInngest: boolean;
@@ -19,7 +20,7 @@ export async function createProject(options: ProjectOptions) {
   process.chdir(name);
 
   preparePayload();
-
+  installSupabase();
   // console.log("🍸 Installing supabase-js...");
   // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
   // Run Plop for Supabase files
