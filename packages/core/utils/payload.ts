@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { join } from "path";
+import { removeTurboFlag } from "./removeTurboFlag";
 
 const updatePackages = () => {
   console.log(
@@ -19,6 +20,9 @@ const updatePackages = () => {
 export const preparePayload = () => {
   process.chdir("./apps/web/");
   updatePackages();
+
+  // Payload doesn't work with Turbopack yet
+  removeTurboFlag();
 
   console.log("🍸 Moving files to (app) directory...");
   execSync(

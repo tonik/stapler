@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
 import { createEnvFile } from "./utils/env/env";
 import { preparePayload } from "./utils/payload";
-import { removeTurboFlag } from "./utils/removeTurboFlag";
 interface ProjectOptions {
   name: string;
   useInngest: boolean;
@@ -18,8 +17,6 @@ export async function createProject(options: ProjectOptions) {
   });
 
   process.chdir(name);
-
-  removeTurboFlag();
 
   preparePayload();
 

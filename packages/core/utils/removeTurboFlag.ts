@@ -30,7 +30,7 @@ export const removeTurboFlag = () => {
         if (err) {
           console.error("Error writing to package.json", err);
         } else {
-          console.log("Successfully removed --turbo flag from dev script!");
+          console.log("🍸 Successfully removed --turbo flag from dev script!");
         }
       }
     );
