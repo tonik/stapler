@@ -1,7 +1,7 @@
 {
   "name": "@create-tonik-app/core",
   "version": "0.1.0",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
   "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format cjs",
