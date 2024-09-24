@@ -4,7 +4,7 @@ import { supabaseFiles } from "../../templates/supabase/installConfig";
 
 export const installSupabase = () => {
     console.log("🍸 Installing supabase-js...");
-    execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
+    execSync(`pnpm install @supabase/supabase-js`, { stdio: 'inherit' });
     console.log('🍸 Adding Supabase Files...');
     execSync(`supabase init`, { stdio: 'inherit' });
     const projectDirectory = process.cwd();
