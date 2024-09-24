@@ -16,15 +16,9 @@ const updatePackages = () => {
   });
 };
 
-export const preparePayload = (template: string) => {
-  if (template === "create-turbo") {
-    process.chdir("./apps/web/");
-    updatePackages();
-  }
-  if (template === "create-t3-app") {
-    process.chdir("./src/");
-    updatePackages();
-  }
+export const preparePayload = () => {
+  process.chdir("./apps/web/");
+  updatePackages();
 
   console.log("🍸 Moving files to (app) directory...");
   execSync(
