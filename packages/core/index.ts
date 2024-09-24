@@ -21,12 +21,6 @@ export async function createProject(options: ProjectOptions) {
 
   preparePayload();
   installSupabase();
-  // console.log("🍸 Installing supabase-js...");
-  // execSync(`npm install @supabase/supabase-js`, { stdio: 'inherit' });
-  // Run Plop for Supabase files
-  //  console.log('🍸 Adding Supabase Files...');
-  //  const projectDirectory = process.cwd();
-  //  templateGenerator(supabaseFiles, projectDirectory)
 
   console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }
