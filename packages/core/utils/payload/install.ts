@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { join } from "path";
-import { removeTurboFlag } from "./removeTurboFlag";
+import { removeTurboFlag } from "../removeTurboFlag";
 
 const updatePackages = () => {
   console.log(
@@ -36,8 +36,6 @@ export const preparePayload = () => {
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
   // TODO: change tsconfig to include the following:
   // "compilerOptions"."plugins"."paths": {"@payload-config": ["./payload.config.ts"]}
-  // and change dev script from:
-  // "dev": "next dev --turbo" to "dev": "next dev",
 
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");

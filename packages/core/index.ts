@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import { createEnvFile } from "./utils/env/env";
-import { preparePayload } from "./utils/payload";
+import { preparePayload } from "./utils/payload/install";
 interface ProjectOptions {
   name: string;
   useInngest: boolean;
