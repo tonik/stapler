@@ -6,7 +6,7 @@ import path from 'path';
 export const installSupabase = (destinationDirectory: string) => {
   console.log("🍸 Installing supabase-js...");
   // install with pnpm with workspace support/flag
-  execSync(`pnpm install -w @supabase/supabase-js`, { stdio: 'inherit' });
+  execSync(`pnpm install -w @supabase/supabase-js @supabase/ssr`, { stdio: 'inherit' });
   console.log('🍸 Adding Supabase Files...');
   execSync(`supabase init`, { stdio: 'inherit' });
 
