@@ -1,11 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-export const preparePayloadConfig = () => {
+export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
   console.log("🍸 Preparing payload.config.ts...");
-
-  // Path to your payload.config.ts file
-  const configPath = path.join(process.cwd(), "payload.config.ts");
 
   // Read the payload.config.ts file
   fs.readFile(configPath, "utf8", (err, data) => {

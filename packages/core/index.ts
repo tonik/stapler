@@ -15,7 +15,7 @@ export async function createProject(options: ProjectOptions) {
   createEnvFile();
   console.log("🍸 Creating your Stapler...");
 
-  execSync(`pnpm dlx create-turbo@latest ${name}`, {
+  execSync(`pnpm dlx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
   });
 

@@ -36,7 +36,7 @@ export const preparePayload = () => {
   if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
   } else {
-    preparePayloadConfig();
+    preparePayloadConfig(payloadConfigPath);
   }
   // get back to the root directory
   process.chdir("../../");
