@@ -5,10 +5,14 @@ import path from "path";
 
 export const installSupabase = (destinationDirectory: string) => {
   console.log("🍸 Installing supabase-js...");  // create supabase
-  execSync(`supabase init`, { stdio: "inherit" });
-  process.chdir("supabase");
+  const supabaseDir = path.join(destinationDirectory, "supabase");
+  execSync(`supabase init`, { cwd: supabaseDir, stdio: "inherit" });
+  execSync(`rm -rf ${supabaseDir}/.git`, { stdio: "inherit" });
+  console.log("🍸 Installing Supabase dependencies...");
+
   // install with pnpm with workspace support/flag
-  execSync(`pnpm install -w @supabase/supabase-js @supabase/ssr`, {
+  execSync(`pnpm install @supabase/supabase-js @supabase/ssr`, {
+    cwd: supabaseDir,
     stdio: "inherit",
   });
   console.log("🍸 Adding Supabase Files...");
