@@ -2,15 +2,15 @@ import { execSync } from "child_process";
 import { templateGenerator } from "../generator/generator";
 import { supabaseFiles } from "../../templates/supabase/installConfig";
 import path from "path";
+import { dir } from "console";
 
 export const installSupabase = (destinationDirectory: string) => {
   console.log("🍸 Installing supabase-js...");  // create supabase
   const supabaseDir = path.join(destinationDirectory, "supabase");
   execSync(`supabase init`, { cwd: supabaseDir, stdio: "inherit" });
-  execSync(`rm -rf ${supabaseDir}/.git`, { stdio: "inherit" });
+  process.chdir(supabaseDir);
+  execSync('pnpm init -y');
   console.log("🍸 Installing Supabase dependencies...");
-
-  // install with pnpm with workspace support/flag
   execSync(`pnpm install @supabase/supabase-js @supabase/ssr`, {
     cwd: supabaseDir,
     stdio: "inherit",
