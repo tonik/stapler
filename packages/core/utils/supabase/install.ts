@@ -11,7 +11,7 @@ export const installSupabase = (destinationDirectory: string) => {
   execSync(`supabase init`, { stdio: 'inherit' });
 
   // Correctly set the template directory using __dirname
-  const templateDirectory = path.join(__dirname, "../templates");
+  const templateDirectory = path.join(__dirname, "../templates/supabase/files");
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
   console.log(`🍸 Supabase installed successfully!`)
