@@ -23,8 +23,8 @@ export async function createProject(options: ProjectOptions) {
 
   if (usePayload) preparePayload();
 
-  // const currentDir = process.cwd();
-  // installSupabase(currentDir);
+  const currentDir = process.cwd();
+  installSupabase(currentDir);
 
   console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }

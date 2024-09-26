@@ -11,15 +11,9 @@ export const preparePayload = () => {
 
   process.chdir("./apps/web/");
 
-  updatePackages();
-
-  console.log("🍸 Installing Payload to Next.js...");
-  execSync(`pnpm dlx create-payload-app@beta`, { stdio: "inherit" });
-
   prepareTsConfig();
 
-  // Payload doesn't work with Turbopack yet
-  removeTurboFlag();
+  updatePackages();
 
   console.log("🍸 Moving files to (app) directory...");
   execSync(
@@ -28,6 +22,12 @@ export const preparePayload = () => {
       stdio: "inherit",
     }
   );
+
+  console.log("🍸 Installing Payload to Next.js...");
+  execSync(`pnpm create-payload-app@beta`, { stdio: "inherit" });
+
+  // Payload doesn't work with Turbopack yet
+  removeTurboFlag();
 
   // // Check if the payload configuration file exists
   // const payloadConfigPath = join(process.cwd(), "payload.config.ts");
