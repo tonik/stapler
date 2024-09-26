@@ -18,6 +18,10 @@ export const templateGenerator = (template: Template, templateDir: string, desti
       const source = path.join(templateDir, file);
       console.log(source);
       const destination = path.join(destinationDir, templateFilesObject.path, file);
+      // check if the directory exists, if not create it
+      if (!fs.existsSync(path.join(destinationDir, templateFilesObject.path))) {
+        fs.mkdirSync(path.join(destinationDir, templateFilesObject.path), { recursive: true });
+      }
       fs.copyFileSync(source, destination);
 
       // Handle file renaming if needed
