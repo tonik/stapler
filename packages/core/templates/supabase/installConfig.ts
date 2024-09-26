@@ -1,11 +1,12 @@
 export const supabaseFiles = [
     {
-        path: 'supabase',
+        path: 'supabase/src/',
         files: [
             'client.ts',
             'index.ts',
             'middleware.ts',
             'server.ts',
+            'types.ts',
         ],
     },
     // {
