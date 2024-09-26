@@ -20,7 +20,7 @@ export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
         // Append schemaName to the existing pool configuration (avoiding the extra comma)
         return match.replace(
           group1.trimEnd(),
-          `${group1.trimEnd()} schemaName: 'payload',`
+          `${group1.trimEnd()} schemaName: 'payload',\n`
         );
       }
     );
