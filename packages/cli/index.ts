@@ -44,6 +44,12 @@ program
       },
       {
         type: "confirm",
+        name: "usePayload",
+        message: "Would you like to add Payload to your app?",
+        default: true,
+      },
+      {
+        type: "confirm",
         name: "useInngest",
         message: "Would you like to add Inngest to your app?",
         default: false,
