@@ -9,7 +9,7 @@ export const installSupabase = (destinationDirectory: string) => {
   process.chdir("supabase");
   execSync('pnpm init');
   console.log("🍸 Installing Supabase dependencies...");
-  execSync(`pnpm install @supabase/supabase-js @supabase/ssr`, {
+  execSync(`pnpm install -w @supabase/supabase-js @supabase/ssr`, {
     stdio: "inherit",
   });
   console.log("🍸 Adding Supabase Files...");
