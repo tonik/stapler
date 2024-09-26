@@ -9,11 +9,7 @@ export const updatePackages = () => {
   });
 
   console.log("🍸 Installing necessary packages...");
-
-  execSync(
-    `pnpm i payload@beta @payloadcms/next@beta @payloadcms/richtext-lexical@beta @payloadcms/db-postgres pg sharp`,
-    {
-      stdio: "inherit",
-    }
-  );
+  execSync(`pnpm i pg sharp`, {
+    stdio: "inherit",
+  });
 };

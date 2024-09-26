@@ -27,7 +27,7 @@ export const preparePayload = () => {
   );
 
   console.log("🍸 Installing Payload to Next.js...");
-  execSync(`npx create-payload-app@beta --use-pnpm`, { stdio: "inherit" });
+  execSync(`pnpm dlx create-payload-app@beta`, { stdio: "inherit" });
 
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");
