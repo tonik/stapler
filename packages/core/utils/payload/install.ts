@@ -4,6 +4,7 @@ import { join } from "path";
 import { removeTurboFlag } from "./removeTurboFlag";
 import { prepareTsConfig } from "./prepareTsConfig";
 import { updatePackages } from "./updatePackages";
+import { preparePayloadConfig } from "./preparePayloadConfig";
 
 export const preparePayload = () => {
   console.log("🍸 Initializing Payload...");
@@ -13,9 +14,6 @@ export const preparePayload = () => {
   prepareTsConfig();
 
   updatePackages();
-
-  // Payload doesn't work with Turbopack yet
-  removeTurboFlag();
 
   console.log("🍸 Moving files to (app) directory...");
   execSync(
@@ -27,14 +25,17 @@ export const preparePayload = () => {
 
   console.log("🍸 Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
-  // TODO: change tsconfig to include the following:
-  // "compilerOptions"."plugins"."paths": {"@payload-config": ["./payload.config.ts"]}
+
+  // Payload doesn't work with Turbopack yet
+  removeTurboFlag();
 
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");
   if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
+  } else {
+    preparePayloadConfig(payloadConfigPath);
   }
   // get back to the root directory
-  process.chdir("../../"); 
+  process.chdir("../../");
 };

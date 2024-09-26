@@ -9,7 +9,7 @@ export const updatePackages = () => {
   });
 
   console.log("🍸 Installing necessary packages...");
-  execSync(`pnpm up pg`, {
+  execSync(`pnpm i pg sharp`, {
     stdio: "inherit",
   });
 };
