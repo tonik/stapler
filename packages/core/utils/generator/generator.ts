@@ -15,7 +15,8 @@ export const templateGenerator = (template: Template, templateDir: string, desti
   template.forEach((templateFilesObject) => {
     templateFilesObject.files.forEach((file) => {
       // Construct source and destination paths
-      const source = path.join(templateDir, templateFilesObject.path, 'files', file);
+      const source = path.join(templateDir, file);
+      console.log(source);
       const destination = path.join(destinationDir, templateFilesObject.path, file);
       fs.copyFileSync(source, destination);
 
