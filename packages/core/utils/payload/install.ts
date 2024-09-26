@@ -28,8 +28,6 @@ export const preparePayload = () => {
 
   console.log("🍸 Installing Payload to Next.js...");
   execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
-  // TODO: change tsconfig to include the following:
-  // "compilerOptions"."plugins"."paths": {"@payload-config": ["./payload.config.ts"]}
 
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");

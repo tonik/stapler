@@ -16,7 +16,7 @@ export const templateGenerator = (template: Template, templateDir: string, desti
     templateFilesObject.files.forEach((file) => {
       // Construct source and destination paths
       const source = path.join(templateDir, file);
-      console.log(source);
+      // console.log(source);
       const destination = path.join(destinationDir, templateFilesObject.path, file);
       // check if the directory exists, if not create it
       if (!fs.existsSync(path.join(destinationDir, templateFilesObject.path))) {

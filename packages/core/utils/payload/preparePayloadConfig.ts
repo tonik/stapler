@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 
 export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
   console.log("🍸 Preparing payload.config.ts...");
@@ -11,15 +10,18 @@ export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
       return;
     }
 
-    // Use regex to find the "db" object and append "schemaName: 'payload'" to the pool configuration
+    // Use regex to find the "pool" object and append "schemaName: 'payload'" to the pool configuration
     const updatedConfig = data.replace(
-      /pool:\s*{[^}]*connectionString[^}]*}/,
-      (match) => {
+      /pool:\s*{([^}]*)connectionString[^}]*}/,
+      (match, group1) => {
         if (match.includes("schemaName")) {
           return match; // If "schemaName" already exists, return the match unchanged
         }
-        // Add schemaName within the pool configuration
-        return match.replace(/}/, `, schemaName: 'payload' }`);
+        // Append schemaName to the existing pool configuration (avoiding the extra comma)
+        return match.replace(
+          group1.trimEnd(),
+          `${group1.trimEnd()} schemaName: 'payload',`
+        );
       }
     );
 
