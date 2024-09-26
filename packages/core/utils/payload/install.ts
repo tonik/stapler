@@ -4,6 +4,7 @@ import { join } from "path";
 import { removeTurboFlag } from "./removeTurboFlag";
 import { prepareTsConfig } from "./prepareTsConfig";
 import { updatePackages } from "./updatePackages";
+import { preparePayloadConfig } from "./preparePayloadConfig";
 
 export const preparePayload = () => {
   console.log("🍸 Initializing Payload...");
@@ -34,7 +35,9 @@ export const preparePayload = () => {
   const payloadConfigPath = join(process.cwd(), "payload.config.ts");
   if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
+  } else {
+    preparePayloadConfig();
   }
   // get back to the root directory
-  process.chdir("../../"); 
+  process.chdir("../../");
 };
