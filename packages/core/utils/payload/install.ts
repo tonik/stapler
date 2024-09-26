@@ -24,18 +24,18 @@ export const preparePayload = () => {
   );
 
   console.log("🍸 Installing Payload to Next.js...");
-  execSync(`pnpm create-payload-app@beta`, { stdio: "inherit" });
+  execSync(`npx create-payload-app@beta`, { stdio: "inherit" });
 
   // Payload doesn't work with Turbopack yet
   removeTurboFlag();
 
-  // // Check if the payload configuration file exists
-  // const payloadConfigPath = join(process.cwd(), "payload.config.ts");
-  // if (!existsSync(payloadConfigPath)) {
-  //   console.error("🍸 Payload installation cancelled/failed.");
-  // } else {
-  //   preparePayloadConfig(payloadConfigPath);
-  // }
-  // // get back to the root directory
-  // process.chdir("../../");
+  // Check if the payload configuration file exists
+  const payloadConfigPath = join(process.cwd(), "payload.config.ts");
+  if (!existsSync(payloadConfigPath)) {
+    console.error("🍸 Payload installation cancelled/failed.");
+  } else {
+    preparePayloadConfig(payloadConfigPath);
+  }
+  // get back to the root directory
+  process.chdir("../../");
 };
