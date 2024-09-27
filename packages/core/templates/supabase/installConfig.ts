@@ -10,7 +10,7 @@ export const supabaseFiles = [
         ],
     },
     {
-        path: 'supabase',
+        path: 'supabase/',
         files: [
             'package',
         ],
