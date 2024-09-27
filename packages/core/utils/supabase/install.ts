@@ -12,10 +12,7 @@ export const installSupabase = (destinationDirectory: string) => {
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
   process.chdir("supabase");
-  execSync("pnpm init");
   console.log("🍸 Installing Supabase dependencies...");
-  execSync(`pnpm install -w @supabase/supabase-js @supabase/ssr`, {
-    stdio: "inherit",
-  });
+  execSync("pnpm install", { stdio: "inherit" });
   process.chdir("..");
 };
