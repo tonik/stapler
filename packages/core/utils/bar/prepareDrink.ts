@@ -10,15 +10,16 @@ export const prepareDrink = (name: string) => {
   setTimeout(() => {
     console.log("🍸 Filling a high ball glass with ice...");
     setTimeout(() => {
-      console.log("🍸 Add gin and lime juice...");
+      console.log("🍸 Adding gin and lime juice...");
       setTimeout(() => {
         console.log("🍸 Topping with Tonik...");
         setTimeout(() => {
           console.log("🍸 Garnishing with lime wedge...");
           setTimeout(() => {
             console.log(
-              `\x1b[32m`,
-              `🍸 Your Stapled ${getName(name)} is ready!`
+              `\x1b[32m%s\x1b[0m`,
+              `🍸 Your Stapled ${getName(name)} is ready!`,
+              `\x1b[0m`
             );
             // I'm too lazy to mess with modules building to allow coloring library to be installed lol
             console.log(`🍸 You can now run:`);

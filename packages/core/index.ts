@@ -14,7 +14,7 @@ interface ProjectOptions {
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
-  console.log(`🍸 Stapling you ${name} app...`);
+  console.log(`🍸 Stapling ${name}...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
   });
