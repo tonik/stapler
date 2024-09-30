@@ -21,7 +21,7 @@ const getName = (name: string) => {
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
-  console.log("🍸 Creating your Stapler...");
+  console.log(`🍸 Stapling you ${name} app...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
   });
@@ -38,6 +38,10 @@ export async function createProject(options: ProjectOptions) {
 
   prettify();
 
+  console.log("🍸 Filling a high ball glass with ice...");
+  console.log("🍸 Add gin and lime juice...");
+  console.log("🍸 Topping with Tonik...");
+  console.log("🍸 Garnishing with lime wedge...");
   console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
 
   // I'm too lazy to mess with modules building to allow coloring library to be installed lol
