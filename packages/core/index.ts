@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { createEnvFile } from "./utils/env/env";
 import { preparePayload } from "./utils/payload/install";
 import { installSupabase } from "./utils/supabase/install";
+import { prettify } from "./utils/prettier/prettify";
 
 interface ProjectOptions {
   name: string;
@@ -26,9 +27,7 @@ export async function createProject(options: ProjectOptions) {
   const currentDir = process.cwd();
   installSupabase(currentDir);
 
-  execSync(`pnpm format`, {
-    stdio: "inherit",
-  });
+  prettify();
 
   console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }
