@@ -21,11 +21,12 @@ export async function createProject(options: ProjectOptions) {
 
   process.chdir(name);
 
-  createEnvFile();
+  const currentDir = process.cwd();
+
+  createEnvFile(currentDir);
 
   if (usePayload) preparePayload();
 
-  const currentDir = process.cwd();
   installSupabase(currentDir);
 
   prettify();

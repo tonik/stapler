@@ -14,16 +14,13 @@ const requiredEnvVariables: Record<string, "required" | "optional"> = {
   // INNGEST_API_SECRET: "optional",
 };
 
-// Path to the .env file
-const envPath = path.resolve(process.cwd(), ".env");
-
 // Function to create .env file with empty fields
-export const createEnvFile = () => {
+export const createEnvFile = (destinationDirectory: string) => {
   console.log("🍸 Creating .env file...");
   let envTemplate = "";
   for (const [key, status] of Object.entries(requiredEnvVariables)) {
     envTemplate += `${key}=\n`;
   }
 
-  fs.writeFileSync(envPath, envTemplate);
+  fs.writeFileSync(path.resolve(destinationDirectory, ".env"), envTemplate);
 };
