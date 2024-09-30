@@ -16,8 +16,6 @@ export const prettify = () => {
     execSync(`echo ${pattern} >> .prettierignore`);
   });
 
-  console.log("this is a bot test");
-
   execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
     stdio: "inherit",
   });
