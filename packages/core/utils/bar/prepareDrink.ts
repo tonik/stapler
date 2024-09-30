@@ -24,7 +24,8 @@ export const prepareDrink = (name: string) => {
             );
             // I'm too lazy to mess with modules building to allow coloring library to be installed lol
             console.log(
-              `🍸 You can now run: \x1b[36m%s\x1b[0m cd ${name} && pnpm dev\x1b[0m.`
+              `🍸 You can now run:`,
+              `\x1b[36m%s\x1b[0m cd ${name} && pnpm dev\x1b[0m`
             );
           }, 1000);
         }, 1000);
