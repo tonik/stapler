@@ -1,6 +1,8 @@
 import { execSync } from "child_process";
 
 export const prettify = () => {
+  console.log("🍸 Prettifying your Stapler...");
+
   execSync(
     `echo "node_modules
     dist
