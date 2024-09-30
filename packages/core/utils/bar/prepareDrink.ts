@@ -16,7 +16,10 @@ export const prepareDrink = (name: string) => {
         setTimeout(() => {
           console.log("🍸 Garnishing with lime wedge...");
           setTimeout(() => {
-            console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
+            console.log(
+              `\x1b[32m`,
+              `🍸 Your Stapled ${getName(name)} is ready!`
+            );
             // I'm too lazy to mess with modules building to allow coloring library to be installed lol
             console.log(`🍸 You can now run:`);
             console.log(
@@ -24,10 +27,9 @@ export const prepareDrink = (name: string) => {
               `🍸 cd ${name} && pnpm dev`,
               `\x1b[0m`
             );
-            console.log("I'm last");
-          }, 100);
-        }, 100);
-      }, 100);
-    }, 100);
-  }, 100);
+          }, 1000);
+        }, 1000);
+      }, 1000);
+    }, 1000);
+  }, 1000);
 };
