@@ -1,5 +1,4 @@
 import { execSync } from "child_process";
-import chalk from "chalk";
 import { createEnvFile } from "./utils/env/createEnvFile";
 import { preparePayload } from "./utils/payload/install";
 import { installSupabase } from "./utils/supabase/install";
@@ -41,5 +40,5 @@ export async function createProject(options: ProjectOptions) {
   prettify();
 
   console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
-  console.log(`🍸 You can now run:`, chalk.cyan.bold(`cd ${name} && pnpm dev`));
+  console.log(`🍸 You can now run: cd ${name} && pnpm dev`);
 }

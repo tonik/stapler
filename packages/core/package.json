@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format cjs",
     "dev": "tsc -w"
   },
   "dependencies": {
-    "chalk": "^5.3.0",
     "fs-extra": "^11.2.0"
   },
   "devDependencies": {

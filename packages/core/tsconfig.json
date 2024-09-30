@@ -7,9 +7,13 @@
     "outDir": "./dist",
     "rootDir": ".",
     "composite": true,
-    "declaration": true,          // Ensure TypeScript generates declaration files
-    "emitDeclarationOnly": true   // Only emit declaration files without compiling the code
+    "declaration": true, // Ensure TypeScript generates declaration files
+    "emitDeclarationOnly": true // Only emit declaration files without compiling the code
   },
-  "include": ["index.ts", "utils/**/*.ts", "templates/supabase/installConfig.ts"],
+  "include": [
+    "index.ts",
+    "utils/**/*.ts",
+    "templates/supabase/installConfig.ts"
+  ],
   "exclude": ["node_modules", "dist", "templates/supabase/files/**/*"]
 }
