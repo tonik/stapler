@@ -13,7 +13,15 @@ interface ProjectOptions {
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
-
+  console.log(
+    "default",
+    "default",
+    "\x1b[34m%s\x1b[0m",
+    "blue",
+    "\x1b[0m",
+    "default",
+    "default"
+  );
   console.log(`🍸 Stapling ${name}...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
