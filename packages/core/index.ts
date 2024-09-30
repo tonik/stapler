@@ -1,4 +1,5 @@
 import { execSync } from "child_process";
+import chalk from "chalk";
 import { createEnvFile } from "./utils/env/createEnvFile";
 import { preparePayload } from "./utils/payload/install";
 import { installSupabase } from "./utils/supabase/install";
@@ -9,6 +10,14 @@ interface ProjectOptions {
   usePayload: boolean;
   // useInngest: boolean;
 }
+
+const getName = (name: string) => {
+  if (!name) {
+    return ".";
+  }
+
+  return name;
+};
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
@@ -31,5 +40,6 @@ export async function createProject(options: ProjectOptions) {
 
   prettify();
 
-  console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
+  console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
+  console.log(`🍸 You can now run:`, chalk.cyan.bold(`cd ${name} && pnpm dev`));
 }
