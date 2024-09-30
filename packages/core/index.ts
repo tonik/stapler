@@ -22,7 +22,6 @@ export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
   console.log("🍸 Creating your Stapler...");
-  console.log("\x1b[36m%s\x1b[0m", "Stapler is still in beta");
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
   });
@@ -40,5 +39,11 @@ export async function createProject(options: ProjectOptions) {
   prettify();
 
   console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
-  console.log(`🍸 You can now run: cd ${name} && pnpm dev`);
+
+  // I'm too lazy to f with output formatting to allow coloring library to be installed lol
+  console.log(
+    `🍸 You can now run:`,
+    `\x1b[36m%s\x1b[0m`,
+    `cd ${name} && pnpm dev`
+  );
 }
