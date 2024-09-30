@@ -26,5 +26,9 @@ export async function createProject(options: ProjectOptions) {
   const currentDir = process.cwd();
   installSupabase(currentDir);
 
+  execSync(`pnpm format`, {
+    stdio: "inherit",
+  });
+
   console.log(`🍸 Your Stapled ${name === "." ? "app" : name} is ready!`);
 }
