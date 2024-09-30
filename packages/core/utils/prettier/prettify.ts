@@ -3,16 +3,18 @@ import { execSync } from "child_process";
 export const prettify = () => {
   console.log("🍸 Prettifying your Stapler...");
 
-  execSync(
-    `echo "node_modules
-    dist
-    build
-    .turbo
-    payload-types.ts" > .prettierignore`,
-    {
-      stdio: "inherit",
-    }
-  );
+  const ignorePatterns = [
+    "node_modules/",
+    "dist/",
+    "build/",
+    ".turbo/",
+    ".next/",
+    "payload-types.ts",
+  ];
+
+  ignorePatterns.forEach((pattern) => {
+    execSync(`echo ${pattern} >> .prettierignore`);
+  });
 
   execSync(`pnpm format`, {
     stdio: "inherit",
