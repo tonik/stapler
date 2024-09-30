@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { createEnvFile } from "./utils/env/createFile";
+import { createEnvFile } from "./utils/env/createEnvFile";
 import { preparePayload } from "./utils/payload/install";
 import { installSupabase } from "./utils/supabase/install";
 import { prettify } from "./utils/prettier/prettify";
