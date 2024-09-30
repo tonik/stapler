@@ -18,7 +18,7 @@ const asciiArt = `
 
 function displayHeader() {
   console.log(chalk.hex("#3100F5").bold(asciiArt));
-  console.log(chalk.bold("\n🍸 Welcome to Create Tonik App!\n"));
+  console.log(chalk.bold("\n🍸 Welcome to Stapler!\n"));
 }
 
 const program = new Command();
@@ -40,7 +40,7 @@ program
         type: "input",
         name: "name",
         message: "What is your project named?",
-        default: "my-tonik-app",
+        default: "my-stapled-app",
       },
       {
         type: "confirm",

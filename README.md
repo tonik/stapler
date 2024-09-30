@@ -25,7 +25,7 @@ npm link
 Or you can do it in one simple command!
 
 ```
-pnpm install && pnpm build --no-cache && mkdir -p project_template && cd packages/cli && npm link && cd ../../
+pnpm install && pnpm build --no-cache && cd packages/cli && npm link
 ```
 
 Then you can run the following command to create a new project in desired directory on your local machine:
