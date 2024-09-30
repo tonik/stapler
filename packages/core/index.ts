@@ -22,7 +22,7 @@ export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
   console.log("🍸 Creating your Stapler...");
-
+  console.log("%cred", "color: red", "Stapler is still in beta");
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: "inherit",
   });
