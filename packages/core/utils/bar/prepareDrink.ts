@@ -13,7 +13,6 @@ export const prepareDrink = (name: string) => {
       console.log("🍸 Adding gin and lime juice...");
       setTimeout(() => {
         console.log("🍸 Topping with", "\x1b[34mTonik\x1b[0m", "...");
-
         setTimeout(() => {
           console.log("🍸 Garnishing with lime wedge...");
           setTimeout(() => {
