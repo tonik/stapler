@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { createEnvFile } from "./utils/env/env";
+import { createEnvFile } from "./utils/env/createFile";
 import { preparePayload } from "./utils/payload/install";
 import { installSupabase } from "./utils/supabase/install";
 import { prettify } from "./utils/prettier/prettify";
@@ -7,13 +7,12 @@ import { prettify } from "./utils/prettier/prettify";
 interface ProjectOptions {
   name: string;
   usePayload: boolean;
-  useInngest: boolean;
+  // useInngest: boolean;
 }
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
-  createEnvFile();
   console.log("🍸 Creating your Stapler...");
 
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
@@ -21,6 +20,8 @@ export async function createProject(options: ProjectOptions) {
   });
 
   process.chdir(name);
+
+  createEnvFile();
 
   if (usePayload) preparePayload();
 

@@ -48,13 +48,13 @@ program
         message: "Would you like to add Payload to your app?",
         default: true,
       },
-      {
-        type: "confirm",
-        name: "useInngest",
-        message: "Would you like to add Inngest to your app?",
-        default: false,
-      },
-      // Add more questions for T3 options and your custom additions
+      // we dont support Inngest yet
+      // {
+      //   type: "confirm",
+      //   name: "useInngest",
+      //   message: "Would you like to add Inngest to your app?",
+      //   default: false,
+      // },
     ]);
 
     await createProject(answers);
