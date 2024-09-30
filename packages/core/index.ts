@@ -43,5 +43,4 @@ export async function createProject(options: ProjectOptions) {
   // I'm too lazy to mess with modules building to allow coloring library to be installed lol
   console.log(`🍸 You can now run:`);
   console.log(`\x1b[36m%s\x1b[0m`, `🍸 cd ${name} && pnpm dev`, `\x1b[0m`);
-  console.log(`🍸 what color is this???`);
 }
