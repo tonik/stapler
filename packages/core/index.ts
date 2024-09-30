@@ -41,9 +41,6 @@ export async function createProject(options: ProjectOptions) {
   console.log(`🍸 Your Stapled ${getName(name)} is ready!`);
 
   // I'm too lazy to f with output formatting to allow coloring library to be installed lol
-  console.log(
-    `🍸 You can now run:`,
-    `\x1b[36m%s\x1b[0m`,
-    `cd ${name} && pnpm dev`
-  );
+  console.log(`🍸 You can now run:`);
+  console.log(`\x1b[36m%s\x1b[0m`, `cd ${name} && pnpm dev`, `\x1b`);
 }
