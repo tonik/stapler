@@ -16,7 +16,7 @@ export const prettify = () => {
     execSync(`echo ${pattern} >> .prettierignore`);
   });
 
-  execSync(`pnpm format`, {
+  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
     stdio: "inherit",
   });
 };
