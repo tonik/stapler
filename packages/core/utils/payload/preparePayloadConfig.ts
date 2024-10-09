@@ -29,6 +29,8 @@ export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
     fs.writeFile(configPath, updatedConfig, (err) => {
       if (err) {
         console.error("🍸 Error writing to payload.config.ts", err);
+      } else {
+        console.log("🍸 payload.config.ts updated successfully!");
       }
     });
   });
