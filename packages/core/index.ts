@@ -11,7 +11,7 @@ interface ProjectOptions {
   // useInngest: boolean;
 }
 
-export function createProject(options: ProjectOptions) {
+export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
   console.log(`🍸 Stapling ${name}...`);
@@ -25,11 +25,11 @@ export function createProject(options: ProjectOptions) {
 
   createEnvFile(currentDir);
 
-  if (usePayload) preparePayload();
+  if (usePayload) await preparePayload();
 
-  installSupabase(currentDir);
+  await installSupabase(currentDir);
 
-  prettify();
+  await prettify();
 
   prepareDrink(name);
 }

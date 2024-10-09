@@ -4,7 +4,7 @@ import { supabaseFiles } from "../../templates/supabase/installConfig";
 import path from "path";
 import fs from "fs";
 
-export const installSupabase = (destinationDirectory: string) => {
+export const installSupabase = async (destinationDirectory: string) => {
   console.log("🍸 Installing supabase-js..."); // create supabase
   execSync(`supabase init`, { stdio: "inherit" });
 

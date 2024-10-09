@@ -6,7 +6,7 @@ import { prepareTsConfig } from "./prepareTsConfig";
 import { updatePackages } from "./updatePackages";
 import { preparePayloadConfig } from "./preparePayloadConfig";
 
-export const preparePayload = () => {
+export const preparePayload = async () => {
   console.log("🍸 Initializing Payload...");
 
   process.chdir("./apps/web/");
