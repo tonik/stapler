@@ -11,7 +11,7 @@ interface ProjectOptions {
   // useInngest: boolean;
 }
 
-export async function createProject(options: ProjectOptions) {
+export function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
 
   console.log(`🍸 Stapling ${name}...`);
