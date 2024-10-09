@@ -34,7 +34,7 @@ export const preparePayload = async () => {
   if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
   } else {
-    preparePayloadConfig(payloadConfigPath);
+    await preparePayloadConfig(payloadConfigPath);
   }
 
   // get back to the root directory
