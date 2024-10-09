@@ -10,6 +10,7 @@ export const prettify = () => {
     ".turbo/",
     ".next/",
     "payload-types.ts",
+    "(payload)",
   ];
 
   ignorePatterns.forEach((pattern) => {
