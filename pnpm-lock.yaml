@@ -90,7 +90,7 @@ importers:
 
   packages/cli:
     dependencies:
-      '@create-tonik-app/core':
+      '@create-stapler-app/core':
         specifier: workspace:*
         version: link:../core
       chalk:

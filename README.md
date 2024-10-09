@@ -1,45 +1,52 @@
+# Stapler CLI
+
+**Stapler** is a CLI tool that scaffolds an entire fullstack app using a monorepo structure. It integrates **Next.js**, **Supabase**, **Payload CMS**, **Vercel**, and more, leveraging **Turbo** and **pnpm** to optimize your development workflow.
+
+## Features
+
+- **Fullstack scaffolding**: Quickly set up a monorepo with Next.js, Supabase, Payload CMS, and Vercel.
+- **Monorepo**: Built-in support for managing multiple packages with Turbo and pnpm.
+- **Customizable**: Easily extend the project with your own services or tools.
+
 ## Getting Started
 
-This is a jumpstart project for "Tonik app" using TurboRepo.
+### Local Installation for Development
 
-### Local Installation Steps
+If you'd like to develop or test Stapler locally, follow these steps:
 
-Before we refine and finish this project we aim for local development and testing.
-This way we can use this repo on our local machine using `create-tonik-app create` command.
+1. Clone the repository:
 
-Here are the steps to get started:
+   ```bash
+   git clone https://github.com/tonik/stapler.git
+   cd stapler-cli
+   ```
 
+2. Install dependencies and build the project:
+
+   ```bash
+   pnpm install
+   pnpm build
+   ```
+
+3. Link the CLI locally:
+
+   ```bash
+   cd packages/cli
+   npm link
+   ```
+
+   Alternatively, run it all in one command:
+
+   ```bash
+   pnpm install && pnpm build --no-cache && cd packages/cli && npm link
+   ```
+
+### Usage
+
+Once the CLI is linked, you can use it to create a new fullstack project by running:
+
+```bash
+create-stapler-app
 ```
-pnpm install
-```
 
-```
-pnpm build
-```
-
-```
-cd packages/cli
-npm link
-```
-
-Or you can do it in one simple command!
-
-```
-pnpm install && pnpm build --no-cache && cd packages/cli && npm link
-```
-
-Then you can run the following command to create a new project in desired directory on your local machine:
-
-```
-create-tonik-app create
-```
-
-## MVP Checklist
-
-- [ ] Sync env variables with turbo after initalization
-- [ ] Discover a way of packages installation to recreate the boring-stack project
-- [ ] Include:
-  - [ ] Turbo env variables
-  - [ ] Establish our tooling packages with shared pnpm catalog workspec, this will include:
-        eslint, prettier, tailwind.
-  - [ ] Supabase integration with authentication and payload cms working
+This will scaffold a new project in your desired directory.

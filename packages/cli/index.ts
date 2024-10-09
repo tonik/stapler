@@ -2,7 +2,7 @@
 import { Command } from "commander";
 import inquirer from "inquirer";
 import chalk from "chalk";
-import { createProject } from "@create-tonik-app/core";
+import { createProject } from "@create-stapler-app/core";
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    
@@ -24,40 +24,45 @@ function displayHeader() {
 const program = new Command();
 
 program
-  .name("create-tonik-app")
+  .name("create-stapler-app")
   .description("CLI to bootstrap a new tonik-infused app")
   .version("0.1.0")
   .hook("preAction", () => {
     displayHeader();
   });
 
+const createAction = async () => {
+  const answers = await inquirer.prompt([
+    {
+      type: "input",
+      name: "name",
+      message: "What is your project named?",
+      default: "my-stapled-app",
+    },
+    {
+      type: "confirm",
+      name: "usePayload",
+      message: "Would you like to add Payload to your app?",
+      default: true,
+    },
+    // we dont support Inngest yet
+    // {
+    //   type: "confirm",
+    //   name: "useInngest",
+    //   message: "Would you like to add Inngest to your app?",
+    //   default: false,
+    // },
+  ]);
+
+  await createProject(answers);
+};
+
 program
   .command("create")
   .description("Create a new tonik-infused app")
-  .action(async () => {
-    const answers = await inquirer.prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "What is your project named?",
-        default: "my-stapled-app",
-      },
-      {
-        type: "confirm",
-        name: "usePayload",
-        message: "Would you like to add Payload to your app?",
-        default: true,
-      },
-      // we dont support Inngest yet
-      // {
-      //   type: "confirm",
-      //   name: "useInngest",
-      //   message: "Would you like to add Inngest to your app?",
-      //   default: false,
-      // },
-    ]);
+  .action(createAction);
 
-    await createProject(answers);
-  });
+// Set "create" as the default command
+program.action(createAction);
 
 program.parse();
