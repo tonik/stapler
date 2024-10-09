@@ -37,10 +37,6 @@ export const preparePayload = () => {
     preparePayloadConfig(payloadConfigPath);
   }
 
-  execSync(`npx prettier --write "payload.config.ts"`, {
-    stdio: "inherit",
-  });
-
   // get back to the root directory
   process.chdir("../../");
 };
