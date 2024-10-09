@@ -1,14 +1,12 @@
-import fs from "fs";
+import type { PathLike } from "fs";
+import fs from "fs/promises";
 
-export const preparePayloadConfig = async (configPath: fs.PathOrFileDescriptor) => {
+export const preparePayloadConfig = async (configPath: PathLike) => {
   console.log("🍸 Preparing payload.config.ts...");
 
-  // Read the payload.config.ts file
-  fs.readFile(configPath, "utf8", (err, data) => {
-    if (err) {
-      console.error("🍸 Error reading payload.config.ts", err);
-      return;
-    }
+  try {
+    // Read the payload.config.ts file
+    const data = await fs.readFile(configPath, "utf8");
 
     // Use regex to find the "pool" object and append "schemaName: 'payload'" to the pool configuration
     const updatedConfig = data.replace(
@@ -26,12 +24,8 @@ export const preparePayloadConfig = async (configPath: fs.PathOrFileDescriptor) 
     );
 
     // Write the updated payload.config.ts back to the file
-    fs.writeFile(configPath, updatedConfig, (err) => {
-      if (err) {
-        console.error("🍸 Error writing to payload.config.ts", err);
-      } else {
-        console.log("🍸 payload.config.ts updated successfully!");
-      }
-    });
-  });
+    await fs.writeFile(configPath, updatedConfig);
+  } catch (err) {
+    console.error("🍸 Error during processing payload.config.ts", err);
+  }
 };

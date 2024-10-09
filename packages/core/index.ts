@@ -25,23 +25,11 @@ export async function createProject(options: ProjectOptions) {
 
   createEnvFile(currentDir);
 
-  try {
-    if (usePayload) {
-      console.log("🍸 Preparing Payload...");
-      await preparePayload();
-      console.log("🍸 Payload prepared.");
-    }
+  if (usePayload) await preparePayload();
 
-    console.log("🍸 Installing Supabase...");
-    await installSupabase(currentDir);
-    console.log("🍸 Supabase installed.");
+  await installSupabase(currentDir);
 
-    console.log("🍸 Prettifying files...");
-    await prettify();
-    console.log("🍸 Prettifying completed.");
+  await prettify();
 
-    prepareDrink(name);
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
+  prepareDrink(name);
 }
