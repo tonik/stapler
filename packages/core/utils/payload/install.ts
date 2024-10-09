@@ -6,7 +6,7 @@ import { prepareTsConfig } from "./prepareTsConfig";
 import { updatePackages } from "./updatePackages";
 import { preparePayloadConfig } from "./preparePayloadConfig";
 
-export const preparePayload = async () => {
+export const preparePayload = () => {
   console.log("🍸 Initializing Payload...");
 
   process.chdir("./apps/web/");
@@ -34,7 +34,7 @@ export const preparePayload = async () => {
   if (!existsSync(payloadConfigPath)) {
     console.error("🍸 Payload installation cancelled/failed.");
   } else {
-    await preparePayloadConfig(payloadConfigPath);
+    preparePayloadConfig(payloadConfigPath);
   }
 
   // get back to the root directory

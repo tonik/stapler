@@ -25,11 +25,11 @@ export async function createProject(options: ProjectOptions) {
 
   createEnvFile(currentDir);
 
-  if (usePayload) await preparePayload();
+  if (usePayload) preparePayload();
 
-  await installSupabase(currentDir);
+  installSupabase(currentDir);
 
-  await prettify();
+  prettify();
 
   prepareDrink(name);
 }

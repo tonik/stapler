@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export const preparePayloadConfig = async (configPath: fs.PathOrFileDescriptor) => {
+export const preparePayloadConfig = (configPath: fs.PathOrFileDescriptor) => {
   console.log("🍸 Preparing payload.config.ts...");
 
   // Read the payload.config.ts file

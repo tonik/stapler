@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 
-export const prettify = async () => {
+export const prettify = () => {
   console.log("🍸 Prettifying your Stapler...");
 
   const ignorePatterns = [
