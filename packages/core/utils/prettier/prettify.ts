@@ -9,8 +9,10 @@ export const prettify = () => {
     "build/",
     ".turbo/",
     ".next/",
+    `\\(app\\)/`,
     "payload-types.ts",
     `\\(payload\\)/`,
+    "*.d.ts",
   ];
 
   ignorePatterns.forEach((pattern) => {
