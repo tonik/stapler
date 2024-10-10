@@ -1,16 +1,16 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 export const prepareTsConfig = () => {
-  console.log("🍸 Preparing tsconfig.json...");
+  console.log('🍸 Preparing tsconfig.json...');
 
   // Path to your tsconfig.json file
-  const tsconfigPath = path.join(process.cwd(), "tsconfig.json");
+  const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
 
   // Read the tsconfig.json file
-  fs.readFile(tsconfigPath, "utf8", (err, data) => {
+  fs.readFile(tsconfigPath, 'utf8', (err, data) => {
     if (err) {
-      console.error("🍸 Error reading tsconfig.json", err);
+      console.error('🍸 Error reading tsconfig.json', err);
       return;
     }
 
@@ -28,12 +28,12 @@ export const prepareTsConfig = () => {
     }
 
     // Append the "@payload-config" path
-    tsconfig.compilerOptions.paths["@payload-config"] = ["./payload.config.ts"];
+    tsconfig.compilerOptions.paths['@payload-config'] = ['./payload.config.ts'];
 
     // Write the updated tsconfig.json back to the file
     fs.writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2), (err) => {
       if (err) {
-        console.error("🍸 Error writing to tsconfig.json", err);
+        console.error('🍸 Error writing to tsconfig.json', err);
       }
     });
   });
