@@ -1,9 +1,9 @@
-import { execSync } from "child_process";
-import { createEnvFile } from "./utils/env/createEnvFile";
-import { preparePayload } from "./utils/payload/install";
-import { installSupabase } from "./utils/supabase/install";
-import { prettify } from "./utils/prettier/prettify";
-import { prepareDrink } from "./utils/bar/prepareDrink";
+import { execSync } from 'child_process';
+import { prepareDrink } from './utils/bar/prepareDrink';
+import { createEnvFile } from './utils/env/createEnvFile';
+import { preparePayload } from './utils/payload/install';
+import { prettify } from './utils/prettier/prettify';
+import { installSupabase } from './utils/supabase/install';
 
 interface ProjectOptions {
   name: string;
@@ -16,7 +16,7 @@ export async function createProject(options: ProjectOptions) {
 
   console.log(`🍸 Stapling ${name}...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
-    stdio: "inherit",
+    stdio: 'inherit',
   });
 
   process.chdir(name);
@@ -27,7 +27,7 @@ export async function createProject(options: ProjectOptions) {
 
   if (usePayload) await preparePayload();
 
-  await installSupabase(currentDir);
+  await installSupabase(currentDir, name);
 
   await prettify();
 
