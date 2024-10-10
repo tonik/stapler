@@ -1,18 +1,18 @@
-import { execSync } from "child_process";
+import { execSync } from 'child_process';
 
 export const prettify = async () => {
-  console.log("🍸 Prettifying your Stapler...");
+  console.log('🍸 Prettifying your Stapler...');
 
   const ignorePatterns = [
-    "node_modules/",
-    "dist/",
-    "build/",
-    ".turbo/",
-    ".next/",
+    'node_modules/',
+    'dist/',
+    'build/',
+    '.turbo/',
+    '.next/',
     `\\(app\\)/`,
-    "payload-types.ts",
+    'payload-types.ts',
     `\\(payload\\)/`,
-    "*.d.ts",
+    '*.d.ts',
   ];
 
   ignorePatterns.forEach((pattern) => {
@@ -20,6 +20,6 @@ export const prettify = async () => {
   });
 
   execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
-    stdio: "inherit",
+    stdio: 'inherit',
   });
 };
