@@ -32,7 +32,7 @@ export const removeTurboFlag = () => {
         if (err) {
           console.error("🍸 Error writing to package.json", err);
         }
-      }
+      },
     );
   });
 };

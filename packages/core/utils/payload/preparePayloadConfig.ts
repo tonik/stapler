@@ -18,9 +18,9 @@ export const preparePayloadConfig = async (configPath: PathLike) => {
         // Append schemaName to the existing pool configuration (avoiding the extra comma)
         return match.replace(
           group1.trimEnd(),
-          `${group1.trimEnd()} schemaName: 'payload',\n`
+          `${group1.trimEnd()} schemaName: 'payload',\n`,
         );
-      }
+      },
     );
 
     // Write the updated payload.config.ts back to the file
