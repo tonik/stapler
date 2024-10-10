@@ -20,7 +20,7 @@ export const preparePayload = async () => {
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
       stdio: "inherit",
-    }
+    },
   );
 
   console.log("🍸 Installing Payload to Next.js...");
