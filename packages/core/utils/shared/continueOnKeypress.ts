@@ -4,7 +4,6 @@ export const continueOnKeypress = async (question: string) => {
   process.stdin.setRawMode(true);
   return new Promise<void>((resolve) => {
     process.stdin.once('data', () => {
-      console.log('____1');
       process.stdin.setRawMode(false);
       resolve();
     });
