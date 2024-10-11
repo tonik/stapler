@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import inquirer from 'inquirer';
+
 import path from 'path';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
@@ -61,26 +62,35 @@ export const installSupabase = async (destinationDirectory: string, name: string
 
   console.log('🍸 Linking Supabase project...');
   console.log('\n=== Instructions for Supabase Integration with GitHub and Vercel ===');
-  console.log('🍸 1. In 10s you will be redirect to your supabase project dashboard');
+  console.log('🍸 1. You will be redirect to your supabase project dashboard');
   console.log('🍸 2. Find the "GitHub" section and click "Connect".');
   console.log('   - Follow the prompts to connect Supabase with your GitHub repository.');
   console.log('🍸 3. Then, find the "Vercel" section and click "Connect".');
   console.log('   - Follow the prompts to connect Supabase with your Vercel project.');
   console.log('\n 🍸 Please note that these steps require manual configuration in the Supabase interface.\n');
 
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-  execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
+  const { isReadyToBeRedirectToSupabaseWebsite } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'isReadyToBeRedirectToSupabaseWebsite',
+      message: '🍸 When you are ready to be redirected to the supabase page press Enter',
+    },
+  ]);
 
-  const { ready } = await inquirer.prompt([
+  if (isReadyToBeRedirectToSupabaseWebsite) {
+    execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
+  }
+
+  const { isGHandVercelSetupOnSupabaseReady } = await inquirer.prompt([
     {
       type: 'confirm',
-      name: 'ready',
+      name: 'isGHandVercelSetupOnSupabaseReady',
       message: '🍸 Have you completed the GitHub and Vercel integration setup?',
       default: false,
     },
   ]);
 
-  if (ready) {
+  if (isGHandVercelSetupOnSupabaseReady) {
     console.log('🍸 Great! Proceeding with the next steps...');
     // Add your next steps here
   } else {
