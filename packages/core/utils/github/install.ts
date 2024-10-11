@@ -1,4 +1,9 @@
-import { isGitHubAuthenticated, createGitHubRepository, fetchGitHubUsername, authenticateGitHub } from './repositoryManager';
+import {
+  isGitHubAuthenticated,
+  createGitHubRepository,
+  fetchGitHubUsername,
+  authenticateGitHub,
+} from './repositoryManager';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 
 interface ProjectOptions {
