@@ -32,19 +32,6 @@ program
   });
 
 const createAction = async () => {
-  // const keypress = async () => {
-  //   console.log('Press any key to continue');
-  //   process.stdin.setRawMode(true);
-  //   return new Promise<void>((resolve) => {
-  //     process.stdin.once('data', () => {
-  //       process.stdin.setRawMode(false);
-  //       resolve();
-  //     });
-  //   });
-  // };
-
-  // await keypress();
-
   const answers = await inquirer.prompt([
     {
       type: 'input',

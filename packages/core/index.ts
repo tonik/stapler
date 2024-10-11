@@ -28,7 +28,6 @@ export async function createProject(options: ProjectOptions) {
   if (usePayload) await preparePayload();
 
   await installSupabase(currentDir, name);
-  console.log('=======');
 
   await prettify();
 
