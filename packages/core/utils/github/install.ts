@@ -1,5 +1,5 @@
-import { checkGitHubAuth, createGitHubRepository, getGitHubUsername, gitHubAuth } from './createRepository';
-import { installGitHubCLI, isGitHubCLIInstalled } from './installGitHubCLI';
+import { isGitHubAuthenticated, createGitHubRepository, fetchGitHubUsername, authenticateGitHub } from './repositoryManager';
+import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 
 interface ProjectOptions {
   projectName: string;
@@ -24,8 +24,8 @@ export async function createProject(options: ProjectOptions) {
 
   console.log('Checking GitHub authentication...');
 
-  if (!checkGitHubAuth()) {
-    if (!gitHubAuth()) {
+  if (!isGitHubAuthenticated()) {
+    if (!authenticateGitHub()) {
       console.log('You are not authenticated with GitHub CLI.');
       console.log('Please run the following command in your terminal to authenticate:');
       console.log('gh auth login');
@@ -34,7 +34,7 @@ export async function createProject(options: ProjectOptions) {
     }
   }
 
-  const username = getGitHubUsername();
+  const username = fetchGitHubUsername();
   if (username) {
     console.log(`Authenticated as GitHub user: ${username}`);
   } else {
