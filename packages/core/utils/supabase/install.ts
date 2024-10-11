@@ -5,6 +5,7 @@ import inquirer from 'inquirer';
 import path from 'path';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
+import { continueOnKeypress } from '../shared/continueOnKeypress';
 
 interface SupabaseProject {
   linked: boolean;
@@ -69,20 +70,17 @@ export const installSupabase = async (destinationDirectory: string, name: string
   console.log('   - Follow the prompts to connect Supabase with your Vercel project.');
   console.log('\n 🍸 Please note that these steps require manual configuration in the Supabase interface.\n');
 
-  async function pressEnterToContinue() {
-    await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'isReadyToBeRedirectToSupabaseWebsite',
-        message: '🍸 When you are ready to be redirected to the supabase page press Enter',
-      },
-    ]);
-  }
+  // const { isReadyToBeRedirectToWebsite } = await inquirer.prompt([
+  //   {
+  //     type: 'confirm',
+  //     name: 'isReadyToBeRedirectToWebsite',
+  //     message: '🍸 When you are ready to be redirected to the supabase page press Enter',
+  //   },
+  // ]);
 
-  (async () => {
-    await pressEnterToContinue();
-    execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
-  })();
+  await continueOnKeypress('🍸 When you are ready to be redirected to the supabase page press Enter');
+
+  execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
 
   const { isGHandVercelSetupOnSupabaseReady } = await inquirer.prompt([
     {
@@ -102,7 +100,6 @@ export const installSupabase = async (destinationDirectory: string, name: string
       `🍸 You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`,
     );
     console.log("🍸 Run this script again when you're ready to proceed.");
-    process.exit(0); // Exit the script if the user is not ready
   }
 
   process.chdir('..');
