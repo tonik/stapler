@@ -1,8 +1,8 @@
 #!/usr/bin/env node
+import { createProject } from '@create-stapler-app/core';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import chalk from 'chalk';
-import { createProject } from '@create-stapler-app/core';
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    
@@ -32,6 +32,19 @@ program
   });
 
 const createAction = async () => {
+  // const keypress = async () => {
+  //   console.log('Press any key to continue');
+  //   process.stdin.setRawMode(true);
+  //   return new Promise<void>((resolve) => {
+  //     process.stdin.once('data', () => {
+  //       process.stdin.setRawMode(false);
+  //       resolve();
+  //     });
+  //   });
+  // };
+
+  // await keypress();
+
   const answers = await inquirer.prompt([
     {
       type: 'input',
