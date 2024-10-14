@@ -34,10 +34,10 @@ function parseProjectsList(output: string): SupabaseProject[] {
 }
 
 export const installSupabase = async (destinationDirectory: string, name: string) => {
-  console.log('🍸 Installing supabase-js...');
+  console.log('🖇️ Installing supabase-js...');
   execSync(`supabase init`, { stdio: 'inherit' });
 
-  console.log('🍸 Adding Supabase Files...');
+  console.log('🖇️ Adding Supabase Files...');
   const templateDirectory = path.join(__dirname, '../templates/supabase/files');
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
@@ -47,7 +47,7 @@ export const installSupabase = async (destinationDirectory: string, name: string
   fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
 
   process.chdir('supabase');
-  console.log('🍸 Installing Supabase dependencies...');
+  console.log('🖇️ Installing Supabase dependencies...');
   execSync('pnpm install', { stdio: 'inherit' });
 
   console.log('🍸 Creating Supabase project...');
