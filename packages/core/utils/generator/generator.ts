@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 
 interface TemplateFilesObject {
   path: string;
@@ -11,21 +11,13 @@ interface TemplateFilesObject {
 }
 export type Template = TemplateFilesObject[];
 
-export const templateGenerator = (
-  template: Template,
-  templateDir: string,
-  destinationDir: string,
-) => {
+export const templateGenerator = (template: Template, templateDir: string, destinationDir: string) => {
   template.forEach((templateFilesObject) => {
     templateFilesObject.files.forEach((file) => {
       // Construct source and destination paths
       const source = path.join(templateDir, file);
       // console.log(source);
-      const destination = path.join(
-        destinationDir,
-        templateFilesObject.path,
-        file,
-      );
+      const destination = path.join(destinationDir, templateFilesObject.path, file);
       // check if the directory exists, if not create it
       if (!fs.existsSync(path.join(destinationDir, templateFilesObject.path))) {
         fs.mkdirSync(path.join(destinationDir, templateFilesObject.path), {
@@ -37,16 +29,8 @@ export const templateGenerator = (
       // Handle file renaming if needed
       if (templateFilesObject.rename) {
         templateFilesObject.rename.forEach((rename) => {
-          const oldPath = path.join(
-            process.cwd(),
-            templateFilesObject.path,
-            rename.from,
-          );
-          const newPath = path.join(
-            process.cwd(),
-            templateFilesObject.path,
-            rename.to,
-          );
+          const oldPath = path.join(process.cwd(), templateFilesObject.path, rename.from);
+          const newPath = path.join(process.cwd(), templateFilesObject.path, rename.to);
           fs.renameSync(oldPath, newPath);
         });
       }

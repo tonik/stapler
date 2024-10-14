@@ -1,8 +1,8 @@
 #!/usr/bin/env node
+import { createProject } from '@create-stapler-app/core';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import inquirer from 'inquirer';
-import chalk from 'chalk';
-import { createProject } from '@create-stapler-app/core';
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    

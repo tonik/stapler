@@ -1,9 +1,11 @@
-import { execSync } from "child_process";
-import fs from "fs";
-import inquirer from "inquirer";
-import path from "path";
-import { supabaseFiles } from "../../templates/supabase/installConfig";
-import { templateGenerator } from "../generator/generator";
+import { execSync } from 'child_process';
+import fs from 'fs';
+import inquirer from 'inquirer';
+
+import path from 'path';
+import { supabaseFiles } from '../../templates/supabase/installConfig';
+import { templateGenerator } from '../generator/generator';
+import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 
 interface SupabaseProject {
   linked: boolean;
@@ -13,17 +15,15 @@ interface SupabaseProject {
   region: string;
   created_at: string;
 }
-
+console.log('TEST');
 function parseProjectsList(output: string): SupabaseProject[] {
-  const lines = output.trim().split("\n");
+  const lines = output.trim().split('\n');
   lines.splice(0, 2);
 
   return lines.map((line) => {
-    const [linked, org_id, id, name, region, created_at] = line
-      .split("│")
-      .map((item) => item.trim());
+    const [linked, org_id, id, name, region, created_at] = line.split('│').map((item) => item.trim());
     return {
-      linked: linked !== "",
+      linked: linked !== '',
       org_id,
       id,
       name,
@@ -33,12 +33,9 @@ function parseProjectsList(output: string): SupabaseProject[] {
   });
 }
 
-export const installSupabase = async (
-  destinationDirectory: string,
-  name: string,
-) => {
-  console.log("🍸 Installing supabase-js...");
-  execSync(`supabase init`, { stdio: "inherit" });
+export const installSupabase = async (destinationDirectory: string, name: string) => {
+  console.log('🍸 Installing supabase-js...');
+  execSync(`supabase init`, { stdio: 'inherit' });
 
   console.log('🍸 Adding Supabase Files...');
   const templateDirectory = path.join(__dirname, '../templates/supabase/files');
@@ -49,67 +46,52 @@ export const installSupabase = async (
   const addSupabaseToWorkspace = `  - "supabase/**"`;
   fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
 
-  process.chdir("supabase");
-  console.log("🍸 Installing Supabase dependencies...");
-  execSync("pnpm install", { stdio: "inherit" });
+  process.chdir('supabase');
+  console.log('🍸 Installing Supabase dependencies...');
+  execSync('pnpm install', { stdio: 'inherit' });
 
-  console.log("🍸 Creating Supabase project...");
+  console.log('🍸 Creating Supabase project...');
 
   execSync(`supabase projects create ${name}`, {
-    stdio: "inherit",
+    stdio: 'inherit',
   });
 
   // Find the newly created project
-  const output = execSync("supabase projects list", { encoding: "utf-8" });
+  const output = execSync('supabase projects list', { encoding: 'utf-8' });
   const projects = parseProjectsList(output);
   const newProject = projects.find((project) => project.name === name);
 
-  console.log("🍸 Linking Supabase project...");
-  console.log(
-    "\n=== Instructions for Supabase Integration with GitHub and Vercel ===",
-  );
-  console.log(
-    "🍸 1. In 10s you will be redirect to your supabase project dashboard",
-  );
+  console.log('🍸 Linking Supabase project...');
+  console.log('\n=== Instructions for Supabase Integration with GitHub and Vercel ===');
+  console.log('🍸 1. You will be redirect to your supabase project dashboard');
   console.log('🍸 2. Find the "GitHub" section and click "Connect".');
-  console.log(
-    "   - Follow the prompts to connect Supabase with your GitHub repository.",
-  );
+  console.log('   - Follow the prompts to connect Supabase with your GitHub repository.');
   console.log('🍸 3. Then, find the "Vercel" section and click "Connect".');
-  console.log(
-    "   - Follow the prompts to connect Supabase with your Vercel project.",
-  );
-  console.log(
-    "\n 🍸 Please note that these steps require manual configuration in the Supabase interface.\n",
-  );
+  console.log('   - Follow the prompts to connect Supabase with your Vercel project.');
+  console.log('\n 🍸 Please note that these steps require manual configuration in the Supabase interface.\n');
 
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-  execSync(
-    `open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`,
-  );
+  await continueOnAnyKeypress('🍸 When you are ready to be redirected to the supabase page press any key');
 
-  const { ready } = await inquirer.prompt([
+  execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
+
+  const { isGHandVercelSetupOnSupabaseReady } = await inquirer.prompt([
     {
-      type: "confirm",
-      name: "ready",
-      message: "🍸 Have you completed the GitHub and Vercel integration setup?",
+      type: 'confirm',
+      name: 'isGHandVercelSetupOnSupabaseReady',
+      message: '🍸 Have you completed the GitHub and Vercel integration setup?',
       default: false,
     },
   ]);
 
-  if (ready) {
-    console.log("🍸 Great! Proceeding with the next steps...");
-    // Add your next steps here
+  if (isGHandVercelSetupOnSupabaseReady) {
+    console.log('🍸 Great! Proceeding with the next steps...');
   } else {
-    console.log(
-      "🍸 No problem. Please complete the integration when you're ready.",
-    );
+    console.log("🍸 No problem. Please complete the integration when you're ready.");
     console.log(
       `🍸 You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`,
     );
     console.log("🍸 Run this script again when you're ready to proceed.");
-    process.exit(0); // Exit the script if the user is not ready
   }
 
-  process.chdir("..");
+  process.chdir('..');
 };

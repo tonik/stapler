@@ -1,9 +1,9 @@
 import { execSync } from 'child_process';
+import { prepareDrink } from './utils/bar/prepareDrink';
 import { createEnvFile } from './utils/env/createEnvFile';
 import { preparePayload } from './utils/payload/install';
-import { installSupabase } from './utils/supabase/install';
 import { prettify } from './utils/prettier/prettify';
-import { prepareDrink } from './utils/bar/prepareDrink';
+import { installSupabase } from './utils/supabase/install';
 
 interface ProjectOptions {
   name: string;
