@@ -47,7 +47,7 @@ export function installGitHubCLI(): boolean {
     console.log('🖇️ GitHub CLI installed successfully.');
     return true;
   } catch (error) {
-    console.error('🍸 Failed to install GitHub CLI.');
+    console.error('🖇️ Failed to install GitHub CLI.');
     console.log('🖇️ Please install it manually from: https://github.com/cli/cli#installation');
     return false;
   }

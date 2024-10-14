@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export const removeTurboFlag = () => {
-  console.log('🍸 Removing --turbo flag from dev script...');
+  console.log('🖇️ Removing --turbo flag from dev script...');
 
   // Path to your package.json file
   const packageJsonPath = path.join(process.cwd(), 'package.json');
@@ -10,7 +10,7 @@ export const removeTurboFlag = () => {
   // Read the package.json file
   fs.readFile(packageJsonPath, 'utf8', (err: Error | null, data: string) => {
     if (err) {
-      console.error('🍸 Error reading package.json', err);
+      console.error('🖇️ Error reading package.json', err);
       return;
     }
 
@@ -25,7 +25,7 @@ export const removeTurboFlag = () => {
     // Write the updated package.json back to the file
     fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2), (err: Error | null) => {
       if (err) {
-        console.error('🍸 Error writing to package.json', err);
+        console.error('🖇️ Error writing to package.json', err);
       }
     });
   });

@@ -2,7 +2,7 @@ import type { PathLike } from 'fs';
 import fs from 'fs/promises';
 
 export const preparePayloadConfig = async (configPath: PathLike) => {
-  console.log('🍸 Preparing payload.config.ts...');
+  console.log('🖇️ Preparing payload.config.ts...');
 
   try {
     // Read the payload.config.ts file
@@ -20,6 +20,6 @@ export const preparePayloadConfig = async (configPath: PathLike) => {
     // Write the updated payload.config.ts back to the file
     await fs.writeFile(configPath, updatedConfig);
   } catch (err) {
-    console.error('🍸 Error during processing payload.config.ts', err);
+    console.error('🖇️ Error during processing payload.config.ts', err);
   }
 };
