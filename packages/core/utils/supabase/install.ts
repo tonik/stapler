@@ -5,6 +5,7 @@ import inquirer from 'inquirer';
 import path from 'path';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
+import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 
 interface SupabaseProject {
   linked: boolean;
@@ -14,7 +15,7 @@ interface SupabaseProject {
   region: string;
   created_at: string;
 }
-
+console.log('TEST');
 function parseProjectsList(output: string): SupabaseProject[] {
   const lines = output.trim().split('\n');
   lines.splice(0, 2);
@@ -78,7 +79,7 @@ export const installSupabase = async (destinationDirectory: string, name: string
   ]);
 
   // check why not working
-  //await continueOnKeypress('🍸 When you are ready to be redirected to the supabase page press Enter');
+  await continueOnAnyKeypress('🍸 When you are ready to be redirected to the supabase page press Enter');
 
   execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
 
