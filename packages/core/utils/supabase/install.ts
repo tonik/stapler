@@ -70,16 +70,7 @@ export const installSupabase = async (destinationDirectory: string, name: string
   console.log('   - Follow the prompts to connect Supabase with your Vercel project.');
   console.log('\n 🍸 Please note that these steps require manual configuration in the Supabase interface.\n');
 
-  const { isReadyToBeRedirectToWebsite } = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'isReadyToBeRedirectToWebsite',
-      message: '🍸 When you are ready to be redirected to the supabase page press Y',
-    },
-  ]);
-
-  // check why not working
-  await continueOnAnyKeypress('🍸 When you are ready to be redirected to the supabase page press Enter');
+  await continueOnAnyKeypress('🍸 When you are ready to be redirected to the supabase page press any key');
 
   execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
 
