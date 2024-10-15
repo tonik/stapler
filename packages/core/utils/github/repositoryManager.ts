@@ -1,33 +1,13 @@
 import { execSync } from 'child_process';
 
-async function executeCommand(command: string, silent = false): Promise<string | null> {
-  try {
-    const result = execSync(command, { stdio: 'pipe' }); // Use 'pipe' to capture output
-    const output = result.toString().trim(); // Convert buffer to string
-    return output || null; // Ensure we return null if output is empty
-  } catch (error) {
-    console.error(`Error executing command: ${command}`);
-    if (error instanceof Error) {
-      console.error(`Error message: ${error.message}`);
-      if (error) {
-        console.error(`Command stdout: ${error.toString()}`); // Log stdout
-      }
-    }
-    return null;
-  }
-}
-
 export function isGitHubAuthenticated(): boolean {
-  console.log('🖇️ Checking GitHub authentication status...');
-
   try {
     // Use execSync to run the command and capture output
-    const result = execSync('gh auth status', { stdio: 'pipe' }).toString();
+    const result = execSync('gh auth status', { stdio: 'pipe' }).toString().trim();
 
     // Check if the output includes "Logged in" - this is to be changed in the future but couldn't find a better way
     return result.includes('Logged in');
   } catch (error) {
-    console.error(`🖇️ Error checking authentication status: ${error}`);
     return false;
   }
 }
@@ -35,29 +15,24 @@ export function isGitHubAuthenticated(): boolean {
 export async function authenticateGitHub(): Promise<boolean> {
   console.log('🖇️ Attempting to authenticate with GitHub...');
 
-  const result = await executeCommand('gh auth login');
+  execSync('gh auth login', { stdio: 'inherit' });
 
-  if (result) {
-    // Immediately check authentication status after login attempt
-    const isAuthenticated = isGitHubAuthenticated();
+  // Immediately check authentication status after login attempt
+  const isAuthenticated = isGitHubAuthenticated();
 
-    if (isAuthenticated) {
-      console.log('🖇️ Authentication was successful.');
-      return true;
-    } else {
-      console.error('🖇️ Authentication failed after login attempt.');
-      return false;
-    }
+  if (isAuthenticated) {
+    console.log('🖇️ Authentication was successful.');
+    return true;
+  } else {
+    console.error('🖇️ Authentication failed after login attempt.');
+    return false;
   }
-
-  console.error('🖇️ No output from gh auth login command.');
-  return false;
 }
 
 export async function fetchGitHubUsername(): Promise<string | null> {
   try {
     // Run the command without --jq first to inspect raw output
-    const username = await executeCommand('echo "$(gh api user --jq .login)"');
+    const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
 
     if (username) {
       console.log(`🖇️ Hello \x1b[36m${username}\x1b[0m!`);
@@ -81,7 +56,7 @@ export async function createGitHubRepository(
 
   // Check if the repository exists
   const repoCheckCommand = `echo "$(gh repo view ${username}/${projectName} --json name)"`;
-  const existingRepo = await executeCommand(repoCheckCommand, true); // Silent mode to suppress output
+  const existingRepo = execSync(repoCheckCommand, { stdio: 'pipe' }).toString().trim();
 
   if (existingRepo) {
     console.error(`🖇️ Repository "${projectName}" already exists.`);
@@ -91,12 +66,12 @@ export async function createGitHubRepository(
   console.log(`🖇️ Creating GitHub repository: \x1b[36m${projectName}\x1b[0m`);
 
   const visibility = repositoryVisibility === 'public' ? '--public' : '--private';
-  const command = `gh repo create ${projectName} ${visibility} --confirm`;
+  const command = `gh repo create ${projectName} ${visibility}`;
 
-  const result = await executeCommand(command);
+  const result = execSync(command);
 
   if (result) {
-    console.log(`🖇️ Repository created successfully at \x1b[36m${result}\x1b[0m`);
+    console.log(`🖇️ Repository successfully created at \x1b[36m${result}\x1b[0m`);
     return true; // Return true to indicate success
   }
 
@@ -119,7 +94,7 @@ export async function setupGitRepository(projectName: string, username: string) 
   ];
 
   for (const cmd of commands) {
-    const result = executeCommand(cmd);
+    const result = execSync(cmd, { stdio: 'pipe' });
     if (!result) {
       console.error(`🖇️ Failed to execute command: ${cmd}`);
       process.exit(1);

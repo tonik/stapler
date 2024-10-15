@@ -27,7 +27,7 @@ function checkGitHubCLI() {
 
 // Helper function to ensure GitHub authentication
 function ensureGitHubAuthentication() {
-  console.log('🖇️ Checking GitHub authentication...');
+  console.log('🖇️ Checking GitHub authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
@@ -35,9 +35,9 @@ function ensureGitHubAuthentication() {
     return; // Exit early if authenticated
   }
 
-  if (!authenticateGitHub()) {
-    console.error('🖇️ Authentication failed. Run "gh auth login" in your terminal and try again.');
-    process.exit(1);
+  if (!isGitHubAuthenticated()) {
+    console.error(`🖇️ It looks like you're not logged in...`);
+    authenticateGitHub();
   }
 }
 
