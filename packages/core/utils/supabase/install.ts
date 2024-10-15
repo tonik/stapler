@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 
 export const installSupabase = async (destinationDirectory: string) => {
+  execSync('rm -rf supabase', { stdio: 'pipe' });
   console.log('🖇️ Installing supabase-js...');
   execSync(`supabase init`, { stdio: 'inherit' });
 

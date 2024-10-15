@@ -4,9 +4,10 @@ import { preparePayload } from './utils/payload/install';
 import { installSupabase } from './utils/supabase/install';
 import { prettify } from './utils/prettier/prettify';
 import { prepareDrink } from './utils/bar/prepareDrink';
-import { initializeRepository } from './utils/github/install';
+import { pushToGitHub } from './utils/github/repositoryManager';
 import { ProjectOptions, StaplerState } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
+import { initializeRepository } from './utils/github/install';
 
 export async function createProject(options: ProjectOptions, projectDir: string) {
   const { name, usePayload } = options;
@@ -72,6 +73,13 @@ export async function createProject(options: ProjectOptions, projectDir: string)
         state.stepsCompleted.initializeRepository = false;
         saveState(state, projectDir);
       });
+  }
+
+  if (!state.stepsCompleted.pushToGitHub) {
+    console.log('Pushing to GitHub...');
+    pushToGitHub();
+    state.stepsCompleted.pushToGitHub = true;
+    saveState(state, projectDir);
   }
 
   if (!state.stepsCompleted.prepareDrink) {

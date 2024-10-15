@@ -63,3 +63,5 @@ export async function initializeRepository(options: ProjectOptions) {
 
   await setupGitRepository(projectName, username);
 }
+
+export async function pushToGitHub() {}

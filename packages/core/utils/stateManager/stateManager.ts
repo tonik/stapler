@@ -23,6 +23,7 @@ export function initializeState(projectDir: string): StaplerState {
         prettifyCode: false,
         prepareDrink: false,
         initializeRepository: false,
+        pushToGitHub: false,
       },
       options: {
         name: '',

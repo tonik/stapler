@@ -11,6 +11,7 @@ export interface StepsCompleted {
   prettifyCode: boolean;
   prepareDrink: boolean;
   initializeRepository: boolean;
+  pushToGitHub: boolean;
 }
 
 export interface StaplerState {
