@@ -26,37 +26,40 @@ export async function createProject(options: ProjectOptions, projectDir: string)
     saveState(state, projectDir);
   }
 
-  process.chdir(name);
+  process.chdir(projectDir);
   const currentDir = process.cwd();
 
   if (!state.stepsCompleted.createEnvFile) {
+    console.log('Creating .env file...');
     createEnvFile(currentDir);
     state.stepsCompleted.createEnvFile = true;
     saveState(state, projectDir);
   }
 
   if (usePayload && !state.stepsCompleted.installPayload) {
+    console.log('Installing payload...');
     await preparePayload();
     state.stepsCompleted.installPayload = true;
     saveState(state, projectDir);
-  } else if (state.stepsCompleted.installPayload) {
-    return;
   }
 
   if (!state.stepsCompleted.installSupabase) {
+    console.log('Installing Supabase...');
     await installSupabase(projectDir);
     state.stepsCompleted.installSupabase = true;
     saveState(state, projectDir);
   }
 
   if (!state.stepsCompleted.prettifyCode) {
+    console.log('Prettifying code...');
     await prettify();
     state.stepsCompleted.prettifyCode = true;
     saveState(state, projectDir);
   }
 
   if (!state.stepsCompleted.initializeRepository) {
-    await initializeRepository({
+    console.log('Initializing repository...');
+    initializeRepository({
       projectName: name,
       visibility: 'private',
     })
@@ -72,6 +75,7 @@ export async function createProject(options: ProjectOptions, projectDir: string)
   }
 
   if (!state.stepsCompleted.prepareDrink) {
+    console.log('Preparing drink...');
     prepareDrink(name);
     state.stepsCompleted.prepareDrink = true;
     saveState(state, projectDir);

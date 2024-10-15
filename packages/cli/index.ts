@@ -81,9 +81,17 @@ const createAction = async () => {
   }
 
   if (!proceedWithNewProject && selectedProject) {
-    // Resume the selected project
     process.chdir(selectedProject.projectPath);
-    await createProject(selectedProject.state.options, selectedProject.projectPath);
+    console.log(`project path: ${selectedProject.projectPath}`);
+    console.log(`Resuming project: ${selectedProject.projectName}`);
+    console.log(`Project steps: ${JSON.stringify(selectedProject.state.stepsCompleted, null, 2)}`);
+    await createProject(selectedProject.state.options, selectedProject.projectPath)
+      .then(() => {
+        console.log('Project resumed successfully!');
+      })
+      .catch((error) => {
+        console.error('Error resuming project:', error);
+      });
   } else {
     // create new project
     const answers = await inquirer.prompt([
@@ -100,8 +108,9 @@ const createAction = async () => {
         default: true,
       },
     ]);
+    const projectDir = `${currentDir}/${answers.name}`;
 
-    await createProject(answers, process.cwd());
+    await createProject(answers, projectDir);
   }
 };
 
