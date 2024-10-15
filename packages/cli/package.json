@@ -7,7 +7,7 @@
     "create-stapler-app": "./dist/index.mjs"
   },
   "scripts": {
-    "build": "tsup index.ts --out-dir dist --format esm --dts",
+    "build": "tsup index.ts --out-dir dist --format esm --dts --tsconfig tsconfig.json",
     "dev": "tsc -w"
   },
   "dependencies": {

@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import gradient from 'gradient-string';
 
 import { createProject } from '@create-stapler-app/core';
+import { findUnfinishedProjects, UnfinishedProject } from './utils/findUnfinishedProjects';
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    
@@ -40,29 +41,68 @@ program
   });
 
 const createAction = async () => {
-  const answers = await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'name',
-      message: 'What is your project named?',
-      default: 'my-stapled-app',
-    },
-    {
-      type: 'confirm',
-      name: 'usePayload',
-      message: 'Would you like to add Payload to your app?',
-      default: true,
-    },
-    // we dont support Inngest yet
-    // {
-    //   type: "confirm",
-    //   name: "useInngest",
-    //   message: "Would you like to add Inngest to your app?",
-    //   default: false,
-    // },
-  ]);
+  const currentDir = process.cwd();
+  const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
+  let proceedWithNewProject = true;
+  let selectedProject: UnfinishedProject | null = null;
 
-  await createProject(answers);
+  if (unfinishedProjects.length > 0) {
+    const projectChoices = unfinishedProjects.map((proj) => ({
+      name: proj.projectName,
+      value: proj,
+    }));
+
+    const resumeAnswers = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'resume',
+        message: `We found the following unfinished project(s):\n${unfinishedProjects
+          .map((p) => `- ${p.projectName}`)
+          .join('\n')}\nWould you like to resume one of them?`,
+        default: true,
+      },
+      {
+        type: 'list',
+        name: 'selectedProject',
+        message: 'Select a project to resume:',
+        choices: projectChoices,
+        when: (answers) => answers.resume && unfinishedProjects.length > 1,
+      },
+    ]);
+
+    if (resumeAnswers.resume) {
+      proceedWithNewProject = false;
+      if (unfinishedProjects.length === 1) {
+        selectedProject = unfinishedProjects[0];
+      } else {
+        selectedProject = resumeAnswers.selectedProject || null;
+      }
+    }
+  }
+
+  if (!proceedWithNewProject && selectedProject) {
+    // Resume the selected project
+    process.chdir(selectedProject.projectPath);
+    await createProject(selectedProject.state.options, selectedProject.projectPath);
+  } else {
+    // create new project
+    const answers = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is your project named?',
+        default: 'my-stapled-app',
+      },
+      {
+        type: 'confirm',
+        name: 'usePayload',
+        message: 'Would you like to add Payload to your app?',
+        default: true,
+      },
+    ]);
+
+    await createProject(answers, process.cwd());
+  }
 };
 
 program.command('create').description('Create a new tonik-infused app').action(createAction);
