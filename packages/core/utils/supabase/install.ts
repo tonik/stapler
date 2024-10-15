@@ -9,11 +9,13 @@ import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 import { updateEnvFile } from '../shared/updateEnvFile';
 import { getAnonKey, parseProjectsList } from './utlis';
 
+
 export const installSupabase = async (destinationDirectory: string, name: string) => {
   console.log('🖇️  Installing supabase-js...');
   execSync(`supabase init`, { stdio: 'inherit' });
 
   console.log('🖇️  Adding Supabase Files...');
+
   const templateDirectory = path.join(__dirname, '../templates/supabase/files');
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
@@ -23,7 +25,9 @@ export const installSupabase = async (destinationDirectory: string, name: string
   fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
 
   process.chdir('supabase');
+
   console.log('🖇️  Installing Supabase dependencies...');
+
   execSync('pnpm install', { stdio: 'inherit' });
 
   console.log('🖇️  Creating Supabase project...');

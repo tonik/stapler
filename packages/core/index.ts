@@ -5,6 +5,8 @@ import { initializeRepository } from './utils/github/install';
 import { preparePayload } from './utils/payload/install';
 import { prettify } from './utils/prettier/prettify';
 import { installSupabase } from './utils/supabase/install';
+import { initializeRepository } from './utils/github/install';
+
 
 interface ProjectOptions {
   name: string;
