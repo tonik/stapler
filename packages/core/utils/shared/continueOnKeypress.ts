@@ -8,26 +8,27 @@ export const continueOnAnyKeypress = async (message: string): Promise<void> => {
     output: process.stdout,
   });
 
-  return new Promise((resolve) => {
-    const onKeyPress = () => {
-      cleanup();
-      resolve();
-    };
+  const cleanup = () => {
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(false);
+    }
+    process.stdin.removeListener('keypress', onKeyPress);
+    rl.close();
+  };
 
-    const cleanup = () => {
-      rl.close();
-      process.stdin.removeListener('keypress', onKeyPress);
-      readline.emitKeypressEvents(process.stdin);
-      if (process.stdin.isTTY) {
-        process.stdin.setRawMode(false);
-      }
-    };
+  let resolvePromise: () => void;
 
+  const onKeyPress = () => {
+    cleanup();
+    resolvePromise();
+  };
+
+  return new Promise<void>((resolve) => {
     readline.emitKeypressEvents(process.stdin, rl);
     if (process.stdin.isTTY) {
       process.stdin.setRawMode(true);
     }
 
     process.stdin.on('keypress', onKeyPress);
-  });
+  }).finally(cleanup);
 };

@@ -1,9 +1,9 @@
 import { execSync } from 'child_process';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { createEnvFile } from './utils/env/createEnvFile';
+import { initializeRepository } from './utils/github/install';
 import { preparePayload } from './utils/payload/install';
 import { prettify } from './utils/prettier/prettify';
-import { continueOnAnyKeypress } from './utils/shared/continueOnKeypress';
 import { installSupabase } from './utils/supabase/install';
 
 interface ProjectOptions {
@@ -14,9 +14,8 @@ interface ProjectOptions {
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
-  await continueOnAnyKeypress('🍸 When you are ready to be redirected to the supabase page press Enter');
 
-  console.log(`🍸 Stapling ${name}...`);
+  console.log(`🖇️ Stapling ${name}...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
     stdio: 'inherit',
   });
@@ -32,6 +31,11 @@ export async function createProject(options: ProjectOptions) {
   await installSupabase(currentDir, name);
 
   await prettify();
+
+  initializeRepository({
+    projectName: name,
+    visibility: 'private',
+  });
 
   prepareDrink(name);
 }

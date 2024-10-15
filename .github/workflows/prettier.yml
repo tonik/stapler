@@ -1,7 +1,6 @@
 name: Prettier Check on Merge
 
 on:
-  pull_request:
   push:
     branches:
       - main
