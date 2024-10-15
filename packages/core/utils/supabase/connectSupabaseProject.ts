@@ -1,41 +1,12 @@
 import { execSync } from 'child_process';
-import fs from 'fs';
+
 import inquirer from 'inquirer';
 
-import path from 'path';
-import { supabaseFiles } from '../../templates/supabase/installConfig';
-import { templateGenerator } from '../generator/generator';
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 import { updateEnvFile } from '../shared/updateEnvFile';
 import { getAnonKey, parseProjectsList } from './utlis';
 
-
-export const installSupabase = async (destinationDirectory: string, name: string) => {
-  console.log('🖇️  Installing supabase-js...');
-  execSync(`supabase init`, { stdio: 'inherit' });
-
-  console.log('🖇️  Adding Supabase Files...');
-
-  const templateDirectory = path.join(__dirname, '../templates/supabase/files');
-
-  templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
-  // add "supabase/**" to pnpm-workspace.yaml
-  const workspacePath = path.join(destinationDirectory, 'pnpm-workspace.yaml');
-  const addSupabaseToWorkspace = `  - "supabase/**"`;
-  fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
-
-  process.chdir('supabase');
-
-  console.log('🖇️  Installing Supabase dependencies...');
-
-  execSync('pnpm install', { stdio: 'inherit' });
-
-  console.log('🖇️  Creating Supabase project...');
-
-  execSync(`supabase projects create ${name}`, {
-    stdio: 'inherit',
-  });
-
+export const connectSupabaseProject = async (name: string) => {
   console.log('🖇️  Getting information about newly created Supabase project...');
   const projectsList = execSync('supabase projects list', { encoding: 'utf-8' });
   const projects = parseProjectsList(projectsList);
@@ -54,7 +25,6 @@ export const installSupabase = async (destinationDirectory: string, name: string
       ['SUPABASE_ANON_KEY', `${SUPABASE_ANON_KEY}`],
       ['SUPABASE_URL', `${SUPABASE_URL}`],
     ],
-    isTest: true,
   });
 
   console.log('🖇️  Linking Supabase project...');

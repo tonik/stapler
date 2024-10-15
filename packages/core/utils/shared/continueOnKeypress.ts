@@ -23,12 +23,13 @@ export const continueOnAnyKeypress = async (message: string): Promise<void> => {
     resolvePromise();
   };
 
-  return new Promise<void>((resolve) => {
-    readline.emitKeypressEvents(process.stdin, rl);
-    if (process.stdin.isTTY) {
-      process.stdin.setRawMode(true);
-    }
+  readline.emitKeypressEvents(process.stdin, rl);
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
 
+  return new Promise<void>((resolve) => {
+    resolvePromise = resolve;
     process.stdin.on('keypress', onKeyPress);
-  }).finally(cleanup);
+  });
 };
