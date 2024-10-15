@@ -20,9 +20,10 @@ const asciiArt = `
 
 function displayHeader() {
   const metalGradient = gradient([
-    { color: '#4F4F4F', pos: 0 },
-    { color: '#B0B0B0', pos: 0.5 },
-    { color: '#4F4F4F', pos: 1 },
+    { color: '#3C3C3C', pos: 0 },
+    { color: '#FFFFFF', pos: 0.5 },
+    { color: '#BDBDBD', pos: 0.75 },
+    { color: '#3C3C3C', pos: 1 },
   ]);
 
   console.log(metalGradient(asciiArt));
