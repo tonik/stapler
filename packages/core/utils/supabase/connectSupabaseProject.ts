@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 import { updateEnvFile } from '../shared/updateEnvFile';
-import { getAnonKey, parseProjectsList } from './utlis';
+import { getAnonKey, parseProjectsList } from './utils';
 
 export const connectSupabaseProject = async (name: string) => {
   console.log('🖇️  Getting information about newly created Supabase project...');
