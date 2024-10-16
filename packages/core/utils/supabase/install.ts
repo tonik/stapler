@@ -1,8 +1,8 @@
 import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
+import { supabaseFiles } from '../../templates/supabase/installConfig';
+import path from 'path';
+import fs from 'fs';
 
 export const installSupabase = async (destinationDirectory: string) => {
   console.log('🖇️  Installing supabase-js...');
@@ -23,4 +23,6 @@ export const installSupabase = async (destinationDirectory: string) => {
   console.log('🖇️  Installing Supabase dependencies...');
 
   execSync('pnpm install', { stdio: 'inherit' });
+  
+  process.chdir('..');
 };

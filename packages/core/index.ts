@@ -1,11 +1,11 @@
 import { execSync } from 'child_process';
 import { createEnvFile } from './utils/env/createEnvFile';
-import { initializeRepository } from './utils/github/install';
 import { preparePayload } from './utils/payload/install';
+import { installSupabase } from './utils/supabase/install';
 import { prettify } from './utils/prettier/prettify';
 import { prepareDrink } from './utils/bar/prepareDrink';
+import { initializeRepository } from './utils/github/install';
 import { createAndConnectSupabaseProject } from './utils/supabase';
-import { installSupabase } from './utils/supabase/install';
 
 interface ProjectOptions {
   name: string;

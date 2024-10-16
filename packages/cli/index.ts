@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { createProject } from '@create-stapler-app/core';
-import chalk from 'chalk';
 import { Command } from 'commander';
-import gradient from 'gradient-string';
 import inquirer from 'inquirer';
+import chalk from 'chalk';
+import gradient from 'gradient-string';
+
+import { createProject } from '@create-stapler-app/core';
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    
