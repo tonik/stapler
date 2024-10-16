@@ -2,6 +2,7 @@
 import { createProject } from '@create-stapler-app/core';
 import chalk from 'chalk';
 import { Command } from 'commander';
+import gradient from 'gradient-string';
 import inquirer from 'inquirer';
 
 const asciiArt = `
@@ -17,7 +18,13 @@ const asciiArt = `
 `;
 
 function displayHeader() {
-  console.log(chalk.hex('#3100F5').bold(asciiArt));
+  const metalGradient = gradient([
+    { color: '#4F4F4F', pos: 0 },
+    { color: '#B0B0B0', pos: 0.5 },
+    { color: '#4F4F4F', pos: 1 },
+  ]);
+
+  console.log(metalGradient(asciiArt));
   console.log(chalk.bold('\n🖇️ Welcome to Stapler!\n'));
 }
 

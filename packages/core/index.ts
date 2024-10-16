@@ -1,10 +1,11 @@
 import { execSync } from 'child_process';
 import { createEnvFile } from './utils/env/createEnvFile';
+import { initializeRepository } from './utils/github/install';
 import { preparePayload } from './utils/payload/install';
 import { prettify } from './utils/prettier/prettify';
-import { installSupabase } from './utils/supabase/install';
 import { prepareDrink } from './utils/bar/prepareDrink';
-import { initializeRepository } from './utils/github/install';
+import { createAndConnectSupabaseProject } from './utils/supabase';
+import { installSupabase } from './utils/supabase/install';
 
 interface ProjectOptions {
   name: string;
@@ -28,14 +29,16 @@ export async function createProject(options: ProjectOptions) {
 
   if (usePayload) await preparePayload();
 
-  await installSupabase(currentDir, name);
+  installSupabase(currentDir);
 
   await prettify();
 
-  initializeRepository({
+  await initializeRepository({
     projectName: name,
     visibility: 'private',
   });
+
+  await createAndConnectSupabaseProject(name);
 
   prepareDrink(name);
 }
