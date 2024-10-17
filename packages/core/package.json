@@ -8,7 +8,8 @@
     "dev": "tsc -w"
   },
   "dependencies": {
-    "fs-extra": "^11.2.0"
+    "fs-extra": "^11.2.0",
+    "inquirer": "^10.2.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
