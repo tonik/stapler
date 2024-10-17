@@ -24,10 +24,20 @@ export function parseProjectsList(output: string): SupabaseProjectInfo[] {
   });
 }
 
-export function getAnonKey(input: string) {
+export function getSupabaseKeys(input: string) {
   const lines = input.split('\n');
 
-  const anonLine = lines.find((line) => line.replace(/\x1B\[[0-9;]*[JKmsu]/g, '').includes('anon'));
+  const anonKey = lines
+    .find((line) => line.replace(/\x1B\[[0-9;]*[JKmsu]/g, '').includes('anon'))
+    ?.split('│')[1]
+    .trim();
+  const serviceRoleKey = lines
+    .find((line) => line.replace(/\x1B\[[0-9;]*[JKmsu]/g, '').includes('service_role'))
+    ?.split('│')[1]
+    .trim();
 
-  return anonLine?.split('│')[1].trim();
+  return {
+    anonKey,
+    serviceRoleKey,
+  };
 }

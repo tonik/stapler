@@ -5,7 +5,8 @@ import { installSupabase } from './utils/supabase/install';
 import { prettify } from './utils/prettier/prettify';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { initializeRepository } from './utils/github/install';
-import { createAndConnectSupabaseProject } from './utils/supabase';
+import { connectSupabaseProject } from './utils/supabase/connectProject';
+import { createSupabaseProject } from './utils/supabase/createProject';
 
 interface ProjectOptions {
   name: string;
@@ -15,6 +16,7 @@ interface ProjectOptions {
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
+  const currentDir = process.cwd();
 
   console.log(`🖇️ Stapling ${name}...`);
   execSync(`npx create-turbo@latest ${name} -m pnpm`, {
@@ -22,8 +24,6 @@ export async function createProject(options: ProjectOptions) {
   });
 
   process.chdir(name);
-
-  const currentDir = process.cwd();
 
   createEnvFile(currentDir);
 
@@ -38,7 +38,9 @@ export async function createProject(options: ProjectOptions) {
     visibility: 'private',
   });
 
-  await createAndConnectSupabaseProject(name);
+  await createSupabaseProject(name);
+
+  await connectSupabaseProject(name, currentDir);
 
   prepareDrink(name);
 }

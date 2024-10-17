@@ -1,25 +1,18 @@
 import * as fs from 'fs';
 import * as util from 'util';
-const path = require('path');
+import * as path from 'path';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
+const access = util.promisify(fs.access);
 
 type EnvPair = [string, string];
 
 interface EnvUpdateConfig {
+  currentDir: string;
+  projectName: string;
   pairs: EnvPair[];
-  appFolderName: string;
-  isTest?: boolean;
 }
-
-const getEnvPath = (appFolderName: string, isTest: boolean): string => {
-  if (isTest) {
-    // Update path if needed
-    return path.join(process.env.HOME || '', 'Documents', appFolderName, '.env');
-  }
-  return path.join(__dirname, appFolderName, '.env');
-};
 
 // Function to update a single line
 const updateLine = (line: string, key: string, value: string): string => {
@@ -29,11 +22,18 @@ const updateLine = (line: string, key: string, value: string): string => {
   return line;
 };
 
-export async function updateEnvFile({ appFolderName, pairs, isTest = false }: EnvUpdateConfig): Promise<void> {
-  const envPath = getEnvPath(appFolderName, isTest);
-
+export async function updateEnvFile({ currentDir, projectName, pairs }: EnvUpdateConfig): Promise<void> {
+  const envFilePath = path.join(currentDir, projectName, '.env');
   try {
-    const data = await readFile(envPath, 'utf8');
+    // Check if the .env file exists
+    try {
+      await access(envFilePath); // Check if file exists
+    } catch {
+      // If it doesn't exist, create it with default values
+      await writeFile(envFilePath, '', 'utf8');
+    }
+
+    const data = await readFile(envFilePath, 'utf8');
     let lines = data.split('\n');
 
     lines = lines.map((line) => {
@@ -44,8 +44,7 @@ export async function updateEnvFile({ appFolderName, pairs, isTest = false }: En
     });
 
     const updatedContent = lines.join('\n');
-    await writeFile(envPath, updatedContent, 'utf8');
-    console.log('🖇️ Successfully updated .env file');
+    await writeFile(envFilePath, updatedContent, 'utf8');
   } catch (error) {
     console.error('🖇️ Error updating .env file:', error);
     throw error; // Re-throw the error for the caller to handle
