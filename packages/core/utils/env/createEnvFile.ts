@@ -10,8 +10,6 @@ const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
   SUPABASE_SERVICE_ROLE_KEY: 'required',
   // DATABASE_URI:"required", // this is created by Payload in web app directory
   // PAYLOAD_SECRET:"required", // this is created by Payload in web app directory
-  // INNGEST_API_KEY: "required",
-  // INNGEST_API_SECRET: "optional",
 };
 
 // Function to create .env file with empty fields
