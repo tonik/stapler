@@ -79,7 +79,7 @@ export async function createGitHubRepository(
   return false; // Return false on failure
 }
 
-const executeCommands = (commands: string[]) => {
+const executeCommands = async (commands: string[]) => {
   for (const cmd of commands) {
     const result = execSync(cmd, { stdio: 'pipe' });
     if (!result) {
@@ -109,5 +109,11 @@ export async function pushToGitHub(projectName: string) {
     `git commit -m "feat: initial commit"`,
     `git push -u origin main`,
   ];
-  executeCommands(commands);
+  await executeCommands(commands)
+    .then(() => {
+      console.log('🖇️ Changes pushed to GitHub!');
+    })
+    .catch((error) => {
+      console.error('🖇️ Error pushing changes to GitHub:', error);
+    });
 }

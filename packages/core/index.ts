@@ -1,4 +1,4 @@
-import { assign, createActor, setup } from 'xstate';
+import { assign, createActor, fromPromise, setup } from 'xstate';
 import { ProjectOptions, StaplerState, StepsCompleted } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
 import { createEnvFile } from './utils/env/createEnvFile';
@@ -6,7 +6,7 @@ import { preparePayload } from './utils/payload/install';
 import { installSupabase } from './utils/supabase/install';
 import { prettify } from './utils/prettier/prettify';
 import { initializeRepository } from './utils/github/install';
-import { pushToGitHub } from './utils/github/repositoryManager';
+import { createGitHubRepository, pushToGitHub } from './utils/github/repositoryManager';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { execSync } from 'child_process';
 
@@ -22,6 +22,13 @@ const createInstallMachine = (initialContext: ContextType) => {
     types: {} as {
       context: ContextType;
       events: Event;
+    },
+    actors: {
+      initializeRepository: fromPromise(async ({ input }: { input: ContextType }) => {
+        const { projectName, options } = input.stateData;
+        console.log(`🖇️ Creating GitHub repository: ${projectName}`);
+        return await initializeRepository({ projectName, visibility: 'private' });
+      }),
     },
     actions: {
       performStep: assign({
@@ -45,14 +52,15 @@ const createInstallMachine = (initialContext: ContextType) => {
             case 'prettifyCode':
               prettify();
               break;
-            case 'initializeRepository':
-              initializeRepository({
-                projectName: context.stateData.projectName,
-                visibility: 'private',
-              });
-              break;
             case 'pushToGitHub':
-              pushToGitHub(context.projectDir);
+              async () =>
+                await pushToGitHub(context.projectDir)
+                  .then(() => {
+                    console.log('🖇️ Changes pushed to GitHub!');
+                  })
+                  .catch((error) => {
+                    console.error('🖇️ Error pushing changes to GitHub:', error);
+                  });
               break;
             case 'prepareDrink':
               prepareDrink(context.stateData.projectName);
@@ -99,8 +107,15 @@ const createInstallMachine = (initialContext: ContextType) => {
         on: { NEXT: 'initializeRepository' },
       },
       initializeRepository: {
-        entry: { type: 'performStep', params: { step: 'initializeRepository' } },
-        on: { NEXT: 'pushToGitHub' },
+        invoke: {
+          src: 'initializeRepository',
+          input: ({ context, event }) => ({
+            projectDir: context.projectDir,
+            stateData: context.stateData,
+          }),
+          onDone: { target: 'pushToGitHub' },
+          onError: { target: 'failed' },
+        },
       },
       pushToGitHub: {
         entry: { type: 'performStep', params: { step: 'pushToGitHub' } },
@@ -113,19 +128,29 @@ const createInstallMachine = (initialContext: ContextType) => {
       done: {
         type: 'final',
       },
+      failed: {
+        type: 'final',
+        entry: () => console.log('Installation process encountered an error and stopped.'),
+      },
     },
   });
 };
 
 export async function createProject(options: ProjectOptions, projectDir: string) {
-  let state: StaplerState = initializeState(projectDir);
   const { name } = options;
+
+  let state: StaplerState = initializeState(projectDir, name);
   state.options = options;
 
-  console.log(`🖇️ Stapling ${name}...`);
-  execSync(`npx create-turbo@latest ${name} -m pnpm`, {
-    stdio: 'inherit',
-  });
+  if (state.stepsCompleted.initializeProject) {
+    console.log(`🖇️ Project "${name}" already initialized.`);
+  } else {
+    console.log(`🖇️ Stapling ${name}...`);
+    execSync(`npx create-turbo@latest ${name} -m pnpm`, {
+      stdio: 'inherit',
+    });
+  }
+
   process.chdir(name);
 
   const currentDir = process.cwd();
