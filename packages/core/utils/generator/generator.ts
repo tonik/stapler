@@ -11,29 +11,27 @@ interface TemplateFilesObject {
 }
 export type Template = TemplateFilesObject[];
 
-export const templateGenerator = (template: Template, templateDir: string, destinationDir: string) => {
-  template.forEach((templateFilesObject) => {
-    templateFilesObject.files.forEach((file) => {
-      // Construct source and destination paths
-      const source = path.join(templateDir, file);
-      // console.log(source);
-      const destination = path.join(destinationDir, templateFilesObject.path, file);
-      // check if the directory exists, if not create it
-      if (!fs.existsSync(path.join(destinationDir, templateFilesObject.path))) {
-        fs.mkdirSync(path.join(destinationDir, templateFilesObject.path), {
-          recursive: true,
-        });
-      }
-      fs.copyFileSync(source, destination);
+export const templateGenerator = (filesConfig: Template, templateDir: string, destinationDir: string) => {
+  filesConfig.forEach(({ path: filePath, files, rename }) => {
+    const fullPath = path.join(destinationDir, filePath);
+    fs.mkdirSync(fullPath, { recursive: true }); // Create the directory if it doesn't exist
 
-      // Handle file renaming if needed
-      if (templateFilesObject.rename) {
-        templateFilesObject.rename.forEach((rename) => {
-          const oldPath = path.join(process.cwd(), templateFilesObject.path, rename.from);
-          const newPath = path.join(process.cwd(), templateFilesObject.path, rename.to);
-          fs.renameSync(oldPath, newPath);
-        });
-      }
+    files.forEach((file) => {
+      const sourceFile = path.join(templateDir, file);
+      const destinationFile = path.join(fullPath, file);
+
+      // Copy the file from the template directory to the destination
+      fs.copyFileSync(sourceFile, destinationFile);
     });
+
+    // Handle renaming if applicable
+    if (rename) {
+      rename.forEach(({ from, to }) => {
+        const originalFilePath = path.join(fullPath, from);
+        const renamedFilePath = path.join(fullPath, to);
+
+        fs.renameSync(originalFilePath, renamedFilePath);
+      });
+    }
   });
 };

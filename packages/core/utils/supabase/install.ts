@@ -9,6 +9,7 @@ export const installSupabase = async (destinationDirectory: string) => {
   execSync(`supabase init`, { stdio: 'inherit' });
 
   console.log('🖇️ Adding Supabase Files...');
+
   const templateDirectory = path.join(__dirname, '../templates/supabase/files');
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
@@ -18,7 +19,10 @@ export const installSupabase = async (destinationDirectory: string) => {
   fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
 
   process.chdir('supabase');
+
   console.log('🖇️ Installing Supabase dependencies...');
+
   execSync('pnpm install', { stdio: 'inherit' });
+
   process.chdir('..');
 };

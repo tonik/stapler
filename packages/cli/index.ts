@@ -54,13 +54,6 @@ const createAction = async () => {
       message: 'Would you like to add Payload to your app?',
       default: true,
     },
-    // we dont support Inngest yet
-    // {
-    //   type: "confirm",
-    //   name: "useInngest",
-    //   message: "Would you like to add Inngest to your app?",
-    //   default: false,
-    // },
   ]);
 
   await createProject(answers);
