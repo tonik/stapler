@@ -3,10 +3,9 @@ import path from 'path';
 import { StaplerState } from '../../types';
 
 const rcFileName = '.staplerrc';
-let rcFilePath: string;
 
 export function initializeState(projectDir: string): StaplerState {
-  rcFilePath = path.join(projectDir, rcFileName);
+  const rcFilePath = path.join(projectDir, rcFileName);
   if (fs.existsSync(rcFilePath)) {
     const data = fs.readFileSync(rcFilePath, 'utf-8');
     return JSON.parse(data) as StaplerState;
@@ -35,6 +34,6 @@ export function initializeState(projectDir: string): StaplerState {
 }
 
 export function saveState(state: StaplerState, projectDir: string): void {
-  const rcFilePath = projectDir + '/' + rcFileName;
+  const rcFilePath = path.join(projectDir, rcFileName);
   fs.writeFileSync(rcFilePath, JSON.stringify(state, null, 2));
 }

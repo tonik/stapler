@@ -84,29 +84,30 @@ const executeCommands = (commands: string[]) => {
     const result = execSync(cmd, { stdio: 'pipe' });
     if (!result) {
       console.error(`🖇️ Failed to execute command: ${cmd}`);
-      process.exit(1);
     }
   }
 };
 
 // New function to set up the local Git repository
-export async function setupGitRepository(projectName: string, username: string) {
+export async function setupGitRepository() {
   console.log(`🖇️ Setting up Git for the repository...`);
 
   // Set the remote origin and push to GitHub
-  const commands = [
-    `git init`,
-    `git add .`,
-    `git branch -M main`,
-    `git remote add origin git@github.com:${username}/${projectName}.git`,
-  ];
+  const commands = [`git init`, `git add .`];
 
   executeCommands(commands);
 }
 
-export async function pushToGitHub() {
+export async function pushToGitHub(projectName: string) {
   console.log('🖇️ Pushing changes to GitHub...');
 
-  const commands = [`git add .`, `git commit -m "feat: initial commit"`, `git push -u origin main`];
+  const username = await fetchGitHubUsername();
+  const commands = [
+    `git add .`,
+    `git branch -M main`,
+    `git remote add origin git@github.com:${username}/${projectName}.git`,
+    `git commit -m "feat: initial commit"`,
+    `git push -u origin main`,
+  ];
   executeCommands(commands);
 }
