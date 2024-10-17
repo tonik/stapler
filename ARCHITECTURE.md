@@ -3,6 +3,7 @@
 ```bash
 /my-stapled-app
 .
+├── .env  # Contains all the environment variables.
 ├── README.md  # Main project documentation file explaining overall usage and features.
 ├── apps       # Contains all the main application code (frontend or backend).
 │   ├── docs   # Documentation app, possibly a Next.js site or documentation tool.
