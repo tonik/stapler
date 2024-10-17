@@ -10,7 +10,6 @@ type EnvPair = [string, string];
 
 interface EnvUpdateConfig {
   currentDir: string;
-  projectName: string;
   pairs: EnvPair[];
 }
 
@@ -22,8 +21,8 @@ const updateLine = (line: string, key: string, value: string): string => {
   return line;
 };
 
-export async function updateEnvFile({ currentDir, projectName, pairs }: EnvUpdateConfig): Promise<void> {
-  const envFilePath = path.join(currentDir, projectName, '.env');
+export async function updateEnvFile({ currentDir, pairs }: EnvUpdateConfig): Promise<void> {
+  const envFilePath = path.join(currentDir, '.env');
   try {
     // Check if the .env file exists
     try {

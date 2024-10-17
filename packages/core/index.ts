@@ -15,13 +15,13 @@ interface ProjectOptions {
 
 export async function createProject(options: ProjectOptions) {
   const { name, usePayload } = options;
-  const currentDir = process.cwd();
 
   console.log(`🖇️ Stapling ${name}...`);
 
   await createTurboRepo(name);
 
   process.chdir(name);
+  const currentDir = process.cwd();
 
   createEnvFile(currentDir);
 

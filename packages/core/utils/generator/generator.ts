@@ -22,7 +22,6 @@ export const templateGenerator = (filesConfig: Template, templateDir: string, de
 
       // Copy the file from the template directory to the destination
       fs.copyFileSync(sourceFile, destinationFile);
-      console.log(`🖇️ Copied ${sourceFile} to ${destinationFile}`);
     });
 
     // Handle renaming if applicable
@@ -32,7 +31,6 @@ export const templateGenerator = (filesConfig: Template, templateDir: string, de
         const renamedFilePath = path.join(fullPath, to);
 
         fs.renameSync(originalFilePath, renamedFilePath);
-        console.log(`🖇️ Renamed ${originalFilePath} to ${renamedFilePath}`);
       });
     }
   });

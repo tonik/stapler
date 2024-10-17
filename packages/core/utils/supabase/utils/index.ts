@@ -1,7 +1,7 @@
 interface SupabaseProjectInfo {
   linked: boolean;
   org_id: string;
-  id: string;
+  refId: string;
   name: string;
   region: string;
   created_at: string;
@@ -12,11 +12,11 @@ export function parseProjectsList(output: string): SupabaseProjectInfo[] {
   lines.splice(0, 2);
 
   return lines.map((line) => {
-    const [linked, org_id, id, name, region, created_at] = line.split('│').map((item) => item.trim());
+    const [linked, org_id, refId, name, region, created_at] = line.split('│').map((item) => item.trim());
     return {
       linked: linked !== '',
       org_id,
-      id,
+      refId,
       name,
       region,
       created_at,

@@ -21,16 +21,17 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
   const newProject = projects.find((project) => project.name === projectName);
 
   console.log('🖇️ Getting Supabase project keys...');
-  const projectAPIKeys = execSync(`supabase projects api-keys --project-ref ${newProject?.id}`, { encoding: 'utf-8' });
+  const projectAPIKeys = execSync(`supabase projects api-keys --project-ref ${newProject?.refId}`, {
+    encoding: 'utf-8',
+  });
 
   const SUPABASE_ANON_KEY = getSupabaseKeys(projectAPIKeys).anonKey;
   const SUPABASE_SERVICE_ROLE_KEY = getSupabaseKeys(projectAPIKeys).serviceRoleKey;
-  const SUPABASE_URL = `https://${newProject?.id}.supabase.co/`;
+  const SUPABASE_URL = `https://${newProject?.refId}.supabase.co/`;
 
   console.log(`🖇️ Saving keys to .env...`);
   await updateEnvFile({
     currentDir,
-    projectName,
     pairs: [
       ['SUPABASE_ANON_KEY', `${SUPABASE_ANON_KEY}`],
       ['SUPABASE_SERVICE_ROLE_KEY', `${SUPABASE_SERVICE_ROLE_KEY}`],
@@ -39,7 +40,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
   });
 
   console.log('🖇️ Linking Supabase project...');
-  execSync(`supabase projects link ${newProject?.id}`, {
+  execSync(`supabase link --project-ref ${newProject?.refId}`, {
     stdio: 'inherit',
   });
 
@@ -49,7 +50,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
   await continueOnAnyKeypress('🖇️ When you are ready to be redirected to the Supabase page press any key');
 
-  execSync(`open https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`);
+  execSync(`open https://supabase.com/dashboard/project/${newProject?.refId}/settings/integrations`);
 
   const { isIntegrationReady } = await inquirer.prompt([
     {
@@ -64,7 +65,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     // Uncomment after CLI progress task is done.
     // console.log("🖇️ Run \x1b[36mcreate-stapler-app\x1b[0m again when you've completed the integration.");
     console.log(
-      `🖇️ You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject?.id}/settings/integrations`,
+      `🖇️ You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject?.refId}/settings/integrations`,
     );
   }
 };
