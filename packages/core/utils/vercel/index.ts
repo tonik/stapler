@@ -6,18 +6,20 @@ import { installVercel } from './install';
 import { linkVercelProject } from './link';
 import { loginToVercel } from './login';
 
-export function setupVercel() {
+export async function setupVercel() {
   installVercel();
   loginToVercel();
   initializeVercelProject();
   linkVercelProject();
 
-  const extractedEnvVars = getEnvVariables('here name o the folder my-stapler-app'); //TODO
-  if (extractedEnvVars.SUPABASE_URL) {
-    addEnvironmentVariable({ name: 'SUPABASE_URL', value: extractedEnvVars.SUPABASE_URL });
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+
+  if (supabaseUrl) {
+    addEnvironmentVariable({ name: 'SUPABASE_URL', value: supabaseUrl, deployment: 'production' });
   }
-  if (extractedEnvVars.SUPABASE_ANON_KEY) {
-    addEnvironmentVariable({ name: 'SUPABASE_ANON_KEY', value: extractedEnvVars.SUPABASE_ANON_KEY });
+  if (supabaseAnonKey) {
+    addEnvironmentVariable({ name: 'SUPABASE_ANON_KEY', value: supabaseAnonKey, deployment: 'production' });
   }
 
   deployProject();
