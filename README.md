@@ -1,4 +1,4 @@
-# Stapler CLI
+# Stapler CLI 🖇️
 
 **Stapler** is a CLI tool that scaffolds an entire fullstack app using a monorepo structure. It integrates **Next.js**, **Supabase**, **Payload CMS**, **Vercel**, and more, leveraging **Turbo** and **pnpm** to optimize your development workflow.
 
