@@ -7,6 +7,7 @@ import { prepareDrink } from './utils/bar/prepareDrink';
 import { initializeRepository } from './utils/github/install';
 import { connectSupabaseProject } from './utils/supabase/connectProject';
 import { createSupabaseProject } from './utils/supabase/createProject';
+import { createDocFiles } from './utils/docs/create';
 
 interface ProjectOptions {
   name: string;
@@ -28,6 +29,8 @@ export async function createProject(options: ProjectOptions) {
   if (usePayload) await preparePayload();
 
   installSupabase(currentDir);
+
+  createDocFiles();
 
   await prettify();
 
