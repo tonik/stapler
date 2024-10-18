@@ -30,6 +30,8 @@ export async function createProject(options: ProjectOptions) {
 
   installSupabase(currentDir);
 
+  createDocFiles();
+
   await prettify();
 
   await initializeRepository({
@@ -40,8 +42,6 @@ export async function createProject(options: ProjectOptions) {
   await createSupabaseProject(name);
 
   await connectSupabaseProject(name, currentDir);
-
-  createDocFiles();
 
   prepareDrink(name);
 }
