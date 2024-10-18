@@ -95,6 +95,10 @@ To create a production build of the project:
 pnpm build
 ```
 
+## Project Structure
+
+Refer to the [ARCHITECTURE](ARCHITECTURE.md) document for an in-depth overview of the project structure.
+
 ## Customization
 
 You can extend the project by:
@@ -103,9 +107,9 @@ You can extend the project by:
 
   To add your own `packages` and `apps`, run:
 
-    ```bash
-    pnpm turbo gen workspace
-    ```
+  ```bash
+  pnpm turbo gen workspace
+  ```
 
 - Adding Payload CMS collections: Modify the `payload.config.ts` file in `apps/web` to add new content types.
 - Customizing Supabase: Write custom SQL queries or functions in Supabase.
