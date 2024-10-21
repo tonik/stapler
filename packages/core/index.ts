@@ -9,6 +9,8 @@ import { installSupabase } from './utils/supabase/install';
 import { createTurboRepo } from './utils/turbo/create';
 import { deployVercelProject } from './utils/vercel/deploy';
 import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
+import { createDocFiles } from './utils/docs/create';
+
 
 interface ProjectOptions {
   name: string;
@@ -30,6 +32,8 @@ export async function createProject(options: ProjectOptions) {
   if (usePayload) await preparePayload();
 
   installSupabase(currentDir);
+
+  createDocFiles();
 
   await prettify();
 
