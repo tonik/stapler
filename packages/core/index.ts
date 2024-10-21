@@ -11,7 +11,6 @@ import { deployVercelProject } from './utils/vercel/deploy';
 import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 import { createDocFiles } from './utils/docs/create';
 
-
 interface ProjectOptions {
   name: string;
   usePayload: boolean;
