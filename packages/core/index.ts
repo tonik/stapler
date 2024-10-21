@@ -1,16 +1,14 @@
-
-import { execSync } from 'child_process';
 import { prepareDrink } from './utils/bar/prepareDrink';
-import { createTurboRepo } from './utils/turbo/create';
 import { createEnvFile } from './utils/env/createEnvFile';
 import { initializeRepository } from './utils/github/install';
 import { preparePayload } from './utils/payload/install';
 import { prettify } from './utils/prettier/prettify';
-import { installSupabase } from './utils/supabase/install';
-import { setupVercel } from './utils/vercel';
 import { connectSupabaseProject } from './utils/supabase/connectProject';
 import { createSupabaseProject } from './utils/supabase/createProject';
-
+import { installSupabase } from './utils/supabase/install';
+import { createTurboRepo } from './utils/turbo/create';
+import { deployVercelProject } from './utils/vercel/deploy';
+import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 
 interface ProjectOptions {
   name: string;
@@ -42,9 +40,11 @@ export async function createProject(options: ProjectOptions) {
 
   await createSupabaseProject(name);
 
+  await setupAndCreateVercelProject();
+
   await connectSupabaseProject(name, currentDir);
 
-  await setupVercel();
+  await deployVercelProject();
 
   prepareDrink(name);
 }

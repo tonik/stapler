@@ -56,7 +56,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     {
       type: 'confirm',
       name: 'isIntegrationReady',
-      message: '🖇️ Have you completed the GitHub and Vercel integration setup?',
+      message: 'Have you completed the GitHub and Vercel integration setup?',
       default: false,
     },
   ]);
