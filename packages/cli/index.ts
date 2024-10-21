@@ -111,7 +111,6 @@ const createAction = async () => {
       },
     ]);
     const projectDir = `${currentDir}/${answers.name}`;
-
     await createProject(answers, projectDir);
   }
 };

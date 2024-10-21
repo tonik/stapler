@@ -31,8 +31,9 @@ export async function authenticateGitHub(): Promise<boolean> {
 
 export async function fetchGitHubUsername(): Promise<string | null> {
   try {
-    // Run the command without --jq first to inspect raw output
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
+
+    console.log(`🖇️ Retrieved GitHub username: ${username}`);
 
     if (username) {
       console.log(`🖇️ Hello \x1b[36m${username}\x1b[0m!`);
