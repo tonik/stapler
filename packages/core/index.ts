@@ -1,13 +1,16 @@
-import { createTurboRepo } from './utils/turbo/create';
-import { createEnvFile } from './utils/env/createEnvFile';
-import { preparePayload } from './utils/payload/install';
-import { installSupabase } from './utils/supabase/install';
-import { prettify } from './utils/prettier/prettify';
 import { prepareDrink } from './utils/bar/prepareDrink';
+import { createEnvFile } from './utils/env/createEnvFile';
 import { initializeRepository } from './utils/github/install';
+import { preparePayload } from './utils/payload/install';
+import { prettify } from './utils/prettier/prettify';
 import { connectSupabaseProject } from './utils/supabase/connectProject';
 import { createSupabaseProject } from './utils/supabase/createProject';
+import { installSupabase } from './utils/supabase/install';
+import { createTurboRepo } from './utils/turbo/create';
+import { deployVercelProject } from './utils/vercel/deploy';
+import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 import { createDocFiles } from './utils/docs/create';
+
 
 interface ProjectOptions {
   name: string;
@@ -41,7 +44,11 @@ export async function createProject(options: ProjectOptions) {
 
   await createSupabaseProject(name);
 
+  await setupAndCreateVercelProject();
+
   await connectSupabaseProject(name, currentDir);
+
+  await deployVercelProject();
 
   prepareDrink(name);
 }
