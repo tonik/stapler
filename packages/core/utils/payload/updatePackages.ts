@@ -7,7 +7,7 @@ export const updatePackages = () => {
   });
 
   console.log('🖇️ Installing necessary packages...');
-  execSync(`pnpm i pg sharp`, {
+  execSync(`pnpm i pg sharp dotenv`, {
     stdio: 'inherit',
   });
 };

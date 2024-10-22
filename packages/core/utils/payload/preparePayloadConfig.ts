@@ -5,20 +5,23 @@ export const preparePayloadConfig = async (configPath: PathLike) => {
   console.log('🖇️ Preparing payload.config.ts...');
 
   try {
-    // Read the payload.config.ts file
-    const data = await fs.readFile(configPath, 'utf8');
+    let data = await fs.readFile(configPath, 'utf8');
 
-    // Use regex to find the "pool" object and append "schemaName: 'payload'" to the pool configuration
-    const updatedConfig = data.replace(/pool:\s*{([^}]*)connectionString[^}]*}/, (match, group1) => {
-      if (match.includes('schemaName')) {
-        return match; // If "schemaName" already exists, return the match unchanged
-      }
-      // Append schemaName to the existing pool configuration (avoiding the extra comma)
-      return match.replace(group1.trimEnd(), `${group1.trimEnd()} schemaName: 'payload',\n`);
-    });
+    // Update the db configuration
+    const dbConfig = `db: postgresAdapter({
+    schemaName: "payload",
+    pool: {
+      connectionString: process.env.SUPABASE_URL || process.env.DATABASE_URI || "",
+    },
+    })`;
+
+    data = data.replace(
+      /db:\s*postgresAdapter\(\{[\s\S]*?pool:\s*\{[\s\S]*?connectionString:[\s\S]*?\}[\s\S]*?\}\)/m,
+      dbConfig,
+    );
 
     // Write the updated payload.config.ts back to the file
-    await fs.writeFile(configPath, updatedConfig);
+    await fs.writeFile(configPath, data);
   } catch (err) {
     console.error('🖇️ Error during processing payload.config.ts', err);
   }

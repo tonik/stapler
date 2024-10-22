@@ -8,6 +8,7 @@
     "dev": "tsc -w"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
     "inquirer": "^10.2.2"
   },
