@@ -6,7 +6,6 @@ const fs = require('fs').promises;
 export async function deployVercelProject() {
   try {
     await connectWithGH();
-    console.log('🖇️  Successfully connected to GitHub!');
   } catch (error) {
     console.log('🖇️  An unexpected error occurred:', error);
     console.log('\n🖇️  Failed to connect GitHub with Vercel');
