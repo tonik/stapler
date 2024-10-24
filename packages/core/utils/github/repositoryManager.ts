@@ -11,7 +11,7 @@ async function generateUniqueRepoName(baseName: string): Promise<string> {
   // Try the base name first
   try {
     await execAsync(`gh repo view ${cleanBaseName}`);
-    console.error(`🖇️ Repository "${cleanBaseName}" already exists.`);
+    console.error(`🖇️  Repository "${cleanBaseName}" already exists.`);
     // If we get here, the repo exists, so we need a new name
   } catch (error) {
     // If repo doesn't exist, we can use the clean base name
@@ -26,7 +26,7 @@ async function generateUniqueRepoName(baseName: string): Promise<string> {
     const candidateName = `${cleanBaseName}-v${counter}`;
     try {
       await execAsync(`gh repo view ${candidateName}`);
-      console.error(`🖇️ Repository "${candidateName}" already exists.`);
+      console.error(`🖇️  Repository "${candidateName}" already exists.`);
       counter++;
     } catch (error) {
       if (error) {
