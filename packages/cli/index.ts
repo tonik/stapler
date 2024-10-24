@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import fs from 'fs';
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
@@ -100,6 +101,31 @@ const createAction = async () => {
         message: 'What is your project named?',
         default: 'my-stapled-app',
       },
+    ]);
+    const projectDir = `${currentDir}/${answers.name}`;
+    // Check if the directory already exists
+    if (fs.existsSync(projectDir)) {
+      const overwriteAnswer = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'overwrite',
+          message: `The directory "${answers.name}" already exists. Do you want to overwrite it?`,
+          default: false,
+        },
+      ]);
+
+      if (!overwriteAnswer.overwrite) {
+        console.log(chalk.red('Project creation canceled. Project directory already exists.'));
+        return;
+      }
+
+      // Optional: Clear the directory if overwrite is confirmed
+      fs.rmSync(projectDir, { recursive: true, force: true });
+      console.log(chalk.yellow(`The directory "${answers.name}" has been cleared.`));
+    }
+
+    // Now proceed with further questions like adding Payload
+    const payloadAnswer = await inquirer.prompt([
       {
         type: 'confirm',
         name: 'usePayload',
@@ -107,8 +133,17 @@ const createAction = async () => {
         default: true,
       },
     ]);
-    const projectDir = `${currentDir}/${answers.name}`;
-    await createProject(answers, projectDir);
+
+    const finalOptions = { ...answers, ...payloadAnswer };
+
+    await createProject(finalOptions, projectDir)
+      .then(() => {
+        console.log(chalk.green('Project created successfully!'));
+        console.log(chalk.green(`with options: ${JSON.stringify(finalOptions)}`));
+      })
+      .catch((error) => {
+        console.error(chalk.red('Error creating project:', error));
+      });
   }
 };
 

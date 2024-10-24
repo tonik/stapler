@@ -104,7 +104,6 @@ const createInstallMachine = (initialContext: ContextType) => {
       },
       guards: {
         allStepsCompleted: ({ context }) => {
-          console.log('🖇️ Checking if all steps are completed...');
           return context.currentStepIndex >= context.stepsOrder.length;
         },
         currentStepCompleted: ({ context }) => {
@@ -129,7 +128,12 @@ const createInstallMachine = (initialContext: ContextType) => {
           try {
             switch (step) {
               case 'initializeProject':
-                input.stateData = initializeState(input.projectDir, input.stateData.projectName);
+                const { name } = input.stateData.options;
+                console.log(`🖇️ Stapling ${name}...`);
+                execSync(`npx create-turbo@latest ${name} -m pnpm`, {
+                  stdio: 'inherit',
+                });
+                process.chdir(name);
                 break;
               case 'createEnvFile':
                 createEnvFile(input.projectDir);
@@ -152,7 +156,10 @@ const createInstallMachine = (initialContext: ContextType) => {
                 });
                 break;
               case 'pushToGitHub':
-                await pushToGitHub(input.projectDir);
+                await pushToGitHub(input.projectDir).catch((error) => {
+                  console.error('🖇️ Error pushing to GitHub:', error);
+                  throw error;
+                });
                 console.log('🖇️ Changes pushed to GitHub!');
                 break;
               case 'prepareDrink':
@@ -179,20 +186,10 @@ const createInstallMachine = (initialContext: ContextType) => {
 };
 
 export async function createProject(options: ProjectOptions, projectDir: string) {
-  const { name } = options;
+  const { name, usePayload } = options;
 
-  let state: StaplerState = initializeState(projectDir, name);
+  let state: StaplerState = initializeState(projectDir, name, usePayload);
   state.options = options;
-
-  if (state.stepsCompleted.initializeProject) {
-    console.log(`🖇️ Project "${name}" already initialized.`);
-  } else {
-    console.log(`🖇️ Stapling ${name}...`);
-    execSync(`npx create-turbo@latest ${name} -m pnpm`, {
-      stdio: 'inherit',
-    });
-    process.chdir(name);
-  }
 
   const currentDir = process.cwd();
 
