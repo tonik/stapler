@@ -16,4 +16,4 @@ export const getDeploymentUrl = (production: boolean = false): string => {
     console.error(`Error during ${production ? 'production' : 'preview'} deployment:`, error);
     return '';
   }
-}
+};
