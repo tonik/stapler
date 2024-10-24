@@ -32,7 +32,7 @@ function ensureGitHubAuthentication() {
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
     console.log('🖇️ You are already logged in to GitHub.');
-    return; // Exit early if authenticated
+    return;
   }
 
   if (!isGitHubAuthenticated()) {
