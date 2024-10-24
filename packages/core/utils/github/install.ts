@@ -1,11 +1,11 @@
+import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
-  isGitHubAuthenticated,
+  authenticateGitHub,
   createGitHubRepository,
   fetchGitHubUsername,
-  authenticateGitHub,
+  isGitHubAuthenticated,
   setupGitRepository,
 } from './repositoryManager';
-import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 
 interface ProjectOptions {
   projectName: string;
@@ -14,12 +14,12 @@ interface ProjectOptions {
 
 // Helper function to check if GitHub CLI is installed
 function checkGitHubCLI() {
-  console.log('🖇️ Checking GitHub CLI installation...');
+  console.log('🖇️  Checking GitHub CLI installation...');
   if (!isGitHubCLIInstalled()) {
-    console.log('🖇️ GitHub CLI is not installed.');
+    console.log('🖇️  GitHub CLI is not installed.');
     const installed = installGitHubCLI();
     if (!installed) {
-      console.error('🖇️ GitHub CLI installation failed. Exiting...');
+      console.error('🖇️  GitHub CLI installation failed. Exiting...');
       process.exit(1);
     }
   }
@@ -27,16 +27,16 @@ function checkGitHubCLI() {
 
 // Helper function to ensure GitHub authentication
 function ensureGitHubAuthentication() {
-  console.log('🖇️ Checking GitHub authentication status...');
+  console.log('🖇️  Checking GitHub authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
-    console.log('🖇️ You are already logged in to GitHub.');
+    console.log('🖇️  You are already logged in to GitHub.');
     return; // Exit early if authenticated
   }
 
   if (!isGitHubAuthenticated()) {
-    console.error(`🖇️ It looks like you're not logged in...`);
+    console.error(`🖇️  It looks like you're not logged in...`);
     authenticateGitHub();
   }
 }
@@ -50,14 +50,16 @@ export async function initializeRepository(options: ProjectOptions) {
   // Retrieve GitHub username once
   const username = await fetchGitHubUsername();
   if (!username) {
-    console.error('🖇️ Failed to retrieve GitHub username. Aborting repository creation.');
+    console.error('🖇️  Failed to retrieve GitHub username. Aborting repository creation.');
     process.exit(1);
   }
 
   // Check if the repository exists and create it
   const repoName = await createGitHubRepository(projectName, visibility, username);
   if (!repoName) {
-    console.error('🖇️ Failed to create GitHub repository. Check your permissions or if the repository already exists.');
+    console.error(
+      '🖇️  Failed to create GitHub repository. Check your permissions or if the repository already exists.',
+    );
     process.exit(1);
   }
 

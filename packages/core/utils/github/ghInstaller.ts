@@ -27,8 +27,8 @@ export function installGitHubCLI(): boolean {
         installCommand =
           'sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && sudo dnf install gh';
       } else {
-        console.log('🖇️ Automatic installation is not supported for your Linux distribution.');
-        console.log('🖇️ Please visit https://github.com/cli/cli#installation for installation instructions.');
+        console.log('🖇️  Automatic installation is not supported for your Linux distribution.');
+        console.log('🖇️  Please visit https://github.com/cli/cli#installation for installation instructions.');
         return false;
       }
       break;
@@ -36,19 +36,19 @@ export function installGitHubCLI(): boolean {
       installCommand = 'winget install --id GitHub.cli';
       break;
     default:
-      console.log('🖇️ Automatic installation is not supported for your operating system.');
-      console.log('🖇️ Please visit https://github.com/cli/cli#installation for installation instructions.');
+      console.log('🖇️  Automatic installation is not supported for your operating system.');
+      console.log('🖇️  Please visit https://github.com/cli/cli#installation for installation instructions.');
       return false;
   }
 
-  console.log('🖇️ Installing GitHub CLI...');
+  console.log('🖇️  Installing GitHub CLI...');
   try {
     execSync(installCommand, { stdio: 'inherit' });
-    console.log('🖇️ GitHub CLI installed successfully.');
+    console.log('🖇️  GitHub CLI installed successfully.');
     return true;
   } catch (error) {
-    console.error('🖇️ Failed to install GitHub CLI.');
-    console.log('🖇️ Please install it manually from: https://github.com/cli/cli#installation');
+    console.error('🖇️  Failed to install GitHub CLI.');
+    console.log('🖇️  Please install it manually from: https://github.com/cli/cli#installation');
     return false;
   }
 }
