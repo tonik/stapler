@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
-import inquirer from 'inquirer';
 import chalk from 'chalk';
+import { Command } from 'commander';
 import gradient from 'gradient-string';
+import inquirer from 'inquirer';
 
 import { createProject } from '@create-stapler-app/core';
 
@@ -27,7 +27,7 @@ function displayHeader() {
   ]);
 
   console.log(metalGradient(asciiArt));
-  console.log(chalk.bold('\n🖇️ Welcome to Stapler!\n'));
+  console.log(chalk.bold('\n🖇️  Welcome to Stapler!\n'));
 }
 
 const program = new Command();
