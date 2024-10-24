@@ -3,7 +3,7 @@ import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 
 const MAX_RETRIES = 3;
 
-export async function connectWithGH() {
+export const connectWithGH = async () => {
   console.log('🖇️  Connecting with GitHub repository...');
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -40,4 +40,4 @@ export async function connectWithGH() {
       }
     }
   }
-}
+};

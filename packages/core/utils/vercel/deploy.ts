@@ -3,7 +3,7 @@ import { getDeploymentUrl } from './utils/getDeploymentUrl';
 
 const fs = require('fs').promises;
 
-export async function deployVercelProject() {
+export const deployVercelProject = async () => {
   try {
     await connectWithGH();
   } catch (error) {
@@ -29,4 +29,4 @@ export async function deployVercelProject() {
   console.log(`🖇️  You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m$`);
 
   console.log(`🖇️  You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m$`);
-}
+};

@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 
-export function getDeploymentUrl(production: boolean = false): string {
+export const getDeploymentUrl = (production: boolean = false): string => {
   const command = production ? 'vercel --prod' : 'vercel';
 
   try {

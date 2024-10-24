@@ -13,7 +13,7 @@ interface ProjectOptions {
 }
 
 // Helper function to check if GitHub CLI is installed
-function checkGitHubCLI() {
+const checkGitHubCLI = () => {
   console.log('🖇️  Checking GitHub CLI installation...');
   if (!isGitHubCLIInstalled()) {
     console.log('🖇️  GitHub CLI is not installed.');
@@ -23,10 +23,10 @@ function checkGitHubCLI() {
       process.exit(1);
     }
   }
-}
+};
 
 // Helper function to ensure GitHub authentication
-function ensureGitHubAuthentication() {
+const ensureGitHubAuthentication = () => {
   console.log('🖇️  Checking GitHub authentication status...');
 
   // Check if the user is already authenticated
@@ -39,9 +39,9 @@ function ensureGitHubAuthentication() {
     console.error(`🖇️  It looks like you're not logged in...`);
     authenticateGitHub();
   }
-}
+};
 
-export async function initializeRepository(options: ProjectOptions) {
+export const initializeRepository = async (options: ProjectOptions) => {
   const { projectName, visibility } = options;
 
   checkGitHubCLI();
@@ -64,4 +64,4 @@ export async function initializeRepository(options: ProjectOptions) {
   }
 
   await setupGitRepository(repoName, username);
-}
+};

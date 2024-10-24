@@ -16,7 +16,7 @@ interface ProjectOptions {
   usePayload: boolean;
 }
 
-export async function createProject(options: ProjectOptions) {
+export const createProject = async (options: ProjectOptions) => {
   const { name, usePayload } = options;
 
   console.log(`🖇️  Stapling ${name}...`);
@@ -50,4 +50,4 @@ export async function createProject(options: ProjectOptions) {
   await deployVercelProject();
 
   prepareDrink(name);
-}
+};

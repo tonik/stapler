@@ -4,7 +4,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-async function generateUniqueRepoName(baseName: string): Promise<string> {
+const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   // Remove any existing numbering pattern from the end
   const cleanBaseName = baseName.replace(/-\d+$/, '');
 
@@ -34,9 +34,9 @@ async function generateUniqueRepoName(baseName: string): Promise<string> {
       }
     }
   }
-}
+};
 
-export function isGitHubAuthenticated(): boolean {
+export const isGitHubAuthenticated = (): boolean => {
   try {
     // Use execSync to run the command and capture output
     const result = execSync('gh auth status', { stdio: 'pipe' }).toString().trim();
@@ -46,9 +46,9 @@ export function isGitHubAuthenticated(): boolean {
   } catch (error) {
     return false;
   }
-}
+};
 
-export async function authenticateGitHub(): Promise<boolean> {
+export const authenticateGitHub = async (): Promise<boolean> => {
   console.log('🖇️  Attempting to authenticate with GitHub...');
 
   execSync('gh auth login', { stdio: 'inherit' });
@@ -63,9 +63,9 @@ export async function authenticateGitHub(): Promise<boolean> {
     console.error('🖇️  Authentication failed after login attempt.');
     return false;
   }
-}
+};
 
-export async function fetchGitHubUsername(): Promise<string | null> {
+export const fetchGitHubUsername = async (): Promise<string | null> => {
   try {
     // Run the command without --jq first to inspect raw output
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
@@ -81,13 +81,13 @@ export async function fetchGitHubUsername(): Promise<string | null> {
     console.error('🖇️  Error fetching GitHub username:', error);
     return null;
   }
-}
+};
 
-export async function createGitHubRepository(
+export const createGitHubRepository = async (
   projectName: string,
   repositoryVisibility: 'public' | 'private',
   username: string,
-): Promise<string | undefined> {
+): Promise<string | undefined> => {
   console.log(`🖇️  Checking if repository already exists...`);
 
   // Check if the repository exists
@@ -128,10 +128,10 @@ export async function createGitHubRepository(
 
   console.error('🖇️  Failed to create GitHub repository.');
   return; // Return false on failure
-}
+};
 
 // New function to set up the local Git repository
-export async function setupGitRepository(projectName: string, username: string) {
+export const setupGitRepository = async (projectName: string, username: string) => {
   console.log(`🖇️  Setting up Git for the repository...`);
 
   // Set the remote origin and push to GitHub
@@ -151,4 +151,4 @@ export async function setupGitRepository(projectName: string, username: string) 
       process.exit(1);
     }
   }
-}
+};

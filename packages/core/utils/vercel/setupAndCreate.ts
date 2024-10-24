@@ -1,15 +1,15 @@
 import { execSync } from 'child_process';
 
-function vercelVersion(): boolean {
+const vercelVersion = (): boolean => {
   try {
     execSync('vercel --version', { encoding: 'utf8' });
     return true;
   } catch {
     return false;
   }
-}
+};
 
-function getUserName(): string | null {
+const getUserName = (): string | null => {
   try {
     const user = execSync('vercel whoami', { stdio: 'pipe', encoding: 'utf-8' });
     console.log('test', user);
@@ -17,9 +17,9 @@ function getUserName(): string | null {
   } catch {
     return null;
   }
-}
+};
 
-export async function setupAndCreateVercelProject() {
+export const setupAndCreateVercelProject = async () => {
   console.log('🖇️  Checking if Vercel CLI is installed...');
 
   const isVercelInstalled = vercelVersion();
@@ -63,4 +63,4 @@ export async function setupAndCreateVercelProject() {
 
   console.log('🖇️  Linking Vercel project...');
   execSync('vercel link', { stdio: 'inherit' });
-}
+};

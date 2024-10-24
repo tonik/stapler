@@ -7,7 +7,7 @@ interface SupabaseProjectInfo {
   created_at: string;
 }
 
-export function parseProjectsList(output: string): SupabaseProjectInfo[] {
+export const parseProjectsList = (output: string): SupabaseProjectInfo[] => {
   const lines = output.trim().split('\n');
   lines.splice(0, 2);
 
@@ -22,9 +22,9 @@ export function parseProjectsList(output: string): SupabaseProjectInfo[] {
       created_at,
     };
   });
-}
+};
 
-export function getSupabaseKeys(input: string) {
+export const getSupabaseKeys = (input: string) => {
   const lines = input.split('\n');
 
   const anonKey = lines
@@ -40,4 +40,4 @@ export function getSupabaseKeys(input: string) {
     anonKey,
     serviceRoleKey,
   };
-}
+};

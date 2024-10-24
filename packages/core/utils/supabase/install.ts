@@ -4,7 +4,7 @@ import path from 'path';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
 
-function checkAndInstallSupabaseCLI(): void {
+const checkAndInstallSupabaseCLI = (): void => {
   console.log('🖇️  Checking Supabase CLI installation...');
 
   try {
@@ -33,7 +33,7 @@ function checkAndInstallSupabaseCLI(): void {
       process.exit(1);
     }
   }
-}
+};
 
 export const installSupabase = async (destinationDirectory: string) => {
   console.log('🖇️  Installing supabase-js...');

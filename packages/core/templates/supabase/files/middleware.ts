@@ -9,8 +9,9 @@ interface CreateMiddlewareOptions {
   supabaseAnonKey: string;
 }
 
-export const createMiddleware = ({ supabaseAnonKey, supabaseUrl }: CreateMiddlewareOptions) =>
-  async function middleware(request: NextRequest) {
+export const createMiddleware =
+  ({ supabaseAnonKey, supabaseUrl }: CreateMiddlewareOptions) =>
+  async (request: NextRequest) => {
     const cookiesToSet: {
       name: string;
       value: string;

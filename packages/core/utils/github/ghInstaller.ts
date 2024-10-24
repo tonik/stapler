@@ -1,16 +1,16 @@
 import { execSync } from 'child_process';
 import * as os from 'os';
 
-export function isGitHubCLIInstalled(): boolean {
+export const isGitHubCLIInstalled = (): boolean => {
   try {
     execSync('gh --version', { stdio: 'ignore' });
     return true;
   } catch (error) {
     return false;
   }
-}
+};
 
-export function installGitHubCLI(): boolean {
+export const installGitHubCLI = (): boolean => {
   const platform = os.platform();
   let installCommand: string;
 
@@ -51,9 +51,9 @@ export function installGitHubCLI(): boolean {
     console.log('🖇️  Please install it manually from: https://github.com/cli/cli#installation');
     return false;
   }
-}
+};
 
-export function getLinuxDistro(): string {
+export const getLinuxDistro = (): string => {
   try {
     const osRelease = execSync('cat /etc/os-release').toString();
     if (osRelease.includes('Ubuntu')) return 'ubuntu';
@@ -65,4 +65,4 @@ export function getLinuxDistro(): string {
   } catch (error) {
     return 'unknown';
   }
-}
+};

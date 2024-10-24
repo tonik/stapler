@@ -21,7 +21,7 @@ const updateLine = (line: string, key: string, value: string): string => {
   return line;
 };
 
-export async function updateEnvFile({ currentDir, pairs }: EnvUpdateConfig): Promise<void> {
+export const updateEnvFile = async ({ currentDir, pairs }: EnvUpdateConfig): Promise<void> => {
   const envFilePath = path.join(currentDir, '.env');
   try {
     // Check if the .env file exists
@@ -48,4 +48,4 @@ export async function updateEnvFile({ currentDir, pairs }: EnvUpdateConfig): Pro
     console.error('🖇️  Error updating .env file:', error);
     throw error; // Re-throw the error for the caller to handle
   }
-}
+};
