@@ -1,13 +1,15 @@
-import { execSync } from 'child_process';
+import { connectWithGH } from './connectWithGH';
 import { getDeploymentUrl } from './utils/getDeploymentUrl';
 
 const fs = require('fs').promises;
 
 export async function deployVercelProject() {
-  console.log('🖇️  Connecting to Git repository...');
-
-  execSync('vercel git connect', { stdio: 'inherit' });
-  // next step: when error git connect then need to add gh account to your vercel account
+  try {
+    await connectWithGH();
+  } catch (error) {
+    console.log('🖇️  An unexpected error occurred:', error);
+    console.log('\n🖇️  Failed to connect GitHub with Vercel');
+  }
 
   console.log('🖇️  Creating vercel.json...');
 
