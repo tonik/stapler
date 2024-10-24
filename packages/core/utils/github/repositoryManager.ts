@@ -1,4 +1,40 @@
-import { execSync } from 'child_process';
+import { exec, execSync } from 'child_process';
+import inquirer from 'inquirer';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
+
+async function generateUniqueRepoName(baseName: string): Promise<string> {
+  // Remove any existing numbering pattern from the end
+  const cleanBaseName = baseName.replace(/-\d+$/, '');
+
+  // Try the base name first
+  try {
+    await execAsync(`gh repo view ${cleanBaseName}`);
+    console.error(`🖇️ Repository "${cleanBaseName}" already exists.`);
+    // If we get here, the repo exists, so we need a new name
+  } catch (error) {
+    // If repo doesn't exist, we can use the clean base name
+    if (error) {
+      return cleanBaseName;
+    }
+  }
+
+  // Find the next available number
+  let counter = 2; // Start with 2 since it's more natural than 1
+  while (true) {
+    const candidateName = `${cleanBaseName}-v${counter}`;
+    try {
+      await execAsync(`gh repo view ${candidateName}`);
+      console.error(`🖇️ Repository "${candidateName}" already exists.`);
+      counter++;
+    } catch (error) {
+      if (error) {
+        return candidateName;
+      }
+    }
+  }
+}
 
 export function isGitHubAuthenticated(): boolean {
   try {
@@ -51,32 +87,47 @@ export async function createGitHubRepository(
   projectName: string,
   repositoryVisibility: 'public' | 'private',
   username: string,
-): Promise<boolean> {
+): Promise<string | undefined> {
   console.log(`🖇️  Checking if repository already exists...`);
 
   // Check if the repository exists
   const repoCheckCommand = `echo "$(gh repo view ${username}/${projectName} --json name)"`;
   const existingRepo = execSync(repoCheckCommand, { stdio: 'pipe' }).toString().trim();
+  let repoName = projectName;
 
   if (existingRepo) {
-    console.error(`🖇️  Repository "${projectName}" already exists.`);
-    return false; // Return false to indicate the repo was not created
+    const newRepoName = await generateUniqueRepoName(projectName);
+    const { confirmedName } = await inquirer.prompt([
+      {
+        type: 'input',
+        name: 'confirmedName',
+        message: 'Please confirm or modify the repository name:',
+        default: newRepoName,
+        validate: (input: string) => {
+          if (!/^[a-zA-Z0-9._-]+$/.test(input)) {
+            return 'Repository name can only contain letters, numbers, dots, hyphens, and underscores';
+          }
+          return true;
+        },
+      },
+    ]);
+    repoName = confirmedName;
   }
 
-  console.log(`🖇️  Creating GitHub repository: \x1b[36m${projectName}\x1b[0m`);
+  console.log(`🖇️  Creating GitHub repository: \x1b[36m${repoName}\x1b[0m`);
 
   const visibility = repositoryVisibility === 'public' ? '--public' : '--private';
-  const command = `gh repo create ${projectName} ${visibility}`;
+  const command = `gh repo create ${repoName} ${visibility}`;
 
   const result = execSync(command);
 
   if (result) {
     console.log(`🖇️  Repository successfully created at \x1b[36m${result}\x1b[0m`);
-    return true; // Return true to indicate success
+    return repoName; // Return true to indicate success
   }
 
   console.error('🖇️  Failed to create GitHub repository.');
-  return false; // Return false on failure
+  return; // Return false on failure
 }
 
 // New function to set up the local Git repository
