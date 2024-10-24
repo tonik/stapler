@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import * as util from 'util';
 import * as path from 'path';
+import * as util from 'util';
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -45,7 +45,7 @@ export async function updateEnvFile({ currentDir, pairs }: EnvUpdateConfig): Pro
     const updatedContent = lines.join('\n');
     await writeFile(envFilePath, updatedContent, 'utf8');
   } catch (error) {
-    console.error('🖇️ Error updating .env file:', error);
+    console.error('🖇️  Error updating .env file:', error);
     throw error; // Re-throw the error for the caller to handle
   }
 }
