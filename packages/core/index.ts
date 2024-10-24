@@ -40,6 +40,11 @@ const createInstallMachine = (initialContext: ContextType) => {
               actions: 'incrementStepIndex',
               target: 'checkNextStep',
             },
+            {
+              guard: 'shouldSkipCurrentStep',
+              actions: ['markStepAsCompleted', 'incrementStepIndex'],
+              target: 'checkNextStep',
+            },
             { target: 'executeStep' },
           ],
         },
@@ -80,6 +85,15 @@ const createInstallMachine = (initialContext: ContextType) => {
             return context.stateData;
           },
         }),
+        markStepAsCompleted: assign({
+          stateData: ({ context }) => {
+            const step = context.stepsOrder[context.currentStepIndex];
+            context.stateData.stepsCompleted[step] = true;
+            saveState(context.stateData, context.projectDir);
+            console.log(`🖇️ Step "${step}" skipped and marked as completed.`);
+            return context.stateData;
+          },
+        }),
         handleError: ({ context, event }) => {
           console.log('Installation process stopped. Event: ', event);
           console.error('Error in performStep:', event.data);
@@ -98,6 +112,14 @@ const createInstallMachine = (initialContext: ContextType) => {
           const step = context.stepsOrder[context.currentStepIndex];
           console.log(`🖇️ Checking if step "${step}" is completed...`);
           return context.stateData.stepsCompleted[step];
+        },
+        shouldSkipCurrentStep: ({ context }) => {
+          const step = context.stepsOrder[context.currentStepIndex];
+          if (step === 'installPayload' && !context.stateData.options.usePayload) {
+            console.log(`🖇️ Skipping step "${step}" as it is optional and not selected.`);
+            return true;
+          }
+          return false;
         },
       },
       actors: {
@@ -144,7 +166,6 @@ const createInstallMachine = (initialContext: ContextType) => {
                 throw new Error(`Unknown step: ${step}`);
             }
 
-            // Mark step as completed
             input.stateData.stepsCompleted[step] = true;
             console.log(
               `🖇️ State after step "${step}": ${JSON.stringify(input.stateData, null, 2)} saved to ${input.projectDir}`,
