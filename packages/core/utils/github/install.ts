@@ -55,11 +55,11 @@ export async function initializeRepository(options: ProjectOptions) {
   }
 
   // Check if the repository exists and create it
-  const repoCreated = await createGitHubRepository(projectName, visibility, username);
-  if (!repoCreated) {
+  const repoName = await createGitHubRepository(projectName, visibility, username);
+  if (!repoName) {
     console.error('🖇️ Failed to create GitHub repository. Check your permissions or if the repository already exists.');
     process.exit(1);
   }
 
-  await setupGitRepository(projectName, username);
+  await setupGitRepository(repoName, username);
 }
