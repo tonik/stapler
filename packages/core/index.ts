@@ -111,7 +111,7 @@ const createInstallMachine = (initialContext: ContextType) => {
           try {
             switch (step) {
               case 'initializeProject':
-                input.stateData = initializeState(input.projectDir);
+                input.stateData = initializeState(input.projectDir, input.stateData.projectName);
                 break;
               case 'createEnvFile':
                 createEnvFile(input.projectDir);

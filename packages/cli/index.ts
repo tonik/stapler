@@ -87,6 +87,7 @@ const createAction = async () => {
     console.log(`Resuming project: ${selectedProject.projectName}`);
     console.log(`Project steps: ${JSON.stringify(selectedProject.state.stepsCompleted, null, 2)}`);
     console.log(`Project options: ${JSON.stringify(selectedProject.state.options, null, 2)}`);
+    selectedProject.state.options.name = selectedProject.projectName;
     await createProject(selectedProject.state.options, selectedProject.projectPath)
       .then(() => {
         console.log('Project resumed successfully!');
