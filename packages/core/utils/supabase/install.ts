@@ -35,11 +35,50 @@ const checkAndInstallSupabaseCLI = (): void => {
   }
 };
 
+const supabaseLogin = () => {
+  console.log('🖇️  Logging into Supabase...');
+
+  try {
+    execSync('supabase projects list', { stdio: 'ignore' });
+    console.log('🖇️  Already logged into Supabase. Skipping login.');
+    return;
+  } catch (error) {
+    try {
+      execSync('supabase login', { stdio: 'inherit' });
+    } catch {
+      console.error('\n🖇️  Failed to log in to Supabase.');
+      console.log('\n🖇️  Please log in manually with "supabase login" and re-run "create-stapled-app".');
+      process.exit(1);
+    }
+  }
+};
+
+const initializeSupabaseProject = (): void => {
+  console.log('🖇️  Initialize Supabase project...');
+  try {
+    execSync(`supabase init`, { stdio: ['pipe'], encoding: 'utf-8' });
+  } catch (error: any) {
+    const errorMessage = error.stderr;
+
+    if (errorMessage.includes('file exists')) {
+      console.log('\n🖇️  Supabase configuration file already exists. Skipping re-initialization.');
+      return;
+    } else {
+      console.error('\n🖇️  Failed to initialize Supabase project with "supabase init".');
+      console.log(
+        '\n🖇️  Please review the error message below, follow the initialization instructions, and try running "create stapled app" again.',
+      );
+      process.exit(1);
+    }
+  }
+};
+
 export const installSupabase = async (destinationDirectory: string) => {
   console.log('🖇️  Installing supabase-js...');
   try {
     checkAndInstallSupabaseCLI();
-    execSync(`supabase init`, { stdio: 'inherit' });
+    supabaseLogin();
+    initializeSupabaseProject();
   } catch (error) {
     console.error('\n🖇️  Failed to init Supabase project.');
     console.error(`🖇️  Error: ${error}`);
@@ -54,7 +93,13 @@ export const installSupabase = async (destinationDirectory: string) => {
   // add "supabase/**" to pnpm-workspace.yaml
   const workspacePath = path.join(destinationDirectory, 'pnpm-workspace.yaml');
   const addSupabaseToWorkspace = `  - "supabase/**"`;
-  fs.appendFileSync(workspacePath, addSupabaseToWorkspace);
+  // check if the file already contains the line
+  const fileContents = fs.readFileSync(workspacePath, 'utf-8');
+
+  if (!fileContents.includes(addSupabaseToWorkspace)) {
+    // append only if the line doesn't already exist
+    fs.appendFileSync(workspacePath, `${addSupabaseToWorkspace}\n`);
+  }
 
   process.chdir('supabase');
 
