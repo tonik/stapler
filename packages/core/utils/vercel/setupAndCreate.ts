@@ -50,7 +50,7 @@ export const setupAndCreateVercelProject = async () => {
         execSync('vercel login', { stdio: 'inherit' });
       } catch {
         console.log('\n🖇️  Please check the error above and try again.');
-        console.log('🖇️  After successfully logging in with "vercel login", please run create-stapled-app again.\n');
+        console.log('🖇️  After successfully logging in with "vercel login", please run create-stapler-app again.\n');
         process.exit(1);
       }
     }
