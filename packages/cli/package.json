@@ -6,6 +6,10 @@
   "bin": {
     "create-stapler-app": "./dist/index.mjs"
   },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha"
+  },
   "scripts": {
     "build": "tsup index.ts --out-dir dist --format esm --dts",
     "dev": "tsc -w"

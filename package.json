@@ -1,5 +1,7 @@
 {
   "name": "stapler",
+  "description": "Stapler: an amazing CLI tool that scaffolds an entire fullstack app for you",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -16,12 +18,6 @@
   "packageManager": "pnpm@8.15.6",
   "engines": {
     "node": ">=18"
-  },
-  "description": "Stapler: an amazing CLI tool that scaffolds an entire fullstack app for you",
-  "version": "1.0.0",
-  "publishConfig": {
-    "access": "public",
-    "tag": "alpha"
   },
   "main": "index.js",
   "dependencies": {
