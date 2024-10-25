@@ -47,7 +47,7 @@ const supabaseLogin = () => {
       execSync('supabase login', { stdio: 'inherit' });
     } catch {
       console.error('\n🖇️  Failed to log in to Supabase.');
-      console.log('\n🖇️  Please log in manually with "supabase login" and re-run "create-stapled-app".');
+      console.log('\n🖇️  Please log in manually with "supabase login" and re-run "create-stapler-app".');
       process.exit(1);
     }
   }
