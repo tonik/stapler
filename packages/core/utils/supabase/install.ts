@@ -66,7 +66,7 @@ const initializeSupabaseProject = (): void => {
     } else {
       console.error('\n🖇️  Failed to initialize Supabase project with "supabase init".');
       console.log(
-        '\n🖇️  Please review the error message below, follow the initialization instructions, and try running "create stapled app" again.',
+        '\n🖇️  Please review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
       );
       process.exit(1);
     }
