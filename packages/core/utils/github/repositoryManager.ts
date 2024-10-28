@@ -131,6 +131,16 @@ export const createGitHubRepository = async (
   return; // Return false on failure
 };
 
+const executeCommands = (commands: string[]) => {
+  for (const cmd of commands) {
+    const result = execSync(cmd, { stdio: 'pipe' });
+    if (!result) {
+      console.error(`🖇️  Failed to execute command: ${cmd}`);
+      process.exit(1);
+    }
+  }
+};
+
 // New function to set up the local Git repository
 export const setupGitRepository = async (projectName: string, username: string) => {
   console.log(`🖇️  Setting up Git for the repository...`);
@@ -153,11 +163,5 @@ export async function pushToGitHub(projectName: string) {
     `git push -u origin main`,
   ];
 
-  for (const cmd of commands) {
-    const result = execSync(cmd, { stdio: 'pipe' });
-    if (!result) {
-      console.error(`🖇️  Failed to execute command: ${cmd}`);
-      process.exit(1);
-    }
-  }
+  executeCommands(commands);
 }
