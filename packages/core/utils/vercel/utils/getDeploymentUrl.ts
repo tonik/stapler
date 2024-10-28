@@ -4,7 +4,10 @@ export const getDeploymentUrl = (production: boolean = false): string => {
   const command = production ? 'vercel --prod' : 'vercel';
 
   try {
-    const output = execSync(command, { encoding: 'utf8' });
+    const output = execSync(command, {
+      stdio: ['inherit', 'pipe', 'inherit'],
+      encoding: 'utf8',
+    });
 
     if (output) {
       return output;
