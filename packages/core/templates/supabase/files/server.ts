@@ -13,7 +13,7 @@ interface BaseOptions {
   cookieStore?: CookieStore;
 }
 
-export function createClient(configOptions: BaseOptions) {
+export const createClient = (configOptions: BaseOptions) => {
   return createServerClient<Database>(configOptions.supabaseApiUrl, configOptions.supabaseKey, {
     cookies: {
       get(name: string) {
@@ -40,4 +40,4 @@ export function createClient(configOptions: BaseOptions) {
       },
     },
   });
-}
+};

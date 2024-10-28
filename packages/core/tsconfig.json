@@ -11,6 +11,12 @@
     "declaration": true, // Ensure TypeScript generates declaration files
     "emitDeclarationOnly": true // Only emit declaration files without compiling the code
   },
-  "include": ["index.ts", "types.ts", "utils/**/*.ts", "templates/supabase/installConfig.ts"],
-  "exclude": ["node_modules", "dist", "templates/supabase/files/**/*"]
+  "include": [
+    "index.ts",
+    "types.ts",
+    "utils/**/*.ts",
+    "templates/supabase/installConfig.ts",
+    "templates/docs/installConfig.ts"
+  ],
+  "exclude": ["node_modules", "dist", "templates/supabase/files/**/*", "templates/docs/files/**/*"]
 }

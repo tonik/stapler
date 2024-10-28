@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "fs-extra": "^11.2.0",
-    "xstate": "^5.18.2"
+    "xstate": "^5.18.2",
+    "inquirer": "^10.2.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

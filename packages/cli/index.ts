@@ -1,10 +1,9 @@
 #!/usr/bin/env node
 import fs from 'fs';
-import { Command } from 'commander';
-import inquirer from 'inquirer';
 import chalk from 'chalk';
+import { Command } from 'commander';
 import gradient from 'gradient-string';
-
+import inquirer from 'inquirer';
 import { createProject } from '@create-stapler-app/core';
 import { findUnfinishedProjects, UnfinishedProject } from './utils/findUnfinishedProjects';
 
@@ -20,7 +19,7 @@ const asciiArt = `
 .&&&%         (&&&&&&&&&%*      (&&&/        %&&&,   *&&&#    &&&&      .&&&&,                        
 `;
 
-function displayHeader() {
+const displayHeader = () => {
   const metalGradient = gradient([
     { color: '#3C3C3C', pos: 0 },
     { color: '#FFFFFF', pos: 0.5 },
@@ -29,8 +28,8 @@ function displayHeader() {
   ]);
 
   console.log(metalGradient(asciiArt));
-  console.log(chalk.bold('\n🖇️ Welcome to Stapler!\n'));
-}
+  console.log(chalk.bold('\n🖇️  Welcome to Stapler!\n'));
+};
 
 const program = new Command();
 
