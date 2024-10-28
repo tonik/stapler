@@ -1,4 +1,3 @@
-import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
   authenticateGitHub,
   createGitHubRepository,
@@ -12,18 +11,6 @@ interface ProjectOptions {
   visibility: 'public' | 'private';
 }
 
-// Helper function to check if GitHub CLI is installed
-const checkGitHubCLI = () => {
-  console.log('🖇️  Checking GitHub CLI installation...');
-  if (!isGitHubCLIInstalled()) {
-    console.log('🖇️  GitHub CLI is not installed.');
-    const installed = installGitHubCLI();
-    if (!installed) {
-      console.error('🖇️  GitHub CLI installation failed. Exiting...');
-      process.exit(1);
-    }
-  }
-};
 
 // Helper function to ensure GitHub authentication
 const ensureGitHubAuthentication = () => {
@@ -44,7 +31,7 @@ const ensureGitHubAuthentication = () => {
 export const initializeRepository = async (options: ProjectOptions) => {
   const { projectName, visibility } = options;
 
-  checkGitHubCLI();
+
   ensureGitHubAuthentication();
 
   // Retrieve GitHub username once

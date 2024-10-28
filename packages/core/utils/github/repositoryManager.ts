@@ -10,7 +10,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
 
   // Try the base name first
   try {
-    await execAsync(`gh repo view ${cleanBaseName}`);
+    await execAsync(`npx gh repo view ${cleanBaseName}`);
     console.error(`🖇️  Repository "${cleanBaseName}" already exists.`);
     // If we get here, the repo exists, so we need a new name
   } catch (error) {
@@ -25,7 +25,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   while (true) {
     const candidateName = `${cleanBaseName}-v${counter}`;
     try {
-      await execAsync(`gh repo view ${candidateName}`);
+      await execAsync(`npx gh repo view ${candidateName}`);
       console.error(`🖇️  Repository "${candidateName}" already exists.`);
       counter++;
     } catch (error) {
@@ -39,7 +39,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
 export const isGitHubAuthenticated = (): boolean => {
   try {
     // Use execSync to run the command and capture output
-    const result = execSync('gh auth status', { stdio: 'pipe' }).toString().trim();
+    const result = execSync('npx gh auth status', { stdio: 'pipe' }).toString().trim();
 
     // Check if the output includes "Logged in" - this is to be changed in the future but couldn't find a better way
     return result.includes('Logged in');
@@ -51,7 +51,7 @@ export const isGitHubAuthenticated = (): boolean => {
 export const authenticateGitHub = async (): Promise<boolean> => {
   console.log('🖇️  Attempting to authenticate with GitHub...');
 
-  execSync('gh auth login', { stdio: 'inherit' });
+  execSync('npx gh auth login', { stdio: 'inherit' });
 
   // Immediately check authentication status after login attempt
   const isAuthenticated = isGitHubAuthenticated();
