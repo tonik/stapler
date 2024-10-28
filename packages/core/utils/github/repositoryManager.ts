@@ -10,7 +10,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
 
   // Try the base name first
   try {
-    await execAsync(`npx gh repo view ${cleanBaseName}`);
+    await execAsync(`gh repo view ${cleanBaseName}`);
     console.error(`🖇️  Repository "${cleanBaseName}" already exists.`);
     // If we get here, the repo exists, so we need a new name
   } catch (error) {
@@ -25,7 +25,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   while (true) {
     const candidateName = `${cleanBaseName}-v${counter}`;
     try {
-      await execAsync(`npx gh repo view ${candidateName}`);
+      await execAsync(`gh repo view ${candidateName}`);
       console.error(`🖇️  Repository "${candidateName}" already exists.`);
       counter++;
     } catch (error) {
@@ -39,7 +39,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
 export const isGitHubAuthenticated = (): boolean => {
   try {
     // Use execSync to run the command and capture output
-    const result = execSync('npx gh auth status', { stdio: 'pipe' }).toString().trim();
+    const result = execSync('gh auth status', { stdio: 'pipe' }).toString().trim();
 
     // Check if the output includes "Logged in" - this is to be changed in the future but couldn't find a better way
     return result.includes('Logged in');
@@ -51,7 +51,7 @@ export const isGitHubAuthenticated = (): boolean => {
 export const authenticateGitHub = async (): Promise<boolean> => {
   console.log('🖇️  Attempting to authenticate with GitHub...');
 
-  execSync('npx gh auth login', { stdio: 'inherit' });
+  execSync('gh auth login', { stdio: 'inherit' });
 
   // Immediately check authentication status after login attempt
   const isAuthenticated = isGitHubAuthenticated();
@@ -68,7 +68,7 @@ export const authenticateGitHub = async (): Promise<boolean> => {
 export const fetchGitHubUsername = async (): Promise<string | null> => {
   try {
     // Run the command without --jq first to inspect raw output
-    const username = execSync('echo "$(npx gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
+    const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
 
     if (username) {
       console.log(`🖇️  Hello \x1b[36m${username}\x1b[0m!`);
@@ -91,9 +91,8 @@ export const createGitHubRepository = async (
   console.log(`🖇️  Checking if repository already exists...`);
 
   // Check if the repository exists
-  const existingRepo = execSync(`echo "$(npx gh repo view ${username}/${projectName} --json name)"`, { stdio: 'pipe' })
-    .toString()
-    .trim();
+  const repoCheckCommand = `echo "$(gh repo view ${username}/${projectName} --json name)"`;
+  const existingRepo = execSync(repoCheckCommand, { stdio: 'pipe' }).toString().trim();
   let repoName = projectName;
 
   if (existingRepo) {
@@ -118,8 +117,9 @@ export const createGitHubRepository = async (
   console.log(`🖇️  Creating GitHub repository: \x1b[36m${repoName}\x1b[0m`);
 
   const visibility = repositoryVisibility === 'public' ? '--public' : '--private';
+  const command = `gh repo create ${repoName} ${visibility}`;
 
-  const result = execSync(`npx gh repo create ${repoName} ${visibility}`, { stdio: 'pipe' });
+  const result = execSync(command);
 
   if (result) {
     console.log(`🖇️  Repository successfully created at \x1b[36m${result}\x1b[0m`);
