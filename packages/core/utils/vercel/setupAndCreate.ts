@@ -10,7 +10,6 @@ const getUserName = (): string | null => {
 };
 
 export const setupAndCreateVercelProject = async () => {
-  console.log('🖇️  Checking if Vercel CLI is installed...');
   const vercelUserName = getUserName();
 
   if (!vercelUserName) {
