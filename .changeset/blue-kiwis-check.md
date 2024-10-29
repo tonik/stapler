@@ -3,4 +3,4 @@
 '@tonik/create-stapler-app': minor
 ---
 
-Change requires to imports
+Remove bundling

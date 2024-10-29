@@ -2,11 +2,11 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@tonik/create-stapler-app": "0.1.0",
-    "@tonik/create-stapler-app-core": "0.1.0",
-    "@tonik/create-stapler-app-cli": "0.2.0-alpha.1"
+    "@tonik/create-stapler-app": "0.1.0-alpha.1",
+    "@tonik/create-stapler-app-core": "0.1.0"
   },
   "changesets": [
+    "blue-kiwis-check",
     "clean-frogs-poke",
     "cuddly-cups-itch",
     "curly-ligers-cheat",

@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.15
+
+### Minor Changes
+
+- Remove bundling
+
 ## 0.1.0-alpha.3
 
 ### Minor Changes

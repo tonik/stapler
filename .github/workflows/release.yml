@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Packages
         run: |
-          pnpm build
+          pnpm build --no-cache
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
