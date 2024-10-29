@@ -1,7 +1,6 @@
 import { connectWithGH } from './connectWithGH';
 import { getDeploymentUrl } from './utils/getDeploymentUrl';
-
-const fs = require('fs').promises;
+import fs from 'fs/promises';
 
 export const deployVercelProject = async () => {
   try {
