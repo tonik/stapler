@@ -1,6 +1,6 @@
 {
   "name": "@tonik/create-stapler-app-cli",
-  "version": "0.2.0-alpha.2",
+  "version": "0.2.0-alpha.3",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
@@ -11,17 +11,17 @@
     "tag": "alpha"
   },
   "scripts": {
-    "build": "tsup index.ts --out-dir dist --format esm --bundle --noExternal:@create-stapler-app/core --dts",
+    "build": "tsup index.ts --out-dir dist --format esm --bundle --dts",
     "dev": "tsc -w"
   },
   "dependencies": {
-    "@tonik/create-stapler-app-core": "workspace:*",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
     "gradient-string": "^3.0.0",
     "inquirer": "^10.2.2"
   },
   "devDependencies": {
+    "@tonik/create-stapler-app-core": "workspace:*",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.5.4",
     "tsup": "^8.2.4",
