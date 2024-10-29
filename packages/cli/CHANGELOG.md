@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.0
+
+### Minor Changes
+
+- Remove cli from npm
+
 ## 0.2.0-alpha.6
 
 ### Patch Changes
