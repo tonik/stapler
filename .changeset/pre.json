@@ -2,8 +2,8 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@create-stapler-app/cli": "0.1.0",
-    "@create-stapler-app/core": "0.1.0"
+    "@tonik/create-stapler-app": "0.1.0",
+    "@tonik/create-stapler-app-core": "0.1.0"
   },
   "changesets": []
 }
