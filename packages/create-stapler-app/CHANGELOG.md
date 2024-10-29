@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.10
+
+### Patch Changes
+
+- 9f05326: Point to mjs bin file
+
 ## 0.1.0-alpha.9
 
 ### Patch Changes
