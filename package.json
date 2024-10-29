@@ -1,5 +1,5 @@
 {
-  "name": "stapler",
+  "name": "create-stapler-app",
   "description": "Stapler: an amazing CLI tool that scaffolds an entire fullstack app for you",
   "version": "0.1.0",
   "private": true,
