@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.12
+
+### Minor Changes
+
+- Add dependencies to create-stapler-app package.json
+
 ## 0.1.0-alpha.11
 
 ### Minor Changes
