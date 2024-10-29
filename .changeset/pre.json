@@ -5,5 +5,7 @@
     "@tonik/create-stapler-app": "0.1.0",
     "@tonik/create-stapler-app-core": "0.1.0"
   },
-  "changesets": []
+  "changesets": [
+    "witty-months-give"
+  ]
 }
