@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "private": true,
   "scripts": {
-    "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format cjs",
+    "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format esm",
     "dev": "tsc -w"
   },
   "dependencies": {
