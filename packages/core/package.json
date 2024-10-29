@@ -4,7 +4,7 @@
   "main": "../create-stapler-app/dist/core/index.js",
   "types": "../create-stapler-app/dist/core/index.d.ts",
   "scripts": {
-    "build": "tsup index.ts --out-dir ../create-stapler-app/dist/core --format cjs --dts",
+    "build": "tsup index.ts --out-dir ../create-stapler-app/dist/core --format cjs",
     "dev": "tsc -w"
   },
   "dependencies": {
