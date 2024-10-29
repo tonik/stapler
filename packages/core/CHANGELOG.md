@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.5
+
+### Minor Changes
+
+- Change build commands
+
 ## 0.2.0-alpha.4
 
 ### Minor Changes
