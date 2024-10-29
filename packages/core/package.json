@@ -1,12 +1,11 @@
 {
   "name": "@tonik/create-stapler-app-core",
-  "version": "0.2.0-alpha.5",
-  "type": "module",
+  "version": "0.2.0-alpha.6",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "private": true,
   "scripts": {
-    "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format cjs",
+    "build": "tsc --emitDeclarationOnly && tsup index.ts --out-dir dist --format esm",
     "dev": "tsc -w"
   },
   "dependencies": {

@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.6
+
+### Patch Changes
+
+- Modify core format
+
 ## 0.2.0-alpha.5
 
 ### Minor Changes
