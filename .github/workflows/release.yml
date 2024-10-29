@@ -26,6 +26,10 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
+      - name: Build Packages
+        run: |
+          pnpm --filter @tonik/create-stapler-app build
+
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
