@@ -1,0 +1,12 @@
+{
+  "name": "@tonik/create-stapler-app",
+  "version": "0.1.0-alpha.4",
+  "main": "index.ts",
+  "bin": {
+    "create-stapler-app": "cli/index.mjs"
+  },
+  "devDependencies": {
+    "@tonik/create-stapler-app-core": "workspace:*",
+    "@tonik/create-stapler-app-cli": "workspace:*"
+  }
+}

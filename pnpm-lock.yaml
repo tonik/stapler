@@ -144,6 +144,15 @@ importers:
         specifier: ^5.6.2
         version: 5.6.3
 
+  packages/create-stapler-app:
+    devDependencies:
+      '@tonik/create-stapler-app-cli':
+        specifier: workspace:*
+        version: link:../cli
+      '@tonik/create-stapler-app-core':
+        specifier: workspace:*
+        version: link:../core
+
 packages:
 
   '@babel/code-frame@7.24.7':

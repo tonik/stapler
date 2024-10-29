@@ -1,6 +1,6 @@
 {
   "name": "@tonik/create-stapler-app-core",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0-alpha.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "private": true,

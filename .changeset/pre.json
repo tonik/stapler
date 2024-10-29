@@ -3,10 +3,12 @@
   "tag": "alpha",
   "initialVersions": {
     "@tonik/create-stapler-app": "0.1.0",
-    "@tonik/create-stapler-app-core": "0.1.0"
+    "@tonik/create-stapler-app-core": "0.1.0",
+    "@tonik/create-stapler-app-cli": "0.2.0-alpha.1"
   },
   "changesets": [
     "light-walls-obey",
+    "new-eggs-cheat",
     "witty-months-give"
   ]
 }

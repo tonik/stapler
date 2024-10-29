@@ -1,5 +1,13 @@
 # @tonik/create-stapler-app
 
+## 0.2.0-alpha.2
+
+### Patch Changes
+
+- Added separate bundled create-stapler-app package
+- Updated dependencies
+  - @tonik/create-stapler-app-core@0.2.0-alpha.2
+
 ## 0.2.0-alpha.1
 
 ### Minor Changes
