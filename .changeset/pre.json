@@ -6,6 +6,7 @@
     "@tonik/create-stapler-app-core": "0.1.0"
   },
   "changesets": [
+    "light-walls-obey",
     "witty-months-give"
   ]
 }
