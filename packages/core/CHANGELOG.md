@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.1.0-alpha.2
+
+### Minor Changes
+
+- Change cjs to esm
+
 ## 0.1.0-alpha.1
 
 ### Minor Changes
