@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.9",
   "main": "./dist/index.js",
   "bin": {
-    "create-stapler-app": "./dist/index.js"
+    "create-stapler-app": "./dist/index.mjs"
   },
   "scripts": {
     "build": "tsup index.ts --out-dir dist --format esm"
