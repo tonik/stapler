@@ -20,7 +20,7 @@ const instructions = [
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
     console.log('🖇️  Getting information about newly created Supabase project...');
-    const { stdout: projectsList } = await execAsync('supabase projects list');
+    const { stdout: projectsList } = await execAsync('npx supabase projects list');
     const projects = parseProjectsList(projectsList);
     const newProject = projects.find((project) => project.name === projectName);
 
@@ -31,7 +31,9 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     }
 
     console.log('🖇️  Getting Supabase project keys...');
-    const { stdout: projectAPIKeys } = await execAsync(`supabase projects api-keys --project-ref ${newProject.refId}`);
+    const { stdout: projectAPIKeys } = await execAsync(
+      `npx supabase projects api-keys --project-ref ${newProject.refId}`,
+    );
 
     const { anonKey, serviceRoleKey } = getSupabaseKeys(projectAPIKeys);
 
@@ -52,7 +54,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     });
 
     console.log('🖇️  Linking Supabase project...');
-    execSync(`supabase link --project-ref ${newProject.refId}`, { stdio: 'inherit' });
+    execSync(`npx supabase link --project-ref ${newProject.refId}`, { stdio: 'inherit' });
 
     for (const instruction of instructions) {
       console.log(instruction);

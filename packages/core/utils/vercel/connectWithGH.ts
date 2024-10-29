@@ -8,7 +8,7 @@ export const connectWithGH = async () => {
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      execSync('vercel git connect', {
+      execSync('npx vercel git connect', {
         stdio: ['pipe'],
         encoding: 'utf-8',
       });
