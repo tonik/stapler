@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.4
+
+### Minor Changes
+
+- Add missing dependencies
+
 ## 0.2.0-alpha.3
 
 ### Minor Changes
