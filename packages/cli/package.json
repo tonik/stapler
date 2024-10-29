@@ -1,7 +1,6 @@
 {
   "name": "@tonik/create-stapler-app-cli",
-  "version": "0.2.0-alpha.5",
-  "type": "module",
+  "version": "0.2.0-alpha.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "publishConfig": {
