@@ -1,5 +1,7 @@
 {
   "name": "stapler",
+  "description": "Stapler: an amazing CLI tool that scaffolds an entire fullstack app for you",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -8,6 +10,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "prettier": "^3.2.5",
     "turbo": "^2.1.1",
     "typescript": "^5.4.5"
@@ -16,8 +19,6 @@
   "engines": {
     "node": ">=18"
   },
-  "description": "This is an official starter Turborepo.",
-  "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
     "eslint": "^8.57.0",

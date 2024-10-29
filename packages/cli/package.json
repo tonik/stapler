@@ -1,10 +1,14 @@
 {
-  "name": "@create-stapler-app/cli",
+  "name": "@tonik/create-stapler-app",
   "version": "0.1.0",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
     "create-stapler-app": "./dist/index.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha"
   },
   "scripts": {
     "build": "tsup index.ts --out-dir dist --format esm --dts",
