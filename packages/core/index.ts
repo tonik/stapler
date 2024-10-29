@@ -13,6 +13,7 @@ import { deployVercelProject } from './utils/vercel/deploy';
 import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { createDocFiles } from './utils/docs/create';
+import { pushToGitHub } from './utils/github/repositoryManager';
 
 type ContextType = {
   projectDir: string;
@@ -20,11 +21,6 @@ type ContextType = {
   stepsOrder: (keyof StepsCompleted)[];
   currentStepIndex: number;
 };
-
-type Event =
-  | { type: 'NEXT' }
-  | { type: 'STEP_COMPLETED'; data: { step: keyof StepsCompleted; stateData: StaplerState } }
-  | { type: 'ERROR'; error: any };
 
 const createInstallMachine = (initialContext: ContextType) => {
   return createMachine(
@@ -127,12 +123,13 @@ const createInstallMachine = (initialContext: ContextType) => {
       actors: {
         performStep: fromPromise(async ({ input }: { input: ContextType }) => {
           const step = input.stepsOrder[input.currentStepIndex];
+          const { options, projectName, stepsCompleted } = input.stateData;
           console.log(`🖇️ Performing step: ${step}`);
 
           try {
             switch (step) {
               case 'initializeProject':
-                const { name } = input.stateData.options;
+                const { name } = options;
                 console.log(`🖇️ Stapling ${name}...`);
                 await createTurboRepo(name);
                 process.chdir(name);
@@ -153,33 +150,34 @@ const createInstallMachine = (initialContext: ContextType) => {
                 prettify();
                 break;
               case 'initializeRepository':
-                const { projectName } = input.stateData;
-                console.log(`🖇️ Initializing repository in our switch call`);
                 await initializeRepository({
                   projectName,
                   visibility: 'private',
                 });
                 break;
+              case 'pushToGitHub':
+                await pushToGitHub(projectName);
+                break;
               case 'createSupabaseProject':
-                await createSupabaseProject(input.stateData.projectName);
+                await createSupabaseProject(projectName);
                 break;
               case 'setupAndCreateVercelProject':
                 await setupAndCreateVercelProject();
                 break;
               case 'connectSupabaseProject':
-                await connectSupabaseProject(input.stateData.projectName, input.projectDir);
+                await connectSupabaseProject(projectName, input.projectDir);
                 break;
               case 'deployVercelProject':
                 await deployVercelProject();
                 break;
               case 'prepareDrink':
-                prepareDrink(input.stateData.projectName);
+                prepareDrink(projectName);
                 break;
               default:
                 throw new Error(`Unknown step: ${step}`);
             }
 
-            input.stateData.stepsCompleted[step] = true;
+            stepsCompleted[step] = true;
             saveState(input.stateData, input.projectDir);
             console.log(`🖇️ Step "${step}" completed.`);
 

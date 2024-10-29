@@ -12,6 +12,7 @@ export interface StepsCompleted {
   prettifyCode: boolean;
   prepareDrink: boolean;
   initializeRepository: boolean;
+  pushToGitHub: boolean;
   createSupabaseProject: boolean;
   setupAndCreateVercelProject: boolean;
   connectSupabaseProject: boolean;

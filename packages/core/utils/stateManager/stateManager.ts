@@ -27,6 +27,7 @@ export function initializeState(projectDir: string, name: string, usePayload: bo
         deployVercelProject: false,
         prepareDrink: false,
         initializeRepository: false,
+        pushToGitHub: false,
       },
       options: {
         name: name,
