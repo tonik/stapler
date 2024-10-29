@@ -1,17 +1,16 @@
 {
   "name": "@tonik/create-stapler-app",
-  "version": "0.1.0-alpha.14",
-  "main": "./dist/core/index.mjs",
-  "types": "./dist/core/index.d.ts",
+  "version": "0.1.0-alpha.16",
+  "main": "./dist/index.mjs",
   "bin": {
-    "create-stapler-app": "./dist/cli/index.mjs"
+    "create-stapler-app": "./dist/index.mjs"
   },
   "publishConfig": {
     "access": "public",
     "tag": "alpha"
   },
   "scripts": {
-    "build": "pnpm --filter @tonik/create-stapler-app-core build && pnpm --filter @tonik/create-stapler-app-cli build"
+    "build": "pnpm --filter @tonik/create-stapler-app-core build && pnpm --filter @tonik/create-stapler-app-cli build && tsup index.ts --out-dir dist --format esm"
   },
   "dependencies": {
     "chalk": "^5.3.0",

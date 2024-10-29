@@ -1,5 +1,17 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.16
+
+### Patch Changes
+
+- use index file
+
+## 0.1.0-alpha.15
+
+### Patch Changes
+
+- use index file from create-stapler-app
+
 ## 0.1.0-alpha.14
 
 ### Minor Changes
