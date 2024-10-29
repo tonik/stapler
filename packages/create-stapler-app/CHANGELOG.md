@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.11
+
+### Minor Changes
+
+- Remove .d.ts creation
+
 ## 0.1.0-alpha.10
 
 ### Minor Changes
