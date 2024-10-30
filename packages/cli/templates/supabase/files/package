@@ -1,0 +1,41 @@
+{
+  "name": "@stapler/supabase",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "SEE LICENSE IN LICENSE",
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/server.ts",
+    "./middleware": "./src/middleware.ts",
+    "./client": "./src/client.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "start": "pnpm with-env supabase start",
+    "stop": "supabase stop",
+    "with-env": "dotenv -e ../../.env --",
+    "db:reset": "supabase db reset",
+    "generate:types": "supabase gen types typescript --local > src/types.gen.ts",
+    "prepare-tests": "tsx scripts/prepare-tests.ts && pnpm db:reset",
+    "test": "supabase test db"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.1.0",
+    "@supabase/supabase-js": "^2.41.1",
+    "supabase": "^1.150.0",
+    "dotenv": "^16.4.5",
+    "tsx": "^4.7.2"
+  },
+  "peerDependencies": {
+    "next": "^14.2.4"
+  },
+  "devDependencies": {
+    "next": "14.2.4",
+    "typescript": "^5.5.3"
+  }
+}
