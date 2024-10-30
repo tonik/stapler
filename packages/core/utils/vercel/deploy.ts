@@ -1,7 +1,6 @@
 import { connectWithGH } from './connectWithGH';
 import { getDeploymentUrl } from './utils/getDeploymentUrl';
-
-const fs = require('fs').promises;
+import fs from 'fs/promises';
 
 export const deployVercelProject = async () => {
   try {
@@ -20,13 +19,13 @@ export const deployVercelProject = async () => {
 
   await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
 
-  console.log('🖇️  Creating preview deployment...');
-  const previewUrl = getDeploymentUrl(false);
-
   console.log('🖇️  Creating production deployment...');
   const productionUrl = getDeploymentUrl(true);
 
-  console.log(`🖇️  You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m$`);
+  console.log('🖇️  Creating preview deployment...');
+  const previewUrl = getDeploymentUrl(false);
 
-  console.log(`🖇️  You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m$`);
+  console.log(`🖇️  You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m`);
+
+  console.log(`🖇️  You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
 };
