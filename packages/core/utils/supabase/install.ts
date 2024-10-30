@@ -1,8 +1,12 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const supabaseLogin = () => {
   console.log('🖇️  Logging into Supabase...');
@@ -55,7 +59,7 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   console.log('🖇️  Adding Supabase Files...');
 
-  const templateDirectory = path.join(__dirname, '../templates/supabase/files');
+  const templateDirectory = path.join(__dirname, '../../core/templates/supabase/files');
 
   templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
   // add "supabase/**" to pnpm-workspace.yaml
