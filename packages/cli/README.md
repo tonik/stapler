@@ -4,6 +4,7 @@
 It integrates **Next.js**, **Supabase**, **Vercel**, and more, just by running a single command.
 The CLI guides you through the setup process and helps you create a new project in minutes.
 You don't have to be an expert to get started with Stapler.
+This amazing tool is brought to you by awesome [**Tonik**](https://www.tonik.com/) engineer team.
 
 ## Requirements
 
