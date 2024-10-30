@@ -84,7 +84,7 @@ const createAction = async () => {
   if (!proceedWithNewProject && selectedProject) {
     process.chdir(selectedProject.projectPath);
     selectedProject.state.options.name = selectedProject.projectName;
-    await createProject(selectedProject.state.options, selectedProject.projectPath)
+    await createProject(selectedProject.state.options)
       .then(() => {
         console.log('Project resumed successfully!');
       })
@@ -135,7 +135,7 @@ const createAction = async () => {
 
     const finalOptions = { ...answers, ...payloadAnswer };
 
-    await createProject(finalOptions, projectDir)
+    await createProject(finalOptions)
       .then(() => {
         console.log(chalk.green('Project created successfully!'));
         console.log(chalk.green(`with options: ${JSON.stringify(finalOptions)}`));
