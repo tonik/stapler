@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.3
+
+### Minor Changes
+
+- Copy templates to cli
+
 ## 0.2.0-alpha.2
 
 ### Minor Changes
