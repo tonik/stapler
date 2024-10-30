@@ -1,5 +1,29 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.4
+
+### Minor Changes
+
+- Clone templates folder to cli manually
+
+## 0.2.0-alpha.3
+
+### Minor Changes
+
+- Copy templates to cli
+
+## 0.2.0-alpha.2
+
+### Minor Changes
+
+- Adjust package.json so it exports templates too
+
+## 0.2.0-alpha.1
+
+### Minor Changes
+
+- Add dynamic handling for template files directories
+
 ## 0.2.0-alpha.0
 
 ### Minor Changes
