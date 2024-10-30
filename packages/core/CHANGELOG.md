@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.1
+
+### Minor Changes
+
+- Add dynamic handling for template files directories
+
 ## 0.2.0-alpha.0
 
 ### Minor Changes
