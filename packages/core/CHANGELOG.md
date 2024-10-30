@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.2
+
+### Minor Changes
+
+- Adjust package.json so it exports templates too
+
 ## 0.2.0-alpha.1
 
 ### Minor Changes

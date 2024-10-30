@@ -1,6 +1,6 @@
 {
   "name": "@tonik/create-stapler-app",
-  "version": "0.1.0-alpha.17",
+  "version": "0.1.0-alpha.18",
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
@@ -10,6 +10,10 @@
     "access": "public",
     "tag": "alpha"
   },
+  "files": [
+    "dist",
+    "../core/templates"
+  ],
   "scripts": {
     "build": "tsup index.ts --out-dir ./dist --format esm",
     "dev": "tsc -w"
