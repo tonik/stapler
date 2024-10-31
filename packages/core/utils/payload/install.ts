@@ -1,19 +1,14 @@
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
 import { join } from 'path';
-import gradient from 'gradient-string';
 import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
-
-const payloadGradient = gradient([
-  { color: '#12324A', pos: 0 },
-  { color: '#E5AA5F', pos: 1 },
-]);
+import { getLogColor } from '../shared/getLogColor';
 
 export const preparePayload = async () => {
-  console.log(payloadGradient('Initializing Payload...'));
+  getLogColor('payload', 'Initializing...');
 
   process.chdir('./apps/web/');
 
@@ -21,7 +16,7 @@ export const preparePayload = async () => {
 
   updatePackages();
 
-  console.log(payloadGradient('Moving files to (app) directory...'));
+  getLogColor('payload', ['Moving files to (app) directory...']);
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
@@ -29,7 +24,7 @@ export const preparePayload = async () => {
     },
   );
 
-  console.log(payloadGradient('Installing Payload to Next.js...'));
+  getLogColor('payload', 'Installing to Next.js...');
   execSync(`npx create-payload-app@beta`, { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet

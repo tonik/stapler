@@ -1,14 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import gradient from 'gradient-string';
-
-const payloadGradient = gradient([
-  { color: '#12324A', pos: 0 },
-  { color: '#E5AA5F', pos: 1 },
-]);
+import { getLogColor } from '../shared/getLogColor';
 
 export const removeTurboFlag = () => {
-  console.log(payloadGradient('Removing --turbo flag from dev script...'));
+  getLogColor('payload', 'Removing --turbo flag from dev script...');
 
   // Path to your package.json file
   const packageJsonPath = path.join(process.cwd(), 'package.json');

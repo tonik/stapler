@@ -1,12 +1,8 @@
 import { execSync } from 'child_process';
-import gradient from 'gradient-string';
+import { getLogColor } from '../shared/getLogColor';
 
-const prettifyGradient = gradient([
-  { color: '#F11D28', pos: 0 },
-  { color: '#FFA12C', pos: 1 },
-]);
 export const prettify = async () => {
-  console.log(prettifyGradient('Prettifying...'));
+  getLogColor('prettier', 'Prettifying...');
 
   const ignorePatterns = [
     'node_modules/',
@@ -24,7 +20,7 @@ export const prettify = async () => {
     execSync(`echo ${pattern} >> .prettierignore`);
   });
 
-  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
+  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}" --log-level silent`, {
     stdio: 'inherit',
   });
 };

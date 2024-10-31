@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import chalk from 'chalk';
+import { getLogColor } from '../shared/getLogColor';
 
 const getUserName = (): string | null => {
   try {
@@ -14,36 +14,32 @@ export const setupAndCreateVercelProject = async () => {
   const vercelUserName = getUserName();
 
   if (!vercelUserName) {
-    console.log(chalk.bgBlack.hex('#FFF')('▲ Logging in to Vercel...'));
+    getLogColor('vercel', 'Logging in...');
     try {
       execSync('npx vercel login', { stdio: 'inherit' });
     } catch (error) {
-      console.log(
-        chalk.bgBlack.hex('#FFF')(
-          '▲ Oops! Something went wrong while logging in to Vercel...',
-          '\n▲ You might already be logged in with this email in another project.',
-          '\n▲ In this case, select "Continue with Email" and enter the email you\'re already logged in with.\n',
-        ),
-      );
+      getLogColor('vercel', [
+        'Oops! Something went wrong while logging in...',
+        '\nYou might already be logged in with this email in another project.',
+        '\nIn this case, select "Continue with Email" and enter the email you\'re already logged in with.\n',
+      ]);
       try {
         execSync('npx vercel login', { stdio: 'inherit' });
       } catch {
-        console.log(
-          chalk.bgBlack.hex('#FFF')(
-            '▲ Please check the error above and try again.',
-            '\n▲ After successfully logging in with "vercel login", please run create-stapler-app again.\n',
-          ),
-        );
-        process.exit(1);
+        getLogColor('vercel', [
+          'Please check the error above and try again.',
+          '\nAfter successfully logging in with "vercel login", please run create-stapler-app again.\n',
+        ]),
+          process.exit(1);
       }
     }
   } else {
-    console.log(chalk.bgBlack.hex('#FFF')(`▲ You are logged to Vercel as \x1b[36m${vercelUserName}\x1b[0m`));
+    getLogColor('vercel', `You are logged as \x1b[36m${vercelUserName}\x1b[0m`);
   }
 
-  console.log(chalk.bgBlack.hex('#FFF')('▲ Initializing Vercel project...'));
+  getLogColor('vercel', 'Initializing project...');
   execSync('npx vercel init');
 
-  console.log(chalk.bgBlack.hex('#FFF')('\n▲ Linking Vercel project...'));
+  getLogColor('vercel', '\nLinking project...');
   execSync('npx vercel link', { stdio: 'inherit' });
 };
