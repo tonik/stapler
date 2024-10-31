@@ -20,13 +20,11 @@ const asciiArt = `
 const displayHeader = () => {
   const metalGradient = gradient([
     { color: '#3C3C3C', pos: 0 },
-    { color: '#FFFFFF', pos: 0.5 },
-    { color: '#BDBDBD', pos: 0.75 },
-    { color: '#3C3C3C', pos: 1 },
+    { color: '#FFFFFF', pos: 1 },
   ]);
 
   console.log(metalGradient(asciiArt));
-  console.log(chalk.bold('\n🖇️  Welcome to Stapler!\n'));
+  console.log(chalk.bold('\nWelcome to Stapler!\n'));
 };
 
 const program = new Command();

@@ -19,8 +19,6 @@ interface ProjectOptions {
 export const createProject = async (options: ProjectOptions) => {
   const { name, usePayload } = options;
 
-  console.log(`🖇️  Stapling ${name}...`);
-
   await createTurboRepo(name);
 
   process.chdir(name);

@@ -1,7 +1,13 @@
 import * as readline from 'readline';
+import gradient from 'gradient-string';
+
+const supabaseGradient = gradient([
+  { color: '#3ABC82', pos: 0 },
+  { color: '#259764', pos: 1 },
+]);
 
 export const continueOnAnyKeypress = async (message: string): Promise<void> => {
-  console.log(message);
+  console.log(supabaseGradient(message));
 
   const rl = readline.createInterface({
     input: process.stdin,

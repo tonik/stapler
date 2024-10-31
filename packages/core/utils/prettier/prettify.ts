@@ -1,7 +1,12 @@
 import { execSync } from 'child_process';
+import gradient from 'gradient-string';
 
+const prettifyGradient = gradient([
+  { color: '#F11D28', pos: 0 },
+  { color: '#FFA12C', pos: 1 },
+]);
 export const prettify = async () => {
-  console.log('🖇️  Prettifying your Stapler...');
+  console.log(prettifyGradient('Prettifying...'));
 
   const ignorePatterns = [
     'node_modules/',

@@ -1,5 +1,11 @@
 import { execSync } from 'child_process';
 import * as os from 'os';
+import gradient from 'gradient-string';
+
+const githubGradient = gradient([
+  { color: '#3B8640', pos: 0 },
+  { color: '#8256D0', pos: 1 },
+]);
 
 export const isGitHubCLIInstalled = (): boolean => {
   try {
@@ -27,8 +33,10 @@ export const installGitHubCLI = (): boolean => {
         installCommand =
           'sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && sudo dnf install gh';
       } else {
-        console.log('🖇️  Automatic installation is not supported for your Linux distribution.');
-        console.log('🖇️  Please visit https://github.com/cli/cli#installation for installation instructions.');
+        console.log(
+          githubGradient('Automatic installation is not supported for your Linux distribution.'),
+          githubGradient('\n Please visit https://github.com/cli/cli#installation for installation instructions.'),
+        );
         return false;
       }
       break;
@@ -36,19 +44,21 @@ export const installGitHubCLI = (): boolean => {
       installCommand = 'winget install --id GitHub.cli';
       break;
     default:
-      console.log('🖇️  Automatic installation is not supported for your operating system.');
-      console.log('🖇️  Please visit https://github.com/cli/cli#installation for installation instructions.');
+      console.log(
+        githubGradient('Automatic installation is not supported for your operating system.'),
+        githubGradient('\nPlease visit https://github.com/cli/cli#installation for installation instructions.'),
+      );
       return false;
   }
 
-  console.log('🖇️  Installing GitHub CLI...');
+  console.log(githubGradient('Installing GitHub CLI...'));
   try {
     execSync(installCommand, { stdio: 'inherit' });
-    console.log('🖇️  GitHub CLI installed successfully.');
+    console.log(githubGradient('GitHub CLI installed successfully.'));
     return true;
   } catch (error) {
-    console.error('🖇️  Failed to install GitHub CLI.');
-    console.log('🖇️  Please install it manually from: https://github.com/cli/cli#installation');
+    console.error('Failed to install GitHub CLI.');
+    console.log(githubGradient('Please install it manually from: https://github.com/cli/cli#installation'));
     return false;
   }
 };
