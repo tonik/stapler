@@ -8,9 +8,7 @@
     "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": ".",
-    "composite": true,
-    "declaration": true, // Ensure TypeScript generates declaration files
-    "emitDeclarationOnly": true // Only emit declaration files without compiling the code
+    "composite": true
   },
   "include": [
     "index.ts",

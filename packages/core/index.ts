@@ -90,7 +90,6 @@ const createInstallMachine = (initialContext: ContextType) => {
             const step = context.stepsOrder[context.currentStepIndex];
             context.stateData.stepsCompleted[step] = true;
             saveState(context.stateData, context.projectDir);
-            console.log(`🖇️  Step "${step}" skipped and marked as completed.`);
             return context.stateData;
           },
         }),
@@ -108,7 +107,6 @@ const createInstallMachine = (initialContext: ContextType) => {
         },
         currentStepCompleted: ({ context }) => {
           const step = context.stepsOrder[context.currentStepIndex];
-          console.log(`🖇️ Checking if step "${step}" is completed...`);
           return context.stateData.stepsCompleted[step];
         },
         shouldSkipCurrentStep: ({ context }) => {
@@ -199,8 +197,6 @@ export const createProject = async (options: ProjectOptions, projectDir: string)
   let state: StaplerState = initializeState(projectDir, name, usePayload);
   state.options = options;
 
-  const currentDir = process.cwd();
-
   const stepsOrder: (keyof StepsCompleted)[] = [
     'initializeProject',
     'createEnvFile',
@@ -217,7 +213,7 @@ export const createProject = async (options: ProjectOptions, projectDir: string)
   ];
 
   const context: ContextType = {
-    projectDir: currentDir,
+    projectDir,
     stateData: state,
     stepsOrder,
     currentStepIndex: 0,

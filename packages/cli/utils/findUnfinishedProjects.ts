@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { StaplerState } from '@create-stapler-app/core/types';
+import { StaplerState } from '@tonik/create-stapler-app-core/types';
 
 const MAX_DEPTH = 2;
 
@@ -10,11 +10,11 @@ export interface UnfinishedProject {
   state: StaplerState;
 }
 
-export function findUnfinishedProjects(
+export const findUnfinishedProjects = (
   dir: string,
   depth: number = 0,
   results: UnfinishedProject[] = [],
-): UnfinishedProject[] {
+): UnfinishedProject[] => {
   if (depth > MAX_DEPTH) return results;
 
   const files = fs.readdirSync(dir);
@@ -47,8 +47,8 @@ export function findUnfinishedProjects(
   }
 
   return results;
-}
+};
 
-function isProjectUnfinished(state: StaplerState): boolean {
+const isProjectUnfinished = (state: StaplerState): boolean => {
   return Object.values(state.stepsCompleted).some((completed) => !completed);
-}
+};

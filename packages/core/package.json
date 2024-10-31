@@ -3,7 +3,6 @@
   "version": "0.2.0-alpha.4",
   "private": true,
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup index.ts --out-dir ./dist --format esm",
     "dev": "tsc -w"

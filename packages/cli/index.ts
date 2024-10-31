@@ -84,13 +84,9 @@ const createAction = async () => {
   if (!proceedWithNewProject && selectedProject) {
     process.chdir(selectedProject.projectPath);
     selectedProject.state.options.name = selectedProject.projectName;
-    await createProject(selectedProject.state.options)
-      .then(() => {
-        console.log('Project resumed successfully!');
-      })
-      .catch((error) => {
-        console.error('Error resuming project:', error);
-      });
+    await createProject(selectedProject.state.options, selectedProject.projectPath).catch((error) => {
+      console.error('Error resuming project:', error);
+    });
   } else {
     // create new project
     const answers = await inquirer.prompt([
@@ -135,14 +131,9 @@ const createAction = async () => {
 
     const finalOptions = { ...answers, ...payloadAnswer };
 
-    await createProject(finalOptions)
-      .then(() => {
-        console.log(chalk.green('Project created successfully!'));
-        console.log(chalk.green(`with options: ${JSON.stringify(finalOptions)}`));
-      })
-      .catch((error) => {
-        console.error(chalk.red('Error creating project:', error));
-      });
+    await createProject(finalOptions, projectDir).catch((error) => {
+      console.error(chalk.red('Error creating project:', error));
+    });
   }
 };
 
