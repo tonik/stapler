@@ -6,6 +6,7 @@
     "@tonik/create-stapler-app-core": "0.1.0"
   },
   "changesets": [
+    "angry-hats-reflect",
     "blue-kiwis-check",
     "clean-frogs-poke",
     "cuddly-cups-itch",
