@@ -1,14 +1,9 @@
 import type { PathLike } from 'fs';
 import fs from 'fs/promises';
-import gradient from 'gradient-string';
-
-const payloadGradient = gradient([
-  { color: '#12324A', pos: 0 },
-  { color: '#E5AA5F', pos: 1 },
-]);
+import { getLogColor } from '../shared/getLogColor';
 
 export const preparePayloadConfig = async (configPath: PathLike) => {
-  console.log(payloadGradient('Preparing payload.config.ts...'));
+  getLogColor('payload', 'Preparing payload.config.ts...');
 
   try {
     // Read the payload.config.ts file

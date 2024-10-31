@@ -1,67 +1,61 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import gradient from 'gradient-string';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
 import { getTemplateDirectory } from '../shared/getTemplateDirectory';
-
-const supabaseGradient = gradient([
-  { color: '#3ABC82', pos: 0 },
-  { color: '#259764', pos: 1 },
-]);
+import { getLogColor } from '../shared/getLogColor';
 
 const supabaseLogin = () => {
-  console.log(supabaseGradient('Logging into Supabase...'));
+  getLogColor('supabase', 'Logging in...');
 
   try {
     execSync('npx supabase projects list', { stdio: 'ignore' });
-    console.log(supabaseGradient('Already logged into Supabase.'));
+    getLogColor('supabase', 'Already logged in.');
     return;
   } catch (error) {
     try {
       execSync('npx supabase login', { stdio: 'inherit' });
     } catch {
       console.error('Failed to log in to Supabase.');
-      console.log(supabaseGradient('\nPlease log in manually with "supabase login" and re-run "create-stapler-app".'));
+      getLogColor('supabase', '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".');
       process.exit(1);
     }
   }
 };
 
 const initializeSupabaseProject = (): void => {
-  console.log(supabaseGradient('Initialize Supabase project...'));
+  getLogColor('supabase', 'Initialize project...');
   try {
     execSync(`npx supabase init`, { stdio: ['pipe'], encoding: 'utf-8' });
   } catch (error: any) {
     const errorMessage = error.stderr;
 
     if (errorMessage.includes('file exists')) {
-      console.log(supabaseGradient('Supabase configuration file already exists.'));
+      getLogColor('supabase', 'Configuration file already exists.');
       return;
     } else {
       console.error('Failed to initialize Supabase project with "supabase init".');
-      console.log(
-        supabaseGradient(
-          '\nPlease review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
-        ),
-      );
-      process.exit(1);
+      getLogColor(
+        'supabase',
+        '\nPlease review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
+      ),
+        process.exit(1);
     }
   }
 };
 
 export const installSupabase = async (destinationDirectory: string) => {
-  console.log(supabaseGradient('Installing supabase-js...'));
+  getLogColor('supabase', 'Installing supabase-js...');
   try {
     supabaseLogin();
     initializeSupabaseProject();
   } catch (error) {
-    console.error('Failed to init Supabase project.', `\nError: ${error}`);
+    console.error('Failed to init project.', `\nError: ${error}`);
     process.exit(1);
   }
 
-  console.log(supabaseGradient('Adding Supabase Files...'));
+  getLogColor('supabase', 'Adding Files...');
 
   const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
 
@@ -79,7 +73,7 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   process.chdir('supabase');
 
-  console.log(supabaseGradient('Installing Supabase dependencies...'));
+  getLogColor('supabase', 'Installing dependencies...');
 
   execSync('pnpm i --reporter silent', { stdio: 'inherit' });
 

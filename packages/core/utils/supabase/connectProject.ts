@@ -2,21 +2,16 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
-import gradient from 'gradient-string';
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 import { updateEnvFile } from '../shared/updateEnvFile';
 import { getSupabaseKeys, parseProjectsList } from './utils';
+import { getLogColor } from '../shared/getLogColor';
 
 const execAsync = promisify(exec);
 
-const supabaseGradient = gradient([
-  { color: '#3ABC82', pos: 0 },
-  { color: '#259764', pos: 1 },
-]);
-
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
-    console.log(supabaseGradient('Getting information about newly created Supabase project...'));
+    getLogColor('supabase', 'Getting information about newly created project...');
     const { stdout: projectsList } = await execAsync('npx supabase projects list');
     const projects = parseProjectsList(projectsList);
     const newProject = projects.find((project) => project.name === projectName);
@@ -27,7 +22,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       );
     }
 
-    console.log(supabaseGradient('Getting Supabase project keys...'));
+    getLogColor('supabase', 'Getting project keys...');
     const { stdout: projectAPIKeys } = await execAsync(
       `npx supabase projects api-keys --project-ref ${newProject.refId}`,
     );
@@ -40,7 +35,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     const SUPABASE_URL = `https://${newProject.refId}.supabase.co/`;
 
-    console.log(supabaseGradient(`Saving keys to .env...`));
+    getLogColor('supabase', `Saving keys to .env...`);
     await updateEnvFile({
       currentDir,
       pairs: [
@@ -50,18 +45,18 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       ],
     });
 
-    console.log(supabaseGradient('Linking Supabase project...'));
+    getLogColor('supabase', 'Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, { stdio: 'inherit' });
 
-    console.log(
-      chalk.bold(supabaseGradient('=== Instructions for Supabase Integration with GitHub and Vercel ===')),
-      supabaseGradient('\n1. You will be redirected to your Supabase project dashboard'),
-      supabaseGradient('\n2. Find the "GitHub" section and click "Connect".'),
-      supabaseGradient('\n   - Follow the prompts to connect Supabase with your GitHub repository.'),
-      supabaseGradient('\n3. Then, find the "Vercel" section and click "Connect".'),
-      supabaseGradient('\n   - Follow the prompts to connect Supabase with your Vercel project.'),
-      chalk.italic(supabaseGradient('\nNOTE: These steps require manual configuration in the Supabase interface.')),
-    );
+    getLogColor('supabase', [
+      chalk.bold('=== Instructions for integration with GitHub and Vercel ==='),
+      '\n1. You will be redirected to your project dashboard',
+      '\n2. Find the "GitHub" section and click "Connect".',
+      '\n   - Follow the prompts to connect with your GitHub repository.',
+      '\n3. Then, find the "Vercel" section and click "Connect".',
+      '\n   - Follow the prompts to connect with your Vercel project.',
+      chalk.italic('\nNOTE: These steps require manual configuration in the Supabase interface.'),
+    ]);
 
     await continueOnAnyKeypress('When you are ready to be redirected to the Supabase page press any key');
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
@@ -76,12 +71,11 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     ]);
 
     if (!isIntegrationReady) {
-      console.log(
-        supabaseGradient(
-          `You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`,
-        ),
-      );
-      process.exit(1);
+      getLogColor(
+        'supabase',
+        `You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`,
+      ),
+        process.exit(1);
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';

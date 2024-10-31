@@ -1,14 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import gradient from 'gradient-string';
-
-const payloadGradient = gradient([
-  { color: '#12324A', pos: 0 },
-  { color: '#E5AA5F', pos: 1 },
-]);
+import { getLogColor } from '../shared/getLogColor';
 
 export const prepareTsConfig = () => {
-  console.log(payloadGradient('Preparing tsconfig.json...'));
+  getLogColor('payload', 'Preparing tsconfig.json...');
 
   // Path to your tsconfig.json file
   const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');

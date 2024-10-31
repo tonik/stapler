@@ -1,4 +1,4 @@
-import gradient from 'gradient-string';
+import { getLogColor } from '../shared/getLogColor';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
   authenticateGitHub,
@@ -13,16 +13,11 @@ interface ProjectOptions {
   visibility: 'public' | 'private';
 }
 
-const githubGradient = gradient([
-  { color: '#3B8640', pos: 0 },
-  { color: '#8256D0', pos: 1 },
-]);
-
 // Helper function to check if GitHub CLI is installed
 const checkGitHubCLI = () => {
-  console.log(githubGradient('Checking if GitHub CLI is installed...'));
+  getLogColor('github', 'Checking if GitHub CLI is installed...');
   if (!isGitHubCLIInstalled()) {
-    console.log(githubGradient('GitHub CLI is not installed.'));
+    getLogColor('github', 'GitHub CLI is not installed.');
     const installed = installGitHubCLI();
     if (!installed) {
       console.error('GitHub CLI installation failed. Exiting...');
@@ -33,11 +28,11 @@ const checkGitHubCLI = () => {
 
 // Helper function to ensure GitHub authentication
 const ensureGitHubAuthentication = () => {
-  console.log(githubGradient('Checking GitHub authentication status...'));
+  getLogColor('github', 'Checking authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
-    console.log(githubGradient('You are already logged in to GitHub.'));
+    getLogColor('github', 'You are already logged in.');
     return; // Exit early if authenticated
   }
 
