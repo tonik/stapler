@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.7
+
+### Minor Changes
+
+- Introduce progress tracking
+
 ## 0.2.0-alpha.6
 
 ### Minor Changes

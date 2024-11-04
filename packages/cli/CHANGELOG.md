@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.23
+
+### Minor Changes
+
+- Introduce progress tracking
+
 ## 0.1.0-alpha.22
 
 ### Minor Changes
