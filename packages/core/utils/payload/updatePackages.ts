@@ -1,13 +1,14 @@
 import { execSync } from 'child_process';
+import { getLogColor } from '../shared/getLogColor';
 
 export const updatePackages = () => {
-  console.log('🖇️  Updating Next and React to their respective release candidates...');
-  execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc`, {
+  getLogColor('payload', 'Updating Next and React to their respective release candidates...');
+  execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc --reporter silent`, {
     stdio: 'inherit',
   });
 
-  console.log('🖇️  Installing necessary packages...');
-  execSync(`pnpm i pg sharp`, {
+  getLogColor('payload', 'Installing necessary packages...');
+  execSync(`pnpm i pg sharp --reporter silent`, {
     stdio: 'inherit',
   });
 };

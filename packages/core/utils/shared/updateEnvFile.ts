@@ -45,7 +45,7 @@ export const updateEnvFile = async ({ currentDir, pairs }: EnvUpdateConfig): Pro
     const updatedContent = lines.join('\n');
     await writeFile(envFilePath, updatedContent, 'utf8');
   } catch (error) {
-    console.error('🖇️  Error updating .env file:', error);
+    console.error('Error updating .env file:', error);
     throw error; // Re-throw the error for the caller to handle
   }
 };

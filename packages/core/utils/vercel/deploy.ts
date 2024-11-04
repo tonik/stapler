@@ -1,16 +1,16 @@
+import fs from 'fs/promises';
 import { connectWithGH } from './connectWithGH';
 import { getDeploymentUrl } from './utils/getDeploymentUrl';
-import fs from 'fs/promises';
+import { getLogColor } from '../shared/getLogColor';
 
 export const deployVercelProject = async () => {
   try {
     await connectWithGH();
-  } catch (error) {
-    console.log('🖇️  An unexpected error occurred:', error);
-    console.log('\n🖇️  Failed to connect GitHub with Vercel');
+  } catch (error: any) {
+    getLogColor('vercel', ['An unexpected error occurred:', error, '\nFailed to connect GitHub with Vercel']);
   }
 
-  console.log('🖇️  Creating vercel.json...');
+  getLogColor('vercel', 'Creating vercel.json...');
 
   const vercelConfig = {
     buildCommand: 'pnpm build',
@@ -19,13 +19,13 @@ export const deployVercelProject = async () => {
 
   await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
 
-  console.log('🖇️  Creating production deployment...');
+  getLogColor('vercel', 'Creating production deployment...');
   const productionUrl = getDeploymentUrl(true);
 
-  console.log('🖇️  Creating preview deployment...');
+  getLogColor('vercel', 'Creating preview deployment...');
   const previewUrl = getDeploymentUrl(false);
 
-  console.log(`🖇️  You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m`);
+  getLogColor('vercel', `You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m`);
 
-  console.log(`🖇️  You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
+  getLogColor('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
 };

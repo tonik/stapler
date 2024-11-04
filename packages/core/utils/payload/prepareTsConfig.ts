@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { getLogColor } from '../shared/getLogColor';
 
 export const prepareTsConfig = () => {
-  console.log('🖇️  Preparing tsconfig.json...');
+  getLogColor('payload', 'Preparing tsconfig.json...');
 
   // Path to your tsconfig.json file
   const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
@@ -10,7 +11,7 @@ export const prepareTsConfig = () => {
   // Read the tsconfig.json file
   fs.readFile(tsconfigPath, 'utf8', (err, data) => {
     if (err) {
-      console.error('🖇️  Error reading tsconfig.json', err);
+      console.error('Error reading tsconfig.json', err);
       return;
     }
 
@@ -33,7 +34,7 @@ export const prepareTsConfig = () => {
     // Write the updated tsconfig.json back to the file
     fs.writeFile(tsconfigPath, JSON.stringify(tsconfig, null, 2), (err) => {
       if (err) {
-        console.error('🖇️  Error writing to tsconfig.json', err);
+        console.error('Error writing to tsconfig.json', err);
       }
     });
   });

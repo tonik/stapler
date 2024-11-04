@@ -1,7 +1,8 @@
 import { execSync } from 'child_process';
+import { getLogColor } from '../shared/getLogColor';
 
 export const createSupabaseProject = async (name: string) => {
-  console.log('🖇️  Creating Supabase project...');
+  getLogColor('supabase', 'Creating Supabase project...');
 
   execSync(`npx supabase projects create ${name}`, {
     stdio: 'inherit',

@@ -6,6 +6,7 @@
     "@tonik/create-stapler-app-core": "0.1.0"
   },
   "changesets": [
+    "angry-hats-reflect",
     "blue-kiwis-check",
     "clean-frogs-poke",
     "cuddly-cups-itch",
@@ -13,6 +14,7 @@
     "few-parrots-switch",
     "five-students-care",
     "four-boats-confess",
+    "fresh-cougars-study",
     "honest-parents-tickle",
     "lazy-steaks-jog",
     "light-walls-obey",

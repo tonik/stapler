@@ -1,7 +1,8 @@
 import { execSync } from 'child_process';
+import { getLogColor } from '../shared/getLogColor';
 
 export const prettify = async () => {
-  console.log('🖇️  Prettifying your Stapler...');
+  getLogColor('prettier', 'Prettifying...');
 
   const ignorePatterns = [
     'node_modules/',
@@ -19,7 +20,7 @@ export const prettify = async () => {
     execSync(`echo ${pattern} >> .prettierignore`);
   });
 
-  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
+  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}" --log-level silent`, {
     stdio: 'inherit',
   });
 };

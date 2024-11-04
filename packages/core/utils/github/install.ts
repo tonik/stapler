@@ -1,3 +1,4 @@
+import { getLogColor } from '../shared/getLogColor';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
   authenticateGitHub,
@@ -14,12 +15,12 @@ interface ProjectRepositoryOptions {
 
 // Helper function to check if GitHub CLI is installed
 const checkGitHubCLI = () => {
-  console.log('🖇️  Checking GitHub CLI installation...');
+  getLogColor('github', 'Checking if GitHub CLI is installed...');
   if (!isGitHubCLIInstalled()) {
-    console.log('🖇️  GitHub CLI is not installed.');
+    getLogColor('github', 'GitHub CLI is not installed.');
     const installed = installGitHubCLI();
     if (!installed) {
-      console.error('🖇️  GitHub CLI installation failed. Exiting...');
+      console.error('GitHub CLI installation failed. Exiting...');
       process.exit(1);
     }
   }
@@ -27,16 +28,16 @@ const checkGitHubCLI = () => {
 
 // Helper function to ensure GitHub authentication
 const ensureGitHubAuthentication = () => {
-  console.log('🖇️  Checking GitHub authentication status...');
+  getLogColor('github', 'Checking authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
-    console.log('🖇️  You are already logged in to GitHub.');
+    getLogColor('github', 'You are already logged in.');
     return; // Exit early if authenticated
   }
 
   if (!isGitHubAuthenticated()) {
-    console.error(`🖇️  It looks like you're not logged in...`);
+    console.error(`It looks like you're not logged in...`);
     authenticateGitHub();
   }
 };
@@ -51,16 +52,14 @@ export const initializeRepository = async (options: ProjectRepositoryOptions) =>
   // Retrieve GitHub username once
   const username = await fetchGitHubUsername();
   if (!username) {
-    console.error('🖇️  Failed to retrieve GitHub username. Aborting repository creation.');
+    console.error('Failed to retrieve GitHub username. Aborting repository creation.');
     process.exit(1);
   }
 
   // Check if the repository exists and create it
   const repoName = await createGitHubRepository(projectName, visibility, username);
   if (!repoName) {
-    console.error(
-      '🖇️  Failed to create GitHub repository. Check your permissions or if the repository already exists.',
-    );
+    console.error('Failed to create GitHub repository. Check your permissions.');
     process.exit(1);
   }
 

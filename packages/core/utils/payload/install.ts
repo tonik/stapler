@@ -5,9 +5,10 @@ import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
+import { getLogColor } from '../shared/getLogColor';
 
 export const preparePayload = async () => {
-  console.log('🖇️  Initializing Payload...');
+  getLogColor('payload', 'Initializing...');
 
   process.chdir('./apps/web/');
 
@@ -15,7 +16,7 @@ export const preparePayload = async () => {
 
   updatePackages();
 
-  console.log('🖇️  Moving files to (app) directory...');
+  getLogColor('payload', ['Moving files to (app) directory...']);
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
@@ -23,7 +24,7 @@ export const preparePayload = async () => {
     },
   );
 
-  console.log('🖇️  Installing Payload to Next.js...');
+  getLogColor('payload', 'Installing to Next.js...');
   execSync(`npx create-payload-app@beta`, { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet
@@ -32,7 +33,7 @@ export const preparePayload = async () => {
   // Check if the payload configuration file exists
   const payloadConfigPath = join(process.cwd(), 'payload.config.ts');
   if (!existsSync(payloadConfigPath)) {
-    console.error('🖇️  Payload installation cancelled/failed.');
+    console.error('Payload installation cancelled/failed.');
   } else {
     await preparePayloadConfig(payloadConfigPath);
   }

@@ -1,5 +1,17 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.6
+
+### Minor Changes
+
+- Improve readibility EVEN MORE
+
+## 0.2.0-alpha.5
+
+### Minor Changes
+
+- Improve command logs readibility
+
 ## 0.2.0-alpha.4
 
 ### Minor Changes

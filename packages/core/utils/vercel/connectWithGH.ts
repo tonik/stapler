@@ -1,10 +1,11 @@
 import { execSync } from 'child_process';
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
+import { getLogColor } from '../shared/getLogColor';
 
 const MAX_RETRIES = 3;
 
 export const connectWithGH = async () => {
-  console.log('🖇️  Connecting with GitHub repository...');
+  getLogColor('vercel', 'Connecting with GitHub repository...');
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -22,21 +23,23 @@ export const connectWithGH = async () => {
 
       if (noConnectionError) {
         if (attempt === MAX_RETRIES) {
-          console.log("\n🖇️  Hmm, we've tried connecting a few times but no luck.");
-          console.log("\n🖇️  Let's try to set this up manually:");
-          console.log('🖇️  1️⃣  Visit \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m');
-          console.log('🖇️  2️⃣  Click on "GitHub" and complete the authorization');
-          console.log('🖇️  3️⃣  Once done, run \x1b[36mcvercel git connect\x1b\n');
+          getLogColor('vercel', [
+            "Hmm, we've tried connecting a few times but no luck.",
+            "\n\n Let's try to set this up manually:",
+            '\n 1️⃣  Visit \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m',
+            '\n 2️⃣  Click on "GitHub" and complete the authorization',
+            '\n 3️⃣  Once done, run \x1b[36mcvercel git connect\x1b\n',
+          ]);
         } else {
-          console.log(`\n🖇️  🔄 Attempt ${attempt} of ${MAX_RETRIES}`);
-          console.log("\n🖇️  It seems you haven't connected your GitHub login with Vercel yet. 🤔");
-          console.log(
-            '🖇️  No worries though! Just head over to \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m$',
-          );
-          console.log('🖇️  and click that "GitHub" button.');
+          getLogColor('vercel', [
+            `🔄 Attempt ${attempt} of ${MAX_RETRIES}`,
+            "\n\nIt seems you haven't connected your GitHub login with Vercel yet. 🤔",
+            '\nNo worries though! Just head over to \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m$',
+            '\nand click that "GitHub" button.',
+          ]);
         }
 
-        await continueOnAnyKeypress("🖇️  Once you've done that press any key");
+        await continueOnAnyKeypress("Once you've done that press any key");
       }
     }
   }

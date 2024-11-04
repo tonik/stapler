@@ -1,7 +1,8 @@
 import * as readline from 'readline';
+import { getLogColor } from './getLogColor';
 
 export const continueOnAnyKeypress = async (message: string): Promise<void> => {
-  console.log(message);
+  getLogColor('supabase', message);
 
   const rl = readline.createInterface({
     input: process.stdin,

@@ -1,6 +1,7 @@
 import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
+import { getLogColor } from '../shared/getLogColor';
 
 const execAsync = promisify(exec);
 
@@ -11,7 +12,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   // Try the base name first
   try {
     await execAsync(`gh repo view ${cleanBaseName}`);
-    console.error(`🖇️  Repository "${cleanBaseName}" already exists.`);
+    console.error(`Repository "${cleanBaseName}" already exists.`);
     // If we get here, the repo exists, so we need a new name
   } catch (error) {
     // If repo doesn't exist, we can use the clean base name
@@ -26,7 +27,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
     const candidateName = `${cleanBaseName}-v${counter}`;
     try {
       await execAsync(`gh repo view ${candidateName}`);
-      console.error(`🖇️  Repository "${candidateName}" already exists.`);
+      console.error(`Repository "${candidateName}" already exists.`);
       counter++;
     } catch (error) {
       if (error) {
@@ -49,7 +50,7 @@ export const isGitHubAuthenticated = (): boolean => {
 };
 
 export const authenticateGitHub = async (): Promise<boolean> => {
-  console.log('🖇️  Attempting to authenticate with GitHub...');
+  getLogColor('github', 'Attempting to authenticate...');
 
   execSync('gh auth login', { stdio: 'inherit' });
 
@@ -57,10 +58,9 @@ export const authenticateGitHub = async (): Promise<boolean> => {
   const isAuthenticated = isGitHubAuthenticated();
 
   if (isAuthenticated) {
-    console.log('🖇️  Authentication was successful.');
     return true;
   } else {
-    console.error('🖇️  Authentication failed after login attempt.');
+    console.error('Authentication failed after login attempt.');
     return false;
   }
 };
@@ -69,17 +69,17 @@ export const fetchGitHubUsername = async (): Promise<string | null> => {
   try {
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
 
-    console.log(`🖇️ Retrieved GitHub username: ${username}`);
+    getLogColor('github', `🖇️ Retrieved GitHub username: ${username}`);
 
     if (username) {
-      console.log(`🖇️  Hello \x1b[36m${username}\x1b[0m!`);
+      getLogColor('github', `Hello ${username}!`);
       return username;
     } else {
-      console.log('🖇️  No username returned or an error occurred.');
+      getLogColor('github', 'No username returned or an error occurred.');
       return null;
     }
   } catch (error) {
-    console.error('🖇️  Error fetching GitHub username:', error);
+    console.error('Error fetching username:', error);
     return null;
   }
 };
@@ -89,7 +89,7 @@ export const createGitHubRepository = async (
   repositoryVisibility: 'public' | 'private',
   username: string,
 ): Promise<string | undefined> => {
-  console.log(`🖇️  Checking if repository already exists...`);
+  getLogColor('github', `Checking if repository already exists...`);
 
   // Check if the repository exists
   const repoCheckCommand = `echo "$(gh repo view ${username}/${projectName} --json name)"`;
@@ -115,7 +115,7 @@ export const createGitHubRepository = async (
     repoName = confirmedName;
   }
 
-  console.log(`🖇️  Creating GitHub repository: \x1b[36m${repoName}\x1b[0m`);
+  getLogColor('github', `Creating repository: ${repoName}`);
 
   const visibility = repositoryVisibility === 'public' ? '--public' : '--private';
   const command = `gh repo create ${repoName} ${visibility}`;
@@ -123,19 +123,20 @@ export const createGitHubRepository = async (
   const result = execSync(command);
 
   if (result) {
-    console.log(`🖇️  Repository successfully created at \x1b[36m${result}\x1b[0m`);
+    getLogColor('github', `Repository successfully created at ${result}`);
     return repoName; // Return true to indicate success
   }
 
-  console.error('🖇️  Failed to create GitHub repository.');
+  console.error('Failed to create GitHub repository.');
   return; // Return false on failure
 };
+// New function to set up the local Git repository
 
 const executeCommands = (commands: string[]) => {
   for (const cmd of commands) {
     const result = execSync(cmd, { stdio: 'pipe' });
     if (!result) {
-      console.error(`🖇️  Failed to execute command: ${cmd}`);
+      console.error(`Failed to execute command: ${cmd}`);
       process.exit(1);
     }
   }
@@ -143,7 +144,7 @@ const executeCommands = (commands: string[]) => {
 
 // New function to set up the local Git repository
 export const setupGitRepository = async (projectName: string, username: string) => {
-  console.log(`🖇️  Setting up Git for the repository...`);
+  getLogColor('github', `Setting up Git for the repository...`);
 
   // Set the remote origin and push to GitHub
   const commands = [`git init`, `git add .`];
@@ -151,8 +152,8 @@ export const setupGitRepository = async (projectName: string, username: string) 
   executeCommands(commands);
 };
 
-export async function pushToGitHub(projectName: string) {
-  console.log('🖇️ Pushing changes to GitHub...');
+export const pushToGitHub = async (projectName: string) => {
+  getLogColor('github', 'Pushing changes to GitHub...');
 
   const username = await fetchGitHubUsername();
   const commands = [
@@ -164,4 +165,4 @@ export async function pushToGitHub(projectName: string) {
   ];
 
   executeCommands(commands);
-}
+};
