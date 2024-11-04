@@ -40,6 +40,5 @@ export function initializeState(projectDir: string, name: string, usePayload: bo
 
 export function saveState(state: StaplerState, projectDir: string): void {
   const rcFilePath = path.join(projectDir, RC_FILE_NAME);
-  console.log('Saving state to', rcFilePath);
   fs.writeFileSync(rcFilePath, JSON.stringify(state, null, 2));
 }
