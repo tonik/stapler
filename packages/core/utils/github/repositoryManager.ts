@@ -69,7 +69,7 @@ export const fetchGitHubUsername = async (): Promise<string | null> => {
   try {
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
 
-    getLogColor('github', `🖇️ Retrieved GitHub username: ${username}`);
+    getLogColor('github', `Retrieved GitHub username: ${username}`);
 
     if (username) {
       getLogColor('github', `Hello ${username}!`);
