@@ -1,10 +1,8 @@
 import { execSync } from 'child_process';
 
 export const getDeploymentUrl = (): string => {
-  const command = 'vercel --prod';
-
   try {
-    const output = execSync(command, {
+    const output = execSync('vercel --prod', {
       stdio: ['inherit', 'pipe', 'inherit'],
       encoding: 'utf8',
     });
