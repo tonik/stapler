@@ -44,7 +44,7 @@ const ensureGitHubAuthentication = () => {
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
   const { projectName, visibility } = options;
-  console.log(`🖇️ Initializing repository for project "${projectName}"...`);
+  getLogColor('github', `Initializing repository for project "${projectName}"...`);
 
   checkGitHubCLI();
   ensureGitHubAuthentication();
