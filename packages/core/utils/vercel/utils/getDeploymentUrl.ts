@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 
-export const getDeploymentUrl = (production: boolean = false): string => {
-  const command = production ? 'vercel --prod' : 'vercel';
+export const getDeploymentUrl = (): string => {
+  const command = 'vercel --prod';
 
   try {
     const output = execSync(command, {
@@ -12,11 +12,11 @@ export const getDeploymentUrl = (production: boolean = false): string => {
     if (output) {
       return output;
     } else {
-      console.error(`URL not found in ${production ? 'production' : 'preview'} deployment output`);
+      console.error(`URL not found in production deployment output`);
       return '';
     }
   } catch (error) {
-    console.error(`Error during ${production ? 'production' : 'preview'} deployment:`, error);
+    console.error(`Error during production deployment:`, error);
     return '';
   }
 };

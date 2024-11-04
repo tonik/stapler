@@ -20,12 +20,7 @@ export const deployVercelProject = async () => {
   await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
 
   getLogColor('vercel', 'Creating production deployment...');
-  const productionUrl = getDeploymentUrl(true);
-
-  getLogColor('vercel', 'Creating preview deployment...');
-  const previewUrl = getDeploymentUrl(false);
-
-  getLogColor('vercel', `You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m`);
+  const productionUrl = getDeploymentUrl();
 
   getLogColor('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
 };
