@@ -299,7 +299,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createEnvFileActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              logWithColoredPrefix('stapler', 'Creating env file in actor...');
               createEnvFile(input.projectDir);
               input.stateData.stepsCompleted.createEnvFile = true;
               saveState(input.stateData, input.projectDir);
