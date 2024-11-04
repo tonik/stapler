@@ -203,7 +203,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               input.stateData.stepsCompleted.createEnvFile = true;
               saveState(input.stateData, input.projectDir);
             } catch (error) {
-              console.error('Error in initializeProjectActor:', error);
+              console.error('Error in createEnvFileActor:', error);
               throw error;
             }
           }),
