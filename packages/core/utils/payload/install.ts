@@ -5,10 +5,10 @@ import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 export const preparePayload = async () => {
-  getLogColor('payload', 'Initializing...');
+  logWithColoredPrefix('payload', 'Initializing...');
 
   process.chdir('./apps/web/');
 
@@ -16,7 +16,7 @@ export const preparePayload = async () => {
 
   updatePackages();
 
-  getLogColor('payload', ['Moving files to (app) directory...']);
+  logWithColoredPrefix('payload', ['Moving files to (app) directory...']);
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     {
@@ -24,7 +24,7 @@ export const preparePayload = async () => {
     },
   );
 
-  getLogColor('payload', 'Installing to Next.js...');
+  logWithColoredPrefix('payload', 'Installing to Next.js...');
   execSync(`npx create-payload-app@beta`, { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet

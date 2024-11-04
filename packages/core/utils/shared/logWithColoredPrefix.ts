@@ -1,9 +1,20 @@
 import chalk from 'chalk';
 import gradient from 'gradient-string';
 
-type Name = 'turborepo' | 'supabase' | 'payload' | 'github' | 'prettier' | 'vercel';
+type Name = 'stapler' | 'turborepo' | 'supabase' | 'payload' | 'github' | 'prettier' | 'vercel';
 
-const names = [
+type NameProps = {
+  name: Name;
+  prefix: string;
+  colors: string[];
+};
+
+const names: NameProps[] = [
+  {
+    name: 'stapler',
+    prefix: 'Stapler',
+    colors: ['#FAFAFA', '#FAFAFA'],
+  },
   {
     name: 'turborepo',
     prefix: 'Turbo',
@@ -36,7 +47,7 @@ const names = [
   },
 ];
 
-export const getLogColor = (name: Name, messages: string[] | string) => {
+export const logWithColoredPrefix = (name: Name, messages: string[] | string) => {
   const color = names.find((color) => color.name === name);
   if (!color) {
     console.log(chalk.red('Invalid color name.'));

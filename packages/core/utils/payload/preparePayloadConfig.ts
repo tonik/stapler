@@ -1,9 +1,9 @@
 import type { PathLike } from 'fs';
 import fs from 'fs/promises';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 export const preparePayloadConfig = async (configPath: PathLike) => {
-  getLogColor('payload', 'Preparing payload.config.ts...');
+  logWithColoredPrefix('payload', 'Preparing payload.config.ts...');
 
   try {
     // Read the payload.config.ts file

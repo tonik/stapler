@@ -5,13 +5,13 @@ import chalk from 'chalk';
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
 import { updateEnvFile } from '../shared/updateEnvFile';
 import { getSupabaseKeys, parseProjectsList } from './utils';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const execAsync = promisify(exec);
 
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
-    getLogColor('supabase', 'Getting information about newly created project...');
+    logWithColoredPrefix('supabase', 'Getting information about newly created project...');
     const { stdout: projectsList } = await execAsync('npx supabase projects list');
     const projects = parseProjectsList(projectsList);
     const newProject = projects.find((project) => project.name === projectName);
@@ -22,7 +22,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       );
     }
 
-    getLogColor('supabase', 'Getting project keys...');
+    logWithColoredPrefix('supabase', 'Getting project keys...');
     const { stdout: projectAPIKeys } = await execAsync(
       `npx supabase projects api-keys --project-ref ${newProject.refId}`,
     );
@@ -35,7 +35,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     const SUPABASE_URL = `https://${newProject.refId}.supabase.co/`;
 
-    getLogColor('supabase', `Saving keys to .env...`);
+    logWithColoredPrefix('supabase', `Saving keys to .env...`);
     await updateEnvFile({
       currentDir,
       pairs: [
@@ -45,10 +45,10 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       ],
     });
 
-    getLogColor('supabase', 'Linking project...');
+    logWithColoredPrefix('supabase', 'Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, { stdio: 'inherit' });
 
-    getLogColor('supabase', [
+    logWithColoredPrefix('supabase', [
       chalk.bold('=== Instructions for integration with GitHub and Vercel ==='),
       '\n1. You will be redirected to your project dashboard',
       '\n2. Find the "GitHub" section and click "Connect".',
@@ -71,7 +71,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     ]);
 
     if (!isIntegrationReady) {
-      getLogColor(
+      logWithColoredPrefix(
         'supabase',
         `You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`,
       ),

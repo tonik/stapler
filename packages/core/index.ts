@@ -7,6 +7,7 @@ import {
   StateFrom,
   PromiseSnapshot,
 } from 'xstate';
+
 import { ProjectOptions, StaplerState } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
 import { createEnvFile } from './utils/env/createEnvFile';
@@ -22,6 +23,8 @@ import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { createDocFiles } from './utils/docs/create';
 import { pushToGitHub } from './utils/github/repositoryManager';
+import { logWithColoredPrefix } from './utils/shared/logWithColoredPrefix';
+
 interface InstallMachineContext {
   type: 'install';
   projectDir: string;
@@ -164,7 +167,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         },
         done: {
           type: 'final',
-          entry: () => console.log('Installation process completed!'),
+          entry: () => logWithColoredPrefix('stapler', 'Installation process completed!'),
         },
         failed: {
           type: 'final',
@@ -197,7 +200,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         ),
         createEnvFileActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            console.log('Creating env file in actor...');
+            logWithColoredPrefix('stapler', 'Creating env file in actor...');
             createEnvFile(input.projectDir);
             input.stateData.stepsCompleted.createEnvFile = true;
             saveState(input.stateData, input.projectDir);
@@ -308,7 +311,7 @@ export const createProject = async (options: ProjectOptions, projectDir: string)
 
   installActor.subscribe((state: StateFrom<typeof installMachine>) => {
     if (state.matches('done')) {
-      console.log('Installation process completed!');
+      logWithColoredPrefix('stapler', 'Installation process completed!');
     } else if (state.matches('failed')) {
       console.error('Installation process failed.');
     }

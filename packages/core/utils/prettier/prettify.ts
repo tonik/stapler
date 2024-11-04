@@ -1,8 +1,8 @@
 import { execSync } from 'child_process';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 export const prettify = async () => {
-  getLogColor('prettier', 'Prettifying...');
+  logWithColoredPrefix('prettier', 'Prettifying...');
 
   const ignorePatterns = [
     'node_modules/',

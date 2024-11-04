@@ -1,4 +1,4 @@
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
   authenticateGitHub,
@@ -15,9 +15,9 @@ interface ProjectRepositoryOptions {
 
 // Helper function to check if GitHub CLI is installed
 const checkGitHubCLI = () => {
-  getLogColor('github', 'Checking if GitHub CLI is installed...');
+  logWithColoredPrefix('github', 'Checking if GitHub CLI is installed...');
   if (!isGitHubCLIInstalled()) {
-    getLogColor('github', 'GitHub CLI is not installed.');
+    logWithColoredPrefix('github', 'GitHub CLI is not installed.');
     const installed = installGitHubCLI();
     if (!installed) {
       console.error('GitHub CLI installation failed. Exiting...');
@@ -28,11 +28,11 @@ const checkGitHubCLI = () => {
 
 // Helper function to ensure GitHub authentication
 const ensureGitHubAuthentication = () => {
-  getLogColor('github', 'Checking authentication status...');
+  logWithColoredPrefix('github', 'Checking authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
-    getLogColor('github', 'You are already logged in.');
+    logWithColoredPrefix('github', 'You are already logged in.');
     return; // Exit early if authenticated
   }
 
@@ -44,7 +44,7 @@ const ensureGitHubAuthentication = () => {
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
   const { projectName, visibility } = options;
-  getLogColor('github', `Initializing repository for project "${projectName}"...`);
+  logWithColoredPrefix('github', `Initializing repository for project "${projectName}"...`);
 
   checkGitHubCLI();
   ensureGitHubAuthentication();

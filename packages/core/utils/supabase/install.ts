@@ -4,39 +4,42 @@ import path from 'path';
 import { supabaseFiles } from '../../templates/supabase/installConfig';
 import { templateGenerator } from '../generator/generator';
 import { getTemplateDirectory } from '../shared/getTemplateDirectory';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const supabaseLogin = () => {
-  getLogColor('supabase', 'Logging in...');
+  logWithColoredPrefix('supabase', 'Logging in...');
 
   try {
     execSync('npx supabase projects list', { stdio: 'ignore' });
-    getLogColor('supabase', 'Already logged in.');
+    logWithColoredPrefix('supabase', 'Already logged in.');
     return;
   } catch (error) {
     try {
       execSync('npx supabase login', { stdio: 'inherit' });
     } catch {
       console.error('Failed to log in to Supabase.');
-      getLogColor('supabase', '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".');
+      logWithColoredPrefix(
+        'supabase',
+        '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".',
+      );
       process.exit(1);
     }
   }
 };
 
 const initializeSupabaseProject = (): void => {
-  getLogColor('supabase', 'Initialize project...');
+  logWithColoredPrefix('supabase', 'Initialize project...');
   try {
     execSync(`npx supabase init`, { stdio: ['pipe'], encoding: 'utf-8' });
   } catch (error: any) {
     const errorMessage = error.stderr;
 
     if (errorMessage.includes('file exists')) {
-      getLogColor('supabase', 'Configuration file already exists.');
+      logWithColoredPrefix('supabase', 'Configuration file already exists.');
       return;
     } else {
       console.error('Failed to initialize Supabase project with "supabase init".');
-      getLogColor(
+      logWithColoredPrefix(
         'supabase',
         '\nPlease review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
       ),
@@ -46,7 +49,7 @@ const initializeSupabaseProject = (): void => {
 };
 
 export const installSupabase = async (destinationDirectory: string) => {
-  getLogColor('supabase', 'Installing supabase-js...');
+  logWithColoredPrefix('supabase', 'Installing supabase-js...');
   try {
     supabaseLogin();
     initializeSupabaseProject();
@@ -55,7 +58,7 @@ export const installSupabase = async (destinationDirectory: string) => {
     process.exit(1);
   }
 
-  getLogColor('supabase', 'Adding Files...');
+  logWithColoredPrefix('supabase', 'Adding Files...');
 
   const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
 
@@ -73,7 +76,7 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   process.chdir('supabase');
 
-  getLogColor('supabase', 'Installing dependencies...');
+  logWithColoredPrefix('supabase', 'Installing dependencies...');
 
   execSync('pnpm i --reporter silent', { stdio: 'inherit' });
 

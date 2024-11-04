@@ -1,11 +1,11 @@
 import { execSync } from 'child_process';
 import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
-import { getLogColor } from '../shared/getLogColor';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const MAX_RETRIES = 3;
 
 export const connectWithGH = async () => {
-  getLogColor('vercel', 'Connecting with GitHub repository...');
+  logWithColoredPrefix('vercel', 'Connecting with GitHub repository...');
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -23,7 +23,7 @@ export const connectWithGH = async () => {
 
       if (noConnectionError) {
         if (attempt === MAX_RETRIES) {
-          getLogColor('vercel', [
+          logWithColoredPrefix('vercel', [
             "Hmm, we've tried connecting a few times but no luck.",
             "\n\n Let's try to set this up manually:",
             '\n 1️⃣  Visit \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m',
@@ -31,7 +31,7 @@ export const connectWithGH = async () => {
             '\n 3️⃣  Once done, run \x1b[36mcvercel git connect\x1b\n',
           ]);
         } else {
-          getLogColor('vercel', [
+          logWithColoredPrefix('vercel', [
             `🔄 Attempt ${attempt} of ${MAX_RETRIES}`,
             "\n\nIt seems you haven't connected your GitHub login with Vercel yet. 🤔",
             '\nNo worries though! Just head over to \x1b[36mhttps://vercel.com/account/login-connections\x1b[0m$',

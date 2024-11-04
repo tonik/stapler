@@ -1,5 +1,6 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
+import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
   NEXT_PUBLIC_SUPABASE_URL: 'required',
@@ -14,7 +15,7 @@ const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
 
 // Function to create .env file with empty fields
 export const createEnvFile = (destinationDirectory: string) => {
-  console.log('Creating .env file...');
+  logWithColoredPrefix('stapler', 'Creating .env file...');
   let envTemplate = '';
   for (const [key, status] of Object.entries(requiredEnvVariables)) {
     envTemplate += `${key}=\n`;
