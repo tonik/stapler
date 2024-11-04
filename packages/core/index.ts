@@ -264,7 +264,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         },
         done: {
           type: 'final',
-          entry: () => logWithColoredPrefix('stapler', 'Installation process completed!'),
         },
         failed: {
           type: 'final',
@@ -455,8 +454,6 @@ export const createProject = async (options: ProjectOptions, projectDir: string)
   let state: StaplerState = initializeState(projectDir, name, usePayload);
   state.options = options;
 
-  const currentDir = process.cwd();
-
   const context: InstallMachineContext = {
     type: 'install',
     projectDir: projectDir,
@@ -465,14 +462,6 @@ export const createProject = async (options: ProjectOptions, projectDir: string)
 
   const installMachine = createInstallMachine(context);
   const installActor = createActor(installMachine);
-
-  installActor.subscribe((state: StateFrom<typeof installMachine>) => {
-    if (state.matches('done')) {
-      logWithColoredPrefix('stapler', 'Installation process completed!');
-    } else if (state.matches('failed')) {
-      console.error('Installation process failed.');
-    }
-  });
 
   installActor.start();
 };
