@@ -8,7 +8,7 @@ import {
   PromiseSnapshot,
 } from 'xstate';
 
-import { ProjectOptions, StaplerState } from './types';
+import { ProjectOptions, StaplerState, StepsCompleted } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
 import { createEnvFile } from './utils/env/createEnvFile';
 import { initializeRepository } from './utils/github/install';
@@ -30,6 +30,12 @@ interface InstallMachineContext {
   projectDir: string;
   stateData: StaplerState;
 }
+
+const isStepCompleted = (stepName: keyof StepsCompleted) => {
+  return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
+    return context.stateData.stepsCompleted[stepName] === true;
+  };
+};
 
 const createStepMachine = (
   performStepFunction: ActorLogic<PromiseSnapshot<void, InstallMachineContext>, AnyEventObject, InstallMachineContext>,
@@ -64,6 +70,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
       context: initialContext,
       states: {
         initializeProject: {
+          always: [
+            {
+              guard: isStepCompleted('initializeProject'),
+              target: 'createEnvFile',
+            },
+          ],
           invoke: {
             src: 'initializeProjectActor',
             input: ({ context }) => context,
@@ -72,6 +84,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         createEnvFile: {
+          always: [
+            {
+              guard: isStepCompleted('createEnvFile'),
+              target: 'installPayload',
+            },
+          ],
           invoke: {
             src: 'createEnvFileActor',
             onDone: [
@@ -85,6 +103,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         installPayload: {
+          always: [
+            {
+              guard: isStepCompleted('installPayload'),
+              target: 'installSupabase',
+            },
+          ],
           invoke: {
             src: 'installPayloadActor',
             onDone: 'installSupabase',
@@ -92,6 +116,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         installSupabase: {
+          always: [
+            {
+              guard: isStepCompleted('installSupabase'),
+              target: 'createDocFiles',
+            },
+          ],
           invoke: {
             src: 'installSupabaseActor',
             onDone: 'createDocFiles',
@@ -99,6 +129,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         createDocFiles: {
+          always: [
+            {
+              guard: isStepCompleted('createDocFiles'),
+              target: 'prettifyCode',
+            },
+          ],
           invoke: {
             src: 'createDocFilesActor',
             onDone: 'prettifyCode',
@@ -106,6 +142,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         prettifyCode: {
+          always: [
+            {
+              guard: isStepCompleted('prettifyCode'),
+              target: 'initializeRepository',
+            },
+          ],
           invoke: {
             src: 'prettifyCodeActor',
             onDone: 'initializeRepository',
@@ -113,6 +155,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         initializeRepository: {
+          always: [
+            {
+              guard: isStepCompleted('initializeRepository'),
+              target: 'pushToGitHub',
+            },
+          ],
           invoke: {
             src: 'initializeRepositoryActor',
             onDone: 'pushToGitHub',
@@ -120,6 +168,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         pushToGitHub: {
+          always: [
+            {
+              guard: isStepCompleted('pushToGitHub'),
+              target: 'createSupabaseProject',
+            },
+          ],
           invoke: {
             src: 'pushToGitHubActor',
             onDone: 'createSupabaseProject',
@@ -127,6 +181,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         createSupabaseProject: {
+          always: [
+            {
+              guard: isStepCompleted('createSupabaseProject'),
+              target: 'setupAndCreateVercelProject',
+            },
+          ],
           invoke: {
             src: 'createSupabaseProjectActor',
             onDone: 'setupAndCreateVercelProject',
@@ -134,6 +194,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         setupAndCreateVercelProject: {
+          always: [
+            {
+              guard: isStepCompleted('setupAndCreateVercelProject'),
+              target: 'connectSupabaseProject',
+            },
+          ],
           invoke: {
             src: 'setupAndCreateVercelProjectActor',
             onDone: 'connectSupabaseProject',
@@ -141,6 +207,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         connectSupabaseProject: {
+          always: [
+            {
+              guard: isStepCompleted('connectSupabaseProject'),
+              target: 'deployVercelProject',
+            },
+          ],
           invoke: {
             src: 'connectSupabaseProjectActor',
             onDone: 'deployVercelProject',
@@ -148,6 +220,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         deployVercelProject: {
+          always: [
+            {
+              guard: isStepCompleted('deployVercelProject'),
+              target: 'prepareDrink',
+            },
+          ],
           invoke: {
             src: 'deployVercelProjectActor',
             onDone: 'prepareDrink',
@@ -155,6 +233,12 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         prepareDrink: {
+          always: [
+            {
+              guard: isStepCompleted('prepareDrink'),
+              target: 'done',
+            },
+          ],
           invoke: {
             src: 'prepareDrinkActor',
             onDone: 'done',
@@ -198,7 +282,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createEnvFileActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              logWithColoredPrefix('stapler', 'Creating env file in actor...');
+              logWithColoredPrefix('stapler', 'Creating env file in actor... in');
               createEnvFile(input.projectDir);
               input.stateData.stepsCompleted.createEnvFile = true;
               saveState(input.stateData, input.projectDir);

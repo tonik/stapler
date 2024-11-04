@@ -16,6 +16,7 @@ const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
 // Function to create .env file with empty fields
 export const createEnvFile = (destinationDirectory: string) => {
   logWithColoredPrefix('stapler', 'Creating .env file...');
+  logWithColoredPrefix('stapler', destinationDirectory);
   let envTemplate = '';
   for (const [key, status] of Object.entries(requiredEnvVariables)) {
     envTemplate += `${key}=\n`;
