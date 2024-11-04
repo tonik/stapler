@@ -20,7 +20,7 @@ export const prettify = async () => {
     execSync(`echo ${pattern} >> .prettierignore`);
   });
 
-  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}"`, {
+  execSync(`npx prettier --write "apps/web/**/*.{ts,tsx}" --log-level silent`, {
     stdio: 'inherit',
   });
 };
