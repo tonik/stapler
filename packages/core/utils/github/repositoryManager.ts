@@ -67,8 +67,9 @@ export const authenticateGitHub = async (): Promise<boolean> => {
 
 export const fetchGitHubUsername = async (): Promise<string | null> => {
   try {
-    // Run the command without --jq first to inspect raw output
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
+
+    getLogColor('github', `Retrieved GitHub username: ${username}`);
 
     if (username) {
       getLogColor('github', `Hello ${username}!`);
@@ -129,21 +130,9 @@ export const createGitHubRepository = async (
   console.error('Failed to create GitHub repository.');
   return; // Return false on failure
 };
-
 // New function to set up the local Git repository
-export const setupGitRepository = async (projectName: string, username: string) => {
-  getLogColor('github', `Pushing files to repository...`);
 
-  // Set the remote origin and push to GitHub
-  const commands = [
-    `git init`,
-    `git add .`,
-    `git commit -m "feat: initial commit"`,
-    `git branch -M main`,
-    `git remote add origin git@github.com:${username}/${projectName}.git`,
-    `git push -u origin main`,
-  ];
-
+const executeCommands = (commands: string[]) => {
   for (const cmd of commands) {
     const result = execSync(cmd, { stdio: 'pipe' });
     if (!result) {
@@ -151,4 +140,29 @@ export const setupGitRepository = async (projectName: string, username: string) 
       process.exit(1);
     }
   }
+};
+
+// New function to set up the local Git repository
+export const setupGitRepository = async (projectName: string, username: string) => {
+  getLogColor('github', `Setting up Git for the repository...`);
+
+  // Set the remote origin and push to GitHub
+  const commands = [`git init`, `git add .`];
+
+  executeCommands(commands);
+};
+
+export const pushToGitHub = async (projectName: string) => {
+  getLogColor('github', 'Pushing changes to GitHub...');
+
+  const username = await fetchGitHubUsername();
+  const commands = [
+    `git add .`,
+    `git branch -M main`,
+    `git remote add origin git@github.com:${username}/${projectName}.git`,
+    `git commit -m "feat: initial commit"`,
+    `git push -u origin main`,
+  ];
+
+  executeCommands(commands);
 };
