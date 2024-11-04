@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
+import { execSync } from 'node:child_process';
 import { connectWithGH } from './connectWithGH';
-import { getDeploymentUrl } from './utils/getDeploymentUrl';
 import { getLogColor } from '../shared/getLogColor';
 
 export const deployVercelProject = async () => {
@@ -20,12 +20,16 @@ export const deployVercelProject = async () => {
   await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
 
   getLogColor('vercel', 'Creating production deployment...');
-  const productionUrl = getDeploymentUrl(true);
 
-  getLogColor('vercel', 'Creating preview deployment...');
-  const previewUrl = getDeploymentUrl(false);
+  const productionUrl = execSync('vercel --prod', {
+    stdio: ['inherit', 'pipe', 'inherit'],
+    encoding: 'utf8',
+  });
 
-  getLogColor('vercel', `You can access your preview deployment at: \x1b[36m${previewUrl}\x1b[0m`);
-
-  getLogColor('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
+  if (productionUrl) {
+    getLogColor('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
+  } else {
+    getLogColor('vercel', 'Failed to create production deployment.');
+    return;
+  }
 };
