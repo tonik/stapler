@@ -22,5 +22,9 @@ export const createEnvFile = (destinationDirectory: string) => {
     envTemplate += `${key}=\n`;
   }
 
-  fs.writeFileSync(path.resolve(destinationDirectory, '.env'), envTemplate);
+  if (destinationDirectory) {
+    fs.writeFileSync(path.resolve(destinationDirectory, '.env'), envTemplate);
+  } else {
+    throw new Error(`Directory does not exist: ${destinationDirectory}`);
+  }
 };
