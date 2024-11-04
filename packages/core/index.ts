@@ -47,13 +47,9 @@ const createStepMachine = (
           src: performStepFunction,
           input: ({ context }) => context,
           onDone: 'provisioned',
-          onError: 'error',
         },
       },
       provisioned: {
-        type: 'final',
-      },
-      error: {
         type: 'final',
       },
     },
@@ -173,6 +169,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           type: 'final',
           entry: ({ context, event }) => {
             console.error('Installation process failed.', event.data);
+            process.exit(1);
           },
         },
       },
@@ -200,90 +197,150 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         ),
         createEnvFileActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            logWithColoredPrefix('stapler', 'Creating env file in actor...');
-            createEnvFile(input.projectDir);
-            input.stateData.stepsCompleted.createEnvFile = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              logWithColoredPrefix('stapler', 'Creating env file in actor...');
+              createEnvFile(input.projectDir);
+              input.stateData.stepsCompleted.createEnvFile = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in initializeProjectActor:', error);
+              throw error;
+            }
           }),
         ),
         installPayloadActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            await preparePayload();
-            input.stateData.stepsCompleted.installPayload = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              await preparePayload();
+              input.stateData.stepsCompleted.installPayload = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installPayloadActor:', error);
+              throw error;
+            }
           }),
         ),
         installSupabaseActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            const currentDir = process.cwd();
-            await installSupabase(currentDir);
-            input.stateData.stepsCompleted.installSupabase = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              const currentDir = process.cwd();
+              await installSupabase(currentDir);
+              input.stateData.stepsCompleted.installSupabase = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installSupabaseActor:', error);
+              throw error;
+            }
           }),
         ),
         createDocFilesActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            createDocFiles();
-            input.stateData.stepsCompleted.createDocFiles = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              createDocFiles();
+              input.stateData.stepsCompleted.createDocFiles = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in createDocFilesActor:', error);
+              throw error;
+            }
           }),
         ),
         prettifyCodeActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            prettify();
-            input.stateData.stepsCompleted.prettifyCode = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              prettify();
+              input.stateData.stepsCompleted.prettifyCode = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in prettifyCodeActor:', error);
+              throw error;
+            }
           }),
         ),
         initializeRepositoryActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            await initializeRepository({ projectName: input.stateData.options.name, visibility: 'private' });
-            input.stateData.stepsCompleted.initializeRepository = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              await initializeRepository({ projectName: input.stateData.options.name, visibility: 'private' });
+              input.stateData.stepsCompleted.initializeRepository = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in initializeRepositoryActor:', error);
+              throw error;
+            }
           }),
         ),
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            pushToGitHub(input.stateData.options.name);
-            input.stateData.stepsCompleted.pushToGitHub = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              pushToGitHub(input.stateData.options.name);
+              input.stateData.stepsCompleted.pushToGitHub = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in pushToGitHubActor:', error);
+              throw error;
+            }
           }),
         ),
         createSupabaseProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            await createSupabaseProject(input.stateData.options.name);
-            input.stateData.stepsCompleted.createSupabaseProject = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              await createSupabaseProject(input.stateData.options.name);
+              input.stateData.stepsCompleted.createSupabaseProject = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in createSupabaseProjectActor:', error);
+              throw error;
+            }
           }),
         ),
         setupAndCreateVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            await setupAndCreateVercelProject();
-            input.stateData.stepsCompleted.setupAndCreateVercelProject = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              await setupAndCreateVercelProject();
+              input.stateData.stepsCompleted.setupAndCreateVercelProject = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in setupAndCreateVercelProjectActor:', error);
+              throw error;
+            }
           }),
         ),
         connectSupabaseProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            const currentDir = process.cwd();
-            await connectSupabaseProject(input.stateData.options.name, currentDir);
-            input.stateData.stepsCompleted.connectSupabaseProject = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              const currentDir = process.cwd();
+              await connectSupabaseProject(input.stateData.options.name, currentDir);
+              input.stateData.stepsCompleted.connectSupabaseProject = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in connectSupabaseProjectActor:', error);
+              throw error;
+            }
           }),
         ),
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            await deployVercelProject();
-            input.stateData.stepsCompleted.deployVercelProject = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              await deployVercelProject();
+              input.stateData.stepsCompleted.deployVercelProject = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in deployVercelProjectActor:', error);
+              throw error;
+            }
           }),
         ),
         prepareDrinkActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            const { projectName } = input.stateData;
-            prepareDrink(projectName);
-            input.stateData.stepsCompleted.prepareDrink = true;
-            saveState(input.stateData, input.projectDir);
+            try {
+              const { projectName } = input.stateData;
+              prepareDrink(projectName);
+              input.stateData.stepsCompleted.prepareDrink = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in prepareDrinkActor:', error);
+              throw error;
+            }
           }),
         ),
       },
