@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.24
+
+### Minor Changes
+
+- Logs cleanup
+
 ## 0.1.0-alpha.23
 
 ### Minor Changes
