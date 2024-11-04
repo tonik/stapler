@@ -14,7 +14,7 @@ const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
 
 // Function to create .env file with empty fields
 export const createEnvFile = (destinationDirectory: string) => {
-  console.log('🖇️  Creating .env file...');
+  console.log('🖇️  Creating .env file... triggered by actor');
   let envTemplate = '';
   for (const [key, status] of Object.entries(requiredEnvVariables)) {
     envTemplate += `${key}=\n`;

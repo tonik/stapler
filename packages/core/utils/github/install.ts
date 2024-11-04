@@ -7,7 +7,7 @@ import {
   setupGitRepository,
 } from './repositoryManager';
 
-interface ProjectOptions {
+interface ProjectRepositoryOptions {
   projectName: string;
   visibility: 'public' | 'private';
 }
@@ -41,7 +41,7 @@ const ensureGitHubAuthentication = () => {
   }
 };
 
-export const initializeRepository = async (options: ProjectOptions) => {
+export const initializeRepository = async (options: ProjectRepositoryOptions) => {
   const { projectName, visibility } = options;
   console.log(`🖇️ Initializing repository for project "${projectName}"...`);
 
