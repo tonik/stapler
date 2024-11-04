@@ -92,6 +92,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           ],
           invoke: {
             src: 'createEnvFileActor',
+            input: ({ context }) => context,
             onDone: [
               {
                 guard: 'shouldInstallPayload',
@@ -108,9 +109,15 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               guard: isStepCompleted('installPayload'),
               target: 'installSupabase',
             },
+            {
+              guard: 'shouldInstallPayload',
+              target: 'installPayload',
+            },
+            { target: 'installSupabase' },
           ],
           invoke: {
             src: 'installPayloadActor',
+            input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
           },
@@ -123,6 +130,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'installSupabaseActor',
             onDone: 'createDocFiles',
             onError: 'failed',
@@ -136,6 +144,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'createDocFilesActor',
             onDone: 'prettifyCode',
             onError: 'failed',
@@ -149,6 +158,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'prettifyCodeActor',
             onDone: 'initializeRepository',
             onError: 'failed',
@@ -162,6 +172,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'initializeRepositoryActor',
             onDone: 'pushToGitHub',
             onError: 'failed',
@@ -175,6 +186,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'pushToGitHubActor',
             onDone: 'createSupabaseProject',
             onError: 'failed',
@@ -188,6 +200,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'createSupabaseProjectActor',
             onDone: 'setupAndCreateVercelProject',
             onError: 'failed',
@@ -201,6 +214,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'setupAndCreateVercelProjectActor',
             onDone: 'connectSupabaseProject',
             onError: 'failed',
@@ -214,6 +228,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'connectSupabaseProjectActor',
             onDone: 'deployVercelProject',
             onError: 'failed',
@@ -227,6 +242,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'deployVercelProjectActor',
             onDone: 'prepareDrink',
             onError: 'failed',
@@ -240,6 +256,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             },
           ],
           invoke: {
+            input: ({ context }) => context,
             src: 'prepareDrinkActor',
             onDone: 'done',
             onError: 'failed',
@@ -282,7 +299,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createEnvFileActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              logWithColoredPrefix('stapler', 'Creating env file in actor... in');
+              logWithColoredPrefix('stapler', 'Creating env file in actor...');
               createEnvFile(input.projectDir);
               input.stateData.stepsCompleted.createEnvFile = true;
               saveState(input.stateData, input.projectDir);
