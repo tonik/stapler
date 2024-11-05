@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.9
+
+### Minor Changes
+
+- Added instructions for pushing built code to Vercel
+
 ## 0.2.0-alpha.8
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.25
+
+### Minor Changes
+
+- Added instructions for pushing built code to Vercel
+
 ## 0.1.0-alpha.24
 
 ### Minor Changes
