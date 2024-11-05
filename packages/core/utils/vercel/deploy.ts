@@ -1,23 +1,11 @@
-import fs from 'fs/promises';
 import { execSync } from 'node:child_process';
-import { connectWithGH } from './connectWithGH';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 export const deployVercelProject = async () => {
-  try {
-    await connectWithGH();
-  } catch (error: any) {
-    logWithColoredPrefix('vercel', ['An unexpected error occurred:', error, '\nFailed to connect GitHub with Vercel']);
-  }
-
-  logWithColoredPrefix('vercel', 'Creating vercel.json...');
-
-  const vercelConfig = {
-    buildCommand: 'pnpm build',
-    outputDirectory: 'apps/web',
-  };
-
-  await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
+  execSync('npx vercel git connect', {
+    stdio: ['inherit', 'pipe', 'inherit'],
+    encoding: 'utf-8',
+  });
 
   logWithColoredPrefix('vercel', 'Creating production deployment...');
 

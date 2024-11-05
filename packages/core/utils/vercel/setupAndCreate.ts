@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import chalk from 'chalk';
 
 const getUserName = (): string | null => {
   try {
@@ -37,9 +38,10 @@ export const setupAndCreateVercelProject = async () => {
     logWithColoredPrefix('vercel', `You are logged as \x1b[36m${vercelUserName}\x1b[0m`);
   }
 
-  logWithColoredPrefix('vercel', 'Initializing project...');
-  execSync('npx vercel init');
-
-  logWithColoredPrefix('vercel', '\nLinking project...');
+  logWithColoredPrefix('vercel', 'Linking project...');
+  logWithColoredPrefix(
+    'vercel',
+    `NOTE: You need to specify manually ${chalk.cyan('in which directory is your code located')}, should be: ${chalk.greenBright('./apps/web')}`,
+  );
   execSync('npx vercel link', { stdio: 'inherit' });
 };

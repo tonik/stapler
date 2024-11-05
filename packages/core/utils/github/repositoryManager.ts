@@ -66,13 +66,11 @@ export const authenticateGitHub = async (): Promise<boolean> => {
 };
 
 export const fetchGitHubUsername = async (): Promise<string | null> => {
+  logWithColoredPrefix('github', `Retrieving username...`);
   try {
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
 
-    logWithColoredPrefix('github', `Retrieved GitHub username: ${username}`);
-
     if (username) {
-      logWithColoredPrefix('github', `Hello ${username}!`);
       return username;
     } else {
       logWithColoredPrefix('github', 'No username returned or an error occurred.');
