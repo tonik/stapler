@@ -2,6 +2,7 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { executeCommands } from '../shared/executeCommands';
 
 const execAsync = promisify(exec);
 
@@ -129,17 +130,6 @@ export const createGitHubRepository = async (
 
   console.error('Failed to create GitHub repository.');
   return; // Return false on failure
-};
-// New function to set up the local Git repository
-
-const executeCommands = (commands: string[]) => {
-  for (const cmd of commands) {
-    const result = execSync(cmd, { stdio: 'pipe' });
-    if (!result) {
-      console.error(`Failed to execute command: ${cmd}`);
-      process.exit(1);
-    }
-  }
 };
 
 // New function to set up the local Git repository

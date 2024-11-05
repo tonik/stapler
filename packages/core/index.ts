@@ -259,6 +259,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             input: ({ context }) => context,
             src: 'prepareDrinkActor',
             onDone: 'done',
+            
             onError: 'failed',
           },
         },

@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import { execSync } from 'node:child_process';
 import { connectWithGH } from './connectWithGH';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { executeCommands } from '../shared/executeCommands';
 
 export const deployVercelProject = async () => {
   try {
@@ -14,13 +15,19 @@ export const deployVercelProject = async () => {
 
   const vercelConfig = {
     buildCommand: 'pnpm build',
-    outputDirectory: 'apps/web',
+    framework: 'nextjs',
+    rootDirectory: 'apps/web',
   };
 
   await fs.writeFile('vercel.json', JSON.stringify(vercelConfig, null, 2));
 
-  logWithColoredPrefix('vercel', 'Creating production deployment...');
+  logWithColoredPrefix('vercel', 'Pushing changes to GitHub...');
 
+  const commands = [`git add .`, `git commit -m "feat: add vercel.json"`, `git push`];
+
+  executeCommands(commands);
+
+  logWithColoredPrefix('vercel', 'Creating production deployment...');
   const productionUrl = execSync('vercel --prod', {
     stdio: ['inherit', 'pipe', 'inherit'],
     encoding: 'utf8',

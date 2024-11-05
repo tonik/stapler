@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import chalk from 'chalk';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const getUserName = (): string | null => {
@@ -34,7 +35,7 @@ export const setupAndCreateVercelProject = async () => {
       }
     }
   } else {
-    logWithColoredPrefix('vercel', `You are logged as \x1b[36m${vercelUserName}\x1b[0m`);
+    logWithColoredPrefix('vercel', `You are logged as ${chalk.cyan(vercelUserName)}`);
   }
 
   logWithColoredPrefix('vercel', 'Initializing project...');
