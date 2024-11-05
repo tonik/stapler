@@ -2,7 +2,7 @@ import * as readline from 'readline';
 import { logWithColoredPrefix } from './logWithColoredPrefix';
 
 export const continueOnAnyKeypress = async (message: string): Promise<void> => {
-  logWithColoredPrefix('supabase', message);
+  logWithColoredPrefix('supabase', message.toString().trim());
 
   const rl = readline.createInterface({
     input: process.stdin,

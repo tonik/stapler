@@ -1,6 +1,7 @@
 import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
+import chalk from 'chalk';
 import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
 
 const execAsync = promisify(exec);
@@ -12,7 +13,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   // Try the base name first
   try {
     await execAsync(`gh repo view ${cleanBaseName}`);
-    console.error(`Repository "${cleanBaseName}" already exists.`);
+    logWithColoredPrefix('github', `Repository "${cleanBaseName}" already exists.`);
     // If we get here, the repo exists, so we need a new name
   } catch (error) {
     // If repo doesn't exist, we can use the clean base name
@@ -27,7 +28,7 @@ const generateUniqueRepoName = async (baseName: string): Promise<string> => {
     const candidateName = `${cleanBaseName}-v${counter}`;
     try {
       await execAsync(`gh repo view ${candidateName}`);
-      console.error(`Repository "${candidateName}" already exists.`);
+      logWithColoredPrefix('github', `Repository "${candidateName}" already exists.`);
       counter++;
     } catch (error) {
       if (error) {
@@ -121,7 +122,7 @@ export const createGitHubRepository = async (
   const result = execSync(command);
 
   if (result) {
-    logWithColoredPrefix('github', `Repository successfully created at ${result}`);
+    logWithColoredPrefix('github', `Repository successfully created at ${chalk.cyan(result.toString().trim())}`);
     return repoName; // Return true to indicate success
   }
 

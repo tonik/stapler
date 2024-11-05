@@ -35,7 +35,7 @@ export const setupAndCreateVercelProject = async () => {
       }
     }
   } else {
-    logWithColoredPrefix('vercel', `You are logged as \x1b[36m${vercelUserName}\x1b[0m`);
+    logWithColoredPrefix('vercel', `You are logged in as \x1b[36m${vercelUserName.toString().trim()}\x1b[0m`);
   }
 
   logWithColoredPrefix('vercel', 'Linking project...');
