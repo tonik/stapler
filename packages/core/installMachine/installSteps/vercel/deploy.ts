@@ -22,6 +22,12 @@ export const deployVercelProject = async () => {
     encoding: 'utf8',
   });
 
+  logWithColoredPrefix('vercel', 'Setting up environment variables...');
+  execSync("grep PAYLOAD_SECRET apps/web/.env | cut -d '=' -f2 | vercel env add PAYLOAD_SECRET production", {
+    stdio: 'inherit',
+    encoding: 'utf8',
+  });
+
   if (productionUrl) {
     logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
   } else {
