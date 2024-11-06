@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.10
+
+### Minor Changes
+
+- update state logic, add supabase local docker dev
+
 ## 0.2.0-alpha.9
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app
 
+## 0.1.0-alpha.26
+
+### Minor Changes
+
+- update state logic, add supabase local docker dev
+
 ## 0.1.0-alpha.25
 
 ### Minor Changes
