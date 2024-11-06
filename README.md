@@ -87,8 +87,10 @@ When those changes will be pushed to the repository and merged to the `main` bra
 │   ├── cli # Main CLI package
 │   └── core # Core package with installation logic
 │       ├── CHANGELOG.md
+│       ├── installMachine # State machine, based on xState v5 for the installation process
+│       │   └── installSteps # Individual installation steps
 │       ├── templates # Templates for the scaffolded project
-│       └── utils # Core functions
+│       └── utils # Utility functions
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── tsconfig.json

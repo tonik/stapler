@@ -4,7 +4,7 @@ import { StaplerState } from '../../types';
 
 const RC_FILE_NAME = '.staplerrc';
 
-export function initializeState(projectDir: string, name: string, usePayload: boolean): StaplerState {
+export const initializeRcFile = (projectDir: string, name: string, usePayload: boolean): StaplerState => {
   const rcFilePath = path.join(projectDir, RC_FILE_NAME);
   if (fs.existsSync(rcFilePath)) {
     const data = fs.readFileSync(rcFilePath, 'utf-8');
@@ -36,9 +36,9 @@ export function initializeState(projectDir: string, name: string, usePayload: bo
     };
     return initialState;
   }
-}
+};
 
-export function saveState(state: StaplerState, projectDir: string): void {
+export const saveStateToRcFile = (state: StaplerState, projectDir: string): void => {
   const rcFilePath = path.join(projectDir, RC_FILE_NAME);
   fs.writeFileSync(rcFilePath, JSON.stringify(state, null, 2));
-}
+};

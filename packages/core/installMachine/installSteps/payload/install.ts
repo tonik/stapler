@@ -5,7 +5,7 @@ import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 import chalk from 'chalk';
 
 export const preparePayload = async () => {

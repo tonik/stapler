@@ -1,10 +1,10 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { supabaseFiles } from '../../templates/supabase/installConfig';
-import { templateGenerator } from '../generator/generator';
-import { getTemplateDirectory } from '../shared/getTemplateDirectory';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { supabaseFiles } from '../../../templates/supabase/installConfig';
+import { templateGenerator } from '../../../utils/generator/generator';
+import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const supabaseLogin = () => {
   logWithColoredPrefix('supabase', 'Logging in...');

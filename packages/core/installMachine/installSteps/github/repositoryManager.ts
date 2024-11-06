@@ -2,7 +2,7 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const execAsync = promisify(exec);
 

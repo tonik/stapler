@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 export const updatePackages = () => {
   logWithColoredPrefix('payload', 'Updating Next and React to their respective release candidates...');
