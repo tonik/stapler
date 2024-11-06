@@ -1,7 +1,17 @@
 import chalk from 'chalk';
 import gradient from 'gradient-string';
 
-type Name = 'stapler' | 'turborepo' | 'supabase' | 'payload' | 'github' | 'prettier' | 'vercel' | 'docker' | 'error';
+type Name =
+  | 'stapler'
+  | 'turborepo'
+  | 'supabase'
+  | 'payload'
+  | 'github'
+  | 'prettier'
+  | 'vercel'
+  | 'docker'
+  | 'postgres'
+  | 'error';
 
 type NameProps = {
   name: Name;
@@ -49,6 +59,11 @@ const names: NameProps[] = [
     name: 'docker',
     prefix: 'Docker',
     colors: ['#0db7ed', '#0db7ed'],
+  },
+  {
+    name: 'postgres',
+    prefix: 'PostgreSQL',
+    colors: ['#0064a5', '#008bb9'],
   },
   {
     name: 'error',

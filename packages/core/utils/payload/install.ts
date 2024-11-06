@@ -25,8 +25,8 @@ export const preparePayload = async () => {
 
   logWithColoredPrefix('payload', 'Installing to Next.js...');
   logWithColoredPrefix(
-    'docker',
-    `Local PostgreSQL connection string: ${chalk.cyan('postgresql://user:password@localhost:5432/postgres')}`,
+    'postgres',
+    `Local connection string: ${chalk.cyan('postgresql://user:password@localhost:5432/postgres')}`,
   );
   execSync('npx create-payload-app@beta', { stdio: 'inherit' });
 
