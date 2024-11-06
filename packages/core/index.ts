@@ -1,12 +1,4 @@
-import {
-  createMachine,
-  fromPromise,
-  createActor,
-  ActorLogic,
-  AnyEventObject,
-  StateFrom,
-  PromiseSnapshot,
-} from 'xstate';
+import { createMachine, fromPromise, createActor, ActorLogic, AnyEventObject, PromiseSnapshot } from 'xstate';
 
 import { ProjectOptions, StaplerState, StepsCompleted } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
@@ -23,7 +15,7 @@ import { setupAndCreateVercelProject } from './utils/vercel/setupAndCreate';
 import { prepareDrink } from './utils/bar/prepareDrink';
 import { createDocFiles } from './utils/docs/create';
 import { pushToGitHub } from './utils/github/repositoryManager';
-import { logWithColoredPrefix } from './utils/shared/logWithColoredPrefix';
+import { setupDatabaseWithDocker } from './utils/supabase/setupDatabaseWithDocker';
 
 interface InstallMachineContext {
   type: 'install';
@@ -87,36 +79,11 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('createEnvFile'),
-              target: 'installPayload',
+              target: 'installSupabase',
             },
           ],
           invoke: {
             src: 'createEnvFileActor',
-            input: ({ context }) => context,
-            onDone: [
-              {
-                guard: 'shouldInstallPayload',
-                target: 'installPayload',
-              },
-              { target: 'installSupabase' },
-            ],
-            onError: 'failed',
-          },
-        },
-        installPayload: {
-          always: [
-            {
-              guard: isStepCompleted('installPayload'),
-              target: 'installSupabase',
-            },
-            {
-              guard: 'shouldInstallPayload',
-              target: 'installPayload',
-            },
-            { target: 'installSupabase' },
-          ],
-          invoke: {
-            src: 'installPayloadActor',
             input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
@@ -126,12 +93,50 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('installSupabase'),
-              target: 'createDocFiles',
+              target: 'setupDatabaseWithDocker',
             },
           ],
           invoke: {
             input: ({ context }) => context,
             src: 'installSupabaseActor',
+            onDone: 'setupDatabaseWithDocker',
+            onError: 'failed',
+          },
+        },
+        setupDatabaseWithDocker: {
+          always: [
+            {
+              guard: isStepCompleted('setupDatabaseWithDocker'),
+              target: 'installPayload',
+            },
+            {
+              guard: 'shouldInstallPayload',
+              target: 'installPayload',
+            },
+            { target: 'createDocFiles' },
+          ],
+          invoke: {
+            input: ({ context }) => context,
+            src: 'setupDatabaseWithDockerActor',
+            onDone: 'installPayload',
+            onError: 'failed',
+          },
+        },
+        installPayload: {
+          always: [
+            {
+              guard: isStepCompleted('installPayload'),
+              target: 'createDocFiles',
+            },
+            {
+              guard: 'shouldInstallPayload',
+              target: 'installPayload',
+            },
+            { target: 'createDocFiles' },
+          ],
+          invoke: {
+            src: 'installPayloadActor',
+            input: ({ context }) => context,
             onDone: 'createDocFiles',
             onError: 'failed',
           },
@@ -307,18 +312,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             }
           }),
         ),
-        installPayloadActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              await preparePayload();
-              input.stateData.stepsCompleted.installPayload = true;
-              saveState(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in installPayloadActor:', error);
-              throw error;
-            }
-          }),
-        ),
         installSupabaseActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
@@ -328,6 +321,30 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveState(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in installSupabaseActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        setupDatabaseWithDockerActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              setupDatabaseWithDocker();
+              input.stateData.stepsCompleted.setupDatabaseWithDocker = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in setupDatabaseWithDockerActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        installPayloadActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await preparePayload();
+              input.stateData.stepsCompleted.installPayload = true;
+              saveState(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installPayloadActor:', error);
               throw error;
             }
           }),
