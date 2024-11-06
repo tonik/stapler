@@ -1,4 +1,4 @@
-import { createMachine, fromPromise, createActor, ActorLogic, AnyEventObject, PromiseSnapshot, and } from 'xstate';
+import { createMachine, fromPromise, createActor, ActorLogic, AnyEventObject, PromiseSnapshot, and, not } from 'xstate';
 
 import { ProjectOptions, StaplerState, StepsCompleted } from './types';
 import { initializeState, saveState } from './utils/stateManager/stateManager';
@@ -117,21 +117,16 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           invoke: {
             input: ({ context }) => context,
             src: 'setupDatabaseWithDockerActor',
-            onDone: 'installPayload',
+            onDone: [{ guard: 'shouldInstallPayload', target: 'installPayload' }, { target: 'createDocFiles' }],
             onError: 'failed',
           },
         },
         installPayload: {
           always: [
             {
-              guard: isStepCompleted('installPayload'),
+              guard: and([isStepCompleted('installPayload'), not('shouldInstallPayload')]),
               target: 'createDocFiles',
             },
-            {
-              guard: 'shouldInstallPayload',
-              target: 'installPayload',
-            },
-            { target: 'createDocFiles' },
           ],
           invoke: {
             src: 'installPayloadActor',
