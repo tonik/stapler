@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.11
+
+### Minor Changes
+
+- Add docker compose to cli files
+
 ## 0.2.0-alpha.10
 
 ### Minor Changes
