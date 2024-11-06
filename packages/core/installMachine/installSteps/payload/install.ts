@@ -6,6 +6,7 @@ import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import chalk from 'chalk';
 
 export const preparePayload = async () => {
   logWithColoredPrefix('payload', 'Initializing...');
@@ -16,16 +17,18 @@ export const preparePayload = async () => {
 
   updatePackages();
 
-  logWithColoredPrefix('payload', ['Moving files to (app) directory...']);
+  logWithColoredPrefix('payload', 'Moving files to (app) directory...');
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
-    {
-      stdio: 'inherit',
-    },
+    { stdio: 'inherit' },
   );
 
   logWithColoredPrefix('payload', 'Installing to Next.js...');
-  execSync(`npx create-payload-app@beta`, { stdio: 'inherit' });
+  logWithColoredPrefix(
+    'postgres',
+    `Local connection string: ${chalk.cyan('postgresql://user:password@localhost:5432/postgres')}`,
+  );
+  execSync('npx create-payload-app@beta', { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet
   removeTurboFlag();
@@ -38,6 +41,6 @@ export const preparePayload = async () => {
     await preparePayloadConfig(payloadConfigPath);
   }
 
-  // get back to the root directory
+  // Return to the root directory
   process.chdir('../../');
 };
