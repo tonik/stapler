@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import * as os from 'os';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 export const isGitHubCLIInstalled = (): boolean => {
   try {

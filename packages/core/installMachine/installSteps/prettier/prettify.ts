@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 export const prettify = async () => {
   logWithColoredPrefix('prettier', 'Prettifying...');

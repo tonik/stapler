@@ -1,7 +1,7 @@
-import { docFiles } from '../../templates/docs/installConfig';
-import { templateGenerator } from '../generator/generator';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
-import { getTemplateDirectory } from '../shared/getTemplateDirectory';
+import { docFiles } from '../../../templates/docs/installConfig';
+import { templateGenerator } from '../../../utils/generator/generator';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 
 export const createDocFiles = () => {
   logWithColoredPrefix('stapler', 'Writing docs...');

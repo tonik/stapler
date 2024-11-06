@@ -25,3 +25,9 @@ export interface StaplerState {
   stepsCompleted: StepsCompleted;
   options: ProjectOptions;
 }
+
+export interface InstallMachineContext {
+  type: 'install';
+  projectDir: string;
+  stateData: StaplerState;
+}

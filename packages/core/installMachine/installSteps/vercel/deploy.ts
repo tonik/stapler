@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 export const deployVercelProject = async () => {
   execSync('npx vercel git connect', {

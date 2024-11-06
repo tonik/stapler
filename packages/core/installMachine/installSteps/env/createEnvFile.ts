@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const requiredEnvVariables: Record<string, 'required' | 'optional'> = {
   NEXT_PUBLIC_SUPABASE_URL: 'required',

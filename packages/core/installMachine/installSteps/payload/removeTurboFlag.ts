@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 export const removeTurboFlag = () => {
   logWithColoredPrefix('payload', 'Removing --turbo flag from dev script...');

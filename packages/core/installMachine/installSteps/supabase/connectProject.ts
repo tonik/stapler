@@ -2,10 +2,10 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
-import { continueOnAnyKeypress } from '../shared/continueOnKeypress';
-import { updateEnvFile } from '../shared/updateEnvFile';
+import { continueOnAnyKeypress } from '../../../utils/continueOnKeypress';
+import { updateEnvFile } from '../../../utils/updateEnvFile';
 import { getSupabaseKeys, parseProjectsList } from './utils';
-import { logWithColoredPrefix } from '../shared/logWithColoredPrefix';
+import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const execAsync = promisify(exec);
 

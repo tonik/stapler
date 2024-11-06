@@ -14,6 +14,7 @@
     "index.ts",
     "types.ts",
     "utils/**/*.ts",
+    "installMachine/**/*.ts",
     "templates/supabase/installConfig.ts",
     "templates/docs/installConfig.ts"
   ],
