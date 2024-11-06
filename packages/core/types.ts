@@ -6,8 +6,9 @@ export interface ProjectOptions {
 export interface StepsCompleted {
   initializeProject: boolean;
   createEnvFile: boolean;
-  installPayload: boolean;
   installSupabase: boolean;
+  setupDatabaseWithDocker: boolean;
+  installPayload: boolean;
   createDocFiles: boolean;
   prettifyCode: boolean;
   prepareDrink: boolean;
