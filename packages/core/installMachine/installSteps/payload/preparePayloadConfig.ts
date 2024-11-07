@@ -15,26 +15,37 @@ export const preparePayloadConfig = async () => {
     try {
       // Read the payload.config.ts file
       let data = await fs.readFile(payloadConfigPath, 'utf8');
-  
-      // Replace postgresAdapter with vercelPostgresAdapter
-      const oldImport = `import { postgresAdapter } from '@payloadcms/db-postgres'`;
-      const newImport = `import { vercelPostgresAdapter as postgresAdapter } from '@payloadcms/db-vercel-postgres'`;
-  
-      data = data.replace(oldImport, newImport);
-  
-      // Update the db configuration
-      const dbConfig = `db: postgresAdapter({
-      schemaName: "payload",
-      pool: {
-        connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URI || "",
-      },
-      })`;
-  
+
+      const postgresAdapterImport = `import { postgresAdapter } from '@payloadcms/db-postgres'`;
+      const vercelPostgresAdapterImport = `import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'`;
+
+      // Add the vercelPostgresAdapter import after postgresAdapter if it's not already present
+      if (!data.includes(vercelPostgresAdapterImport)) {
+        data = data.replace(postgresAdapterImport, `${postgresAdapterImport}\n${vercelPostgresAdapterImport}`);
+      } else {
+        console.log('vercelPostgresAdapter import is already present.');
+      }
+
+      // Step 2: Replace the db configuration with conditional configuration
+      const newDbConfig = `db: process.env.POSTGRES_URL
+        ? vercelPostgresAdapter({
+            schemaName: "payload",
+            pool: {
+              connectionString: process.env.POSTGRES_URL || "",
+            },
+          })
+        : postgresAdapter({
+            schemaName: "payload",
+            pool: {
+              connectionString: process.env.DATABASE_URI || "",
+            },
+          })`;
+
       data = data.replace(
         /db:\s*postgresAdapter\(\{[\s\S]*?pool:\s*\{[\s\S]*?connectionString:[\s\S]*?\}[\s\S]*?\}\)/m,
-        dbConfig,
+        newDbConfig,
       );
-  
+
       // Write the updated payload.config.ts back to the file
       await fs.writeFile(payloadConfigPath, data);
 
