@@ -28,7 +28,7 @@ export const preparePayload = async () => {
     'postgres',
     `Local connection string: ${chalk.cyan('postgresql://user:password@localhost:5432/postgres')}`,
   );
-  execSync('npx create-payload-app@beta', { stdio: 'inherit' });
+  execSync('npx create-payload-app@beta --db postgres', { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet
   removeTurboFlag();
