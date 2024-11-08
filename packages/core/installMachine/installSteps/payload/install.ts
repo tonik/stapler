@@ -1,9 +1,10 @@
-import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
-import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
 import { moveFilesToAppDir } from './moveFilesToAppDir';
 import { runInstallCommand } from './runInstallCommand';
+import { createMigration } from './createMigration';
+import { updatePackageJson } from './updatePackageJson';
+import { preparePayloadConfig } from './preparePayloadConfig';
 
 export const preparePayload = async () => {
   process.chdir('./apps/web/');
@@ -12,7 +13,8 @@ export const preparePayload = async () => {
   await updatePackages();
   await moveFilesToAppDir();
   await runInstallCommand();
-  await removeTurboFlag();
+  await createMigration();
+  await updatePackageJson();
   await preparePayloadConfig();
 
   process.chdir('../../');
