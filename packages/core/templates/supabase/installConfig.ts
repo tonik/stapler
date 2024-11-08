@@ -1,7 +1,7 @@
 export const supabaseFiles = [
   {
     path: 'supabase/src/',
-    files: ['client.ts', 'index.ts', 'middleware.ts', 'server.ts', 'types.ts', 'docker-compose.yml'],
+    files: ['client.ts', 'index.ts', 'middleware.ts', 'server.ts', 'types.ts'],
   },
   {
     path: 'supabase/',

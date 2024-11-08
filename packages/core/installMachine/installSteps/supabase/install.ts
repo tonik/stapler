@@ -80,5 +80,9 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   execSync('pnpm i --reporter silent', { stdio: 'inherit' });
 
+  logWithColoredPrefix('supabase', 'Starting local database...');
+
+  execSync('npx supabase start', { stdio: 'ignore' });
+
   process.chdir('..');
 };
