@@ -1,3 +1,4 @@
+import inquirer from 'inquirer';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
@@ -14,13 +15,27 @@ interface ProjectRepositoryOptions {
 }
 
 // Helper function to check if GitHub CLI is installed
-const checkGitHubCLI = () => {
+const checkGitHubCLI = async () => {
   logWithColoredPrefix('github', 'Checking if GitHub CLI is installed...');
   if (!isGitHubCLIInstalled()) {
     logWithColoredPrefix('github', 'GitHub CLI is not installed.');
-    const installed = installGitHubCLI();
-    if (!installed) {
-      console.error('GitHub CLI installation failed. Exiting...');
+    const { shouldInstallGitHubCLI } = await inquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'shouldInstallGitHubCLI',
+        message: 'Would you like us to install GitHub CLI?',
+        default: true,
+      },
+    ]);
+
+    if (shouldInstallGitHubCLI) {
+      const installed = installGitHubCLI();
+      if (!installed) {
+        console.error('GitHub CLI installation failed. Exiting...');
+        process.exit(1);
+      }
+    } else {
+      console.error('GitHub CLI is not installed. Please install GitHub CLI and try again.');
       process.exit(1);
     }
   }
