@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import chalk from 'chalk';
 import { supabaseFiles } from '../../../templates/supabase/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
@@ -82,7 +83,32 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   logWithColoredPrefix('supabase', 'Starting local database...');
 
-  execSync('npx supabase start', { stdio: 'ignore' });
+  try {
+    execSync('npx supabase start', { stdio: 'ignore' });
+  } catch (error) {
+    console.error(
+      `Failed to start local database. Is your ${chalk.hex('#0db7ed')('Docker')} daemon running?`,
+      `\n${error}`,
+    );
+    process.exit(1);
+  }
+
+  logWithColoredPrefix('supabase', 'Writing local variables to .env file...');
+
+  const output = execSync('npx supabase status --output json', {
+    encoding: 'utf-8',
+    stdio: ['ignore', 'pipe', 'ignore'],
+  });
+  // Parse the JSON output
+  const jsonData = JSON.parse(output);
+
+  // Convert JSON data to .env format
+  const envData = Object.entries(jsonData)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('\n');
+
+  // Write the formatted data to .env file
+  fs.writeFileSync('.env', envData, 'utf8');
 
   process.chdir('..');
 };
