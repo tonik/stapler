@@ -16,9 +16,9 @@ export const initializeRcFile = (projectDir: string, name: string, usePayload: b
       projectName: name,
       stepsCompleted: {
         initializeProject: false,
-        createEnvFile: false,
         installPayload: false,
         installSupabase: false,
+        setupDatabaseWithDocker: false,
         prettifyCode: false,
         createDocFiles: false,
         createSupabaseProject: false,
