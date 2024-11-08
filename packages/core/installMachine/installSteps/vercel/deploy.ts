@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
+import crypto from 'crypto';
 
 export const deployVercelProject = async (usePayload: boolean) => {
   await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
@@ -23,10 +24,18 @@ export const deployVercelProject = async (usePayload: boolean) => {
   });
 
   if (usePayload) {
-    logger.log('vercel', 'Setting up environment variables...');
-    execSync("grep PAYLOAD_SECRET apps/web/.env | cut -d '=' -f2 | vercel env add PAYLOAD_SECRET production", {
-      stdio: 'inherit',
-      encoding: 'utf8',
+    logger.withSpinner('vercel', 'Setting up environment variables...', async (spinner) => {
+      try {
+        // Generate payload secret
+        const payloadSecret = crypto.randomBytes(256).toString('hex');
+        execSync(`echo '${payloadSecret}' | vercel env add PAYLOAD_SECRET production --sensitive`, {
+          stdio: 'inherit',
+          encoding: 'utf8',
+        });
+      } catch (error) {
+        spinner.fail('Failed to set up environment variables.');
+        console.error(error);
+      }
     });
   }
 
