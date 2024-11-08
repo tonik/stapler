@@ -49,7 +49,6 @@ export const installGitHubCLI = (): boolean => {
   logWithColoredPrefix('github', 'Installing GitHub CLI...');
   try {
     execSync(installCommand, { stdio: 'inherit' });
-    logWithColoredPrefix('github', 'GitHub CLI installed successfully.');
     return true;
   } catch (error) {
     console.error('Failed to install GitHub CLI.');
