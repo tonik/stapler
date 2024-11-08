@@ -3,7 +3,6 @@ import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
 import { continueOnAnyKeypress } from '../../../utils/continueOnKeypress';
-import { updateEnvFile } from '../../../utils/updateEnvFile';
 import { getSupabaseKeys, parseProjectsList } from './utils';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
@@ -32,18 +31,6 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     if (!anonKey || !serviceRoleKey) {
       throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
     }
-
-    const SUPABASE_URL = `https://${newProject.refId}.supabase.co/`;
-
-    logWithColoredPrefix('supabase', `Saving keys to .env...`);
-    await updateEnvFile({
-      currentDir,
-      pairs: [
-        ['SUPABASE_ANON_KEY', anonKey],
-        ['SUPABASE_SERVICE_ROLE_KEY', serviceRoleKey],
-        ['SUPABASE_URL', SUPABASE_URL],
-      ],
-    });
 
     logWithColoredPrefix('supabase', 'Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, { stdio: 'inherit' });

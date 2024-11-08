@@ -1,6 +1,5 @@
 import { createMachine, fromPromise, ActorLogic, AnyEventObject, PromiseSnapshot, createActor, and, not } from 'xstate';
 
-import { createEnvFile } from './installSteps/env/createEnvFile';
 import { initializeRepository } from './installSteps/github/install';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
@@ -59,25 +58,11 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('initializeProject'),
-              target: 'createEnvFile',
-            },
-          ],
-          invoke: {
-            src: 'initializeProjectActor',
-            input: ({ context }) => context,
-            onDone: 'createEnvFile',
-            onError: 'failed',
-          },
-        },
-        createEnvFile: {
-          always: [
-            {
-              guard: isStepCompleted('createEnvFile'),
               target: 'installSupabase',
             },
           ],
           invoke: {
-            src: 'createEnvFileActor',
+            src: 'initializeProjectActor',
             input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
@@ -284,18 +269,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in initializeProjectActor:', error);
-              throw error;
-            }
-          }),
-        ),
-        createEnvFileActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              createEnvFile(input.projectDir);
-              input.stateData.stepsCompleted.createEnvFile = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in createEnvFileActor:', error);
               throw error;
             }
           }),
