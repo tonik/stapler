@@ -40,8 +40,8 @@ const isDirectory = (path: string): boolean => {
 };
 
 // Returns in which directory the config should be present
-export const getGlobalPathConfig = async (): Promise<string> => {
-  const vercelDirectories = getXDGPaths('com.vercel.cli').dataDirs;
+export const getGlobalPathConfig = async (appName: string): Promise<string> => {
+  const vercelDirectories = getXDGPaths(appName).dataDirs;
 
   const possibleConfigPaths = [
     ...vercelDirectories, // latest vercel directory
