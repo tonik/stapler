@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { getGlobalPathConfig } from './getGlobalPathConfig';
+import { getGlobalPathConfig } from './utils/getGlobalPathConfig';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const getTokenFromAuthFile = async (filePath: string): Promise<string | null> => {
@@ -25,7 +25,7 @@ const getProjectIdFromVercelConfig = async (): Promise<string | null> => {
   }
 };
 
-export const updateProjectSettings = async () => {
+export const updateVercelProjectSettings = async () => {
   logWithColoredPrefix('vercel', 'Changing project settings...');
   const globalPath = await getGlobalPathConfig();
   if (!globalPath) {

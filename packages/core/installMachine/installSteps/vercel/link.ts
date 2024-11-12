@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
 import chalk from 'chalk';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
-import { updateProjectSettings } from './updateProjectSettings';
 
 const getUsername = (): string | null => {
   try {
@@ -34,7 +33,7 @@ const loginIfNeeded = () => {
   }
 };
 
-export const setupAndCreateProject = async () => {
+export const linkVercelProject = async () => {
   let vercelUserName = getUsername();
 
   if (!vercelUserName) {

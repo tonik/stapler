@@ -21,7 +21,7 @@ export const initializeRcFile = (projectDir: string, name: string, usePayload: b
         prettifyCode: false,
         createDocFiles: false,
         createSupabaseProject: false,
-        setupAndCreateVercelProject: false,
+        linkVercelProject: false,
         updateVercelProjectSettings: false,
         connectSupabaseProject: false,
         deployVercelProject: false,
