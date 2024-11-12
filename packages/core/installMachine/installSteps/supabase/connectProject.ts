@@ -2,9 +2,10 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
-
 import { getSupabaseKeys, parseProjectsList } from './utils';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
+import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
 
 const execAsync = promisify(exec);
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,10 +40,10 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     logWithColoredPrefix('supabase', [
       chalk.bold('=== Instructions for integration with GitHub and Vercel ==='),
       '\n1. You will be redirected to your project dashboard',
-      '\n2. Find the "GitHub" section and click "Connect".',
-      '\n   - Follow the prompts to connect with your GitHub repository.',
-      '\n3. Then, find the "Vercel" section and click "Connect".',
+      '\n2. Find Vercel Integration and click "Add new project connection".',
       '\n   - Follow the prompts to connect with your Vercel project.',
+      '\n3. (Optional) Find GitHub Connections and click "Add new project connection".',
+      '\n   - Follow the prompts to connect with your GitHub repository.',
       chalk.italic('\nNOTE: These steps require manual configuration in the Supabase interface.'),
     ]);
 
@@ -54,21 +55,45 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     logWithColoredPrefix('supabase', 'Opening the dashboard in your browser...');
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
 
-    const { isIntegrationReady } = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'isIntegrationReady',
-        message: 'Have you completed the GitHub and Vercel integration setup?',
-        default: false,
-      },
-    ]);
+    let attempts = 0;
+    const maxAttempts = 30; // Set to check for 5 minutes (5 * 60 seconds)
+    const interval = 5000; // Check every 5 seconds
 
-    if (!isIntegrationReady) {
-      logWithColoredPrefix(
-        'supabase',
-        `You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`,
-      ),
+    const token = await getVercelTokenFromAuthFile();
+    const vercelProjectId = await getProjectIdFromVercelConfig();
+
+    logWithColoredPrefix('supabase', 'Checking for Vercel integration...');
+    while (attempts < maxAttempts) {
+      process.stdout.write(`Attempt ${attempts + 1}/${maxAttempts}\n`);
+      const envVarsSet = await fetch(`https://api.vercel.com/v9/projects/${vercelProjectId}/env`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        method: 'get',
+      })
+        .catch((error) => {
+          console.error('Failed to fetch Vercel environment variables:', error);
+          process.exit(1);
+        })
+        .then((response) => response.json());
+
+      const supabaseUrl = envVarsSet.envs.find((env: { key: string }) => env.key === 'SUPABASE_URL')?.value;
+      if (supabaseUrl) {
+        logWithColoredPrefix('supabase', 'Vercel integration found!');
+        break;
+      }
+
+      // Wait for the specified interval before checking again
+      await delay(interval);
+      attempts++;
+
+      if (attempts === maxAttempts) {
+        logWithColoredPrefix(
+          'supabase',
+          `Timeout reached. You can access your project dashboard at: https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`,
+        );
         process.exit(1);
+      }
     }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
