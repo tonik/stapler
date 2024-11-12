@@ -31,7 +31,7 @@ export const preparePayload = async () => {
   logWithColoredPrefix('postgres', `Local connection string: ${chalk.cyan(process.env.DB_URL)}`);
 
   // Install Payload
-  execSync('npx create-payload-app@beta --db postgres', { stdio: 'inherit' });
+  execSync(`npx create-payload-app@beta --db postgres --db-uri ${process.env.DB_URL}`, { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet
   removeTurboFlag();
