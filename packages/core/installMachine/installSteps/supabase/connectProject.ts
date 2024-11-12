@@ -2,11 +2,12 @@ import { exec, execSync } from 'child_process';
 import inquirer from 'inquirer';
 import { promisify } from 'util';
 import chalk from 'chalk';
-import { continueOnAnyKeypress } from '../../../utils/continueOnKeypress';
+
 import { getSupabaseKeys, parseProjectsList } from './utils';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
 
 const execAsync = promisify(exec);
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
@@ -45,7 +46,12 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       chalk.italic('\nNOTE: These steps require manual configuration in the Supabase interface.'),
     ]);
 
-    await continueOnAnyKeypress('When you are ready to be redirected to the Supabase page press any key');
+    for (let i = 3; i > 0; i--) {
+      logWithColoredPrefix('supabase', `Redirecting to the Supabase dashboard in ${i} seconds...`);
+      await delay(1000); // 1-second countdown delay
+    }
+
+    logWithColoredPrefix('supabase', 'Opening the dashboard in your browser...');
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
 
     const { isIntegrationReady } = await inquirer.prompt([
