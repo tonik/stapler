@@ -1,12 +1,13 @@
 import { execSync } from 'child_process';
 import { existsSync } from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
+import chalk from 'chalk';
 import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
 import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
-import chalk from 'chalk';
+import { loadEnvFile } from './utils/loadEnvFile';
 
 export const preparePayload = async () => {
   logWithColoredPrefix('payload', 'Initializing...');
@@ -24,10 +25,12 @@ export const preparePayload = async () => {
   );
 
   logWithColoredPrefix('payload', 'Installing to Next.js...');
-  logWithColoredPrefix(
-    'postgres',
-    `Local connection string: ${chalk.cyan('postgresql://user:password@localhost:5432/postgres')}`,
-  );
+
+  // Show the local Supabase connection string
+  loadEnvFile(path.resolve('../../supabase/.env'));
+  logWithColoredPrefix('postgres', `Local connection string: ${chalk.cyan(process.env.DB_URL)}`);
+
+  // Install Payload
   execSync('npx create-payload-app@beta --db postgres', { stdio: 'inherit' });
 
   // Payload doesn't work with Turbopack yet

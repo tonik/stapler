@@ -14,7 +14,6 @@ import { createDocFiles } from './installSteps/docs/create';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { setupDatabaseWithDocker } from './installSteps/supabase/setupDatabaseWithDocker';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -71,31 +70,17 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installSupabase: {
           always: [
             {
-              guard: isStepCompleted('installSupabase'),
-              target: 'setupDatabaseWithDocker',
-            },
-          ],
-          invoke: {
-            input: ({ context }) => context,
-            src: 'installSupabaseActor',
-            onDone: 'setupDatabaseWithDocker',
-            onError: 'failed',
-          },
-        },
-        setupDatabaseWithDocker: {
-          always: [
-            {
-              guard: and([isStepCompleted('setupDatabaseWithDocker'), 'shouldInstallPayload']),
+              guard: and([isStepCompleted('installSupabase'), 'shouldInstallPayload']),
               target: 'installPayload',
             },
             {
-              guard: isStepCompleted('setupDatabaseWithDocker'),
+              guard: isStepCompleted('installSupabase'),
               target: 'createDocFiles',
             },
           ],
           invoke: {
             input: ({ context }) => context,
-            src: 'setupDatabaseWithDockerActor',
+            src: 'installSupabaseActor',
             onDone: [{ guard: 'shouldInstallPayload', target: 'installPayload' }, { target: 'createDocFiles' }],
             onError: 'failed',
           },
@@ -282,18 +267,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in installSupabaseActor:', error);
-              throw error;
-            }
-          }),
-        ),
-        setupDatabaseWithDockerActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              setupDatabaseWithDocker();
-              input.stateData.stepsCompleted.setupDatabaseWithDocker = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in setupDatabaseWithDockerActor:', error);
               throw error;
             }
           }),
