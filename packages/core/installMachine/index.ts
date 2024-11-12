@@ -8,7 +8,8 @@ import { createSupabaseProject } from './installSteps/supabase/createProject';
 import { installSupabase } from './installSteps/supabase/install';
 import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
-import { setupAndCreateVercelProject } from './installSteps/vercel/setupAndCreate';
+import { setupAndCreateProject as setupAndCreateVercelProject } from './installSteps/vercel/setupAndCreate';
+import { updateProjectSettings as updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
 import { prepareDrink } from './installSteps/bar/prepareDrink';
 import { createDocFiles } from './installSteps/docs/create';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
@@ -173,12 +174,26 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('setupAndCreateVercelProject'),
-              target: 'connectSupabaseProject',
+              target: 'updateVercelProjectSettings',
             },
           ],
           invoke: {
             input: ({ context }) => context,
             src: 'setupAndCreateVercelProjectActor',
+            onDone: 'updateVercelProjectSettings',
+            onError: 'failed',
+          },
+        },
+        updateVercelProjectSettings: {
+          always: [
+            {
+              guard: isStepCompleted('updateVercelProjectSettings'),
+              target: 'connectSupabaseProject',
+            },
+          ],
+          invoke: {
+            input: ({ context }) => context,
+            src: 'updateVercelProjectSettingsActor',
             onDone: 'connectSupabaseProject',
             onError: 'failed',
           },
@@ -351,6 +366,18 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in setupAndCreateVercelProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        updateVercelProjectSettingsActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await updateVercelProjectSettings();
+              input.stateData.stepsCompleted.updateVercelProjectSettings = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in updateVercelProjectSettingsActor:', error);
               throw error;
             }
           }),
