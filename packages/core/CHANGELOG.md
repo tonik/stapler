@@ -1,5 +1,11 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.13
+
+### Minor Changes
+
+- Add spinning progress indicators
+
 ## 0.2.0-alpha.12
 
 ### Minor Changes
