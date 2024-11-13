@@ -33,13 +33,23 @@ const program = new Command();
 
 program
   .name('create-stapler-app')
-  .description('CLI to bootstrap a new tonik-infused app')
+  .description(
+    'CLI tool to bootstrap an app with a variety of integrated steps. This tool guides you through the entire process of initializing, configuring, and deploying a new project.',
+  )
   .version('0.1.0')
   .hook('preAction', () => {
     displayHeader();
-  });
+  })
+  .option('-n, --name <name>', 'Set the name of the project')
+  .option('--skip-payload', 'Skip adding Payload to the app')
+  .option('--resume', 'Resume an unfinished project');
 
-const createAction = async () => {
+interface Flags {
+  name?: string;
+  skipPayload?: boolean;
+}
+
+const createAction = async (options: Flags) => {
   const currentDir = process.cwd();
   const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
   let proceedWithNewProject = true;
@@ -86,23 +96,28 @@ const createAction = async () => {
       console.error('Error resuming project:', error);
     });
   } else {
-    // create new project
-    const answers = await inquirer.prompt([
-      {
-        type: 'input',
-        name: 'name',
-        message: 'What is your project named?',
-        default: 'my-stapled-app',
-      },
-    ]);
-    const projectDir = `${currentDir}/${answers.name}`;
+    // Create new project
+    const projectName =
+      options.name ||
+      (
+        await inquirer.prompt([
+          {
+            type: 'input',
+            name: 'name',
+            message: 'What is your project named?',
+            default: 'my-stapled-app',
+          },
+        ])
+      ).name;
+
+    const projectDir = `${currentDir}/${projectName}`;
     // Check if the directory already exists
     if (fs.existsSync(projectDir)) {
       const overwriteAnswer = await inquirer.prompt([
         {
           type: 'confirm',
           name: 'overwrite',
-          message: `The directory "${answers.name}" already exists. Do you want to overwrite it?`,
+          message: `The directory "${projectName}" already exists. Do you want to overwrite it?`,
           default: false,
         },
       ]);
@@ -112,22 +127,24 @@ const createAction = async () => {
         return;
       }
 
-      // Optional: Clear the directory if overwrite is confirmed
+      // Clear the directory if overwrite is confirmed
       fs.rmSync(projectDir, { recursive: true, force: true });
-      console.log(chalk.yellow(`The directory "${answers.name}" has been cleared.`));
+      console.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
     }
 
-    // Now proceed with further questions like adding Payload
-    const payloadAnswer = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'usePayload',
-        message: 'Would you like to add Payload to your app?',
-        default: true,
-      },
-    ]);
+    // Skip Payload if specified by the flag
+    const payloadAnswer = options.skipPayload
+      ? { usePayload: false }
+      : await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'usePayload',
+            message: 'Would you like to add Payload to your app?',
+            default: true,
+          },
+        ]);
 
-    const finalOptions = { ...answers, ...payloadAnswer };
+    const finalOptions = { name: projectName, ...payloadAnswer };
 
     await createProject(finalOptions, projectDir).catch((error) => {
       console.error(chalk.red('Error creating project:', error));
@@ -135,9 +152,13 @@ const createAction = async () => {
   }
 };
 
-program.command('create').description('Create a new tonik-infused app').action(createAction);
-
-// Set "create" as the default command
-program.action(createAction);
+program
+  .command('create', { isDefault: true })
+  .description(
+    'CLI tool to bootstrap an app with a variety of integrated steps. This tool guides you through the entire process of initializing, configuring, and deploying a new project.',
+  )
+  .option('-n, --name <name>', 'Set the name of the project')
+  .option('--skip-payload', 'Skip adding Payload to the app')
+  .action(createAction);
 
 program.parse();
