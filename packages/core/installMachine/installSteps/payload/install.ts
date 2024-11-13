@@ -31,7 +31,7 @@ export const preparePayload = async () => {
 
   // Install Payload
   execSync(`echo y | npx create-payload-app@beta --db postgres --db-connection-string ${process.env.DB_URL}`, {
-    stdio: 'inherit',
+    stdio: ['inherit', 'ignore', 'inherit'],
   });
 
   // Payload doesn't work with Turbopack yet
