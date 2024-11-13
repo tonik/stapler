@@ -1,5 +1,16 @@
 # @tonik/create-stapler-app-core
 
+## 0.2.0-alpha.12
+
+### Minor Changes
+
+- - Improved Payload UX
+  - Improved Supabase UX
+  - Introduced flags (--skip-payload, --name, etc.)
+  - Replaced Vercel flow
+  - Replaced local database with Supabase
+  - Improved logs
+
 ## 0.2.0-alpha.11
 
 ### Minor Changes
