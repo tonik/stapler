@@ -301,7 +301,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createDocFilesActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              createDocFiles();
+              await createDocFiles();
               input.stateData.stepsCompleted.createDocFiles = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -313,7 +313,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prettifyCodeActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              prettify();
+              await prettify();
               input.stateData.stepsCompleted.prettifyCode = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -337,7 +337,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              pushToGitHub(input.stateData.options.name);
+              await pushToGitHub(input.stateData.options.name);
               input.stateData.stepsCompleted.pushToGitHub = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

@@ -1,10 +1,18 @@
-import { execSync } from 'node:child_process';
+import { execSync } from 'child_process';
+import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
 
 export const deployVercelProject = async () => {
-  execSync('npx vercel git connect', {
-    stdio: ['inherit', 'pipe', 'inherit'],
-    encoding: 'utf-8',
+  await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
+    try {
+      // Execute 'vercel git connect' and capture the output
+      await execAsync('npx vercel git connect');
+      spinner.succeed('Connected Vercel to Git successfully.');
+    } catch (error) {
+      spinner.fail('Failed to connect Vercel to Git.');
+      console.error(error);
+      return;
+    }
   });
 
   logger.log('vercel', 'Creating production deployment...');

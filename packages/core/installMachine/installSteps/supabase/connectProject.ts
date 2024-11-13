@@ -1,14 +1,12 @@
-import { exec, execSync } from 'child_process';
-import { promisify } from 'util';
+import { execSync } from 'child_process';
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { getSupabaseKeys, parseProjectsList } from './utils';
 import { logger } from '../../../utils/logger';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
-
-const execAsync = promisify(exec);
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { execAsync } from '../../../utils/execAsync';
+import { delay } from '../../../utils/delay';
 
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
@@ -59,11 +57,11 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     console.log(
       boxen(
         chalk.bold('Supabase Integration Setup\n\n') +
-          chalk.hex('#3ABC82')('1.') +
+          chalk.hex('#259764')('1.') +
           ' You will be redirected to your project dashboard\n' +
-          chalk.hex('#3ABC82')('2.') +
+          chalk.hex('#259764')('2.') +
           ' Connect Vercel: "Add new project connection"\n' +
-          chalk.hex('#3ABC82')('3.') +
+          chalk.hex('#259764')('3.') +
           ' (Optional) Connect GitHub: "Add new project connection"\n\n' +
           chalk.dim('Tip: Keep this terminal open to track the integration status'),
         {
@@ -80,7 +78,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     spinner.start();
 
     for (let i = 3; i > 0; i--) {
-      spinner.text = `Opening dashboard in ${chalk.hex('#3ABC82')(i)}...`;
+      spinner.text = `Opening dashboard in ${chalk.hex('#259764')(i)}...`;
       await delay(1000);
     }
 
@@ -113,7 +111,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
           }
 
           attempts++;
-          spinner.text = `Checking integration status ${chalk.hex('#3ABC82')(`[${attempts}/${maxAttempts}]`)}`;
+          spinner.text = `Checking integration status ${chalk.hex('#259764')(`[${attempts}/${maxAttempts}]`)}`;
           await delay(interval);
         } catch (error) {
           spinner.fail('Failed to check Vercel integration status');
@@ -127,7 +125,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
         boxen(
           chalk.yellow('Integration Status Unknown\n\n') +
             'You can manually verify the integration at:\n' +
-            chalk.hex('#3ABC82')(`https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`),
+            chalk.hex('#259764')(`https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`),
           {
             padding: 1,
             margin: 1,

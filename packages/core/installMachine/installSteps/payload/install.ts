@@ -1,50 +1,19 @@
-import { execSync } from 'child_process';
-import { existsSync } from 'fs';
-import path, { join } from 'path';
-import chalk from 'chalk';
 import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
-import { logger } from '../../../utils/logger';
-import { loadEnvFile } from './utils/loadEnvFile';
+import { moveFilesToAppDir } from './moveFilesToAppDir';
+import { runInstallCommand } from './runInstallCommand';
 
 export const preparePayload = async () => {
-  logger.log('payload', 'Initializing...');
-
   process.chdir('./apps/web/');
 
-  prepareTsConfig();
+  await prepareTsConfig();
+  await updatePackages();
+  await moveFilesToAppDir();
+  await runInstallCommand();
+  await removeTurboFlag();
+  await preparePayloadConfig();
 
-  updatePackages();
-
-  logger.log('payload', 'Moving files to (app) directory...');
-  execSync(
-    `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
-    { stdio: 'inherit' },
-  );
-
-  logger.log('payload', 'Installing to Next.js...');
-
-  // Show the local Supabase connection string
-  loadEnvFile(path.resolve('../../supabase/.env'));
-
-  // Install Payload
-  execSync(`echo y | npx create-payload-app@beta --db postgres --db-connection-string ${process.env.DB_URL}`, {
-    stdio: ['inherit', 'ignore', 'inherit'],
-  });
-
-  // Payload doesn't work with Turbopack yet
-  removeTurboFlag();
-
-  // Check if the payload configuration file exists
-  const payloadConfigPath = join(process.cwd(), 'payload.config.ts');
-  if (!existsSync(payloadConfigPath)) {
-    console.error('Payload installation cancelled/failed.');
-  } else {
-    await preparePayloadConfig(payloadConfigPath);
-  }
-
-  // Return to the root directory
   process.chdir('../../');
 };

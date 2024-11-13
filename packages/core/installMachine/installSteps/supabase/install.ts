@@ -1,4 +1,3 @@
-import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
@@ -6,106 +5,98 @@ import { supabaseFiles } from '../../../templates/supabase/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 import { logger } from '../../../utils/logger';
+import { execAsync } from '../../../utils/execAsync';
 
-const supabaseLogin = () => {
-  logger.log('supabase', 'Logging in...');
-
-  try {
-    execSync('npx supabase projects list', { stdio: 'ignore' });
-    logger.log('supabase', 'Already logged in.');
-    return;
-  } catch (error) {
+const supabaseLogin = async () => {
+  await logger.withSpinner('supabase', 'Logging in...', async (spinner) => {
     try {
-      execSync('npx supabase login', { stdio: 'inherit' });
-    } catch {
-      console.error('Failed to log in to Supabase.');
-      logger.log('supabase', '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".');
-      process.exit(1);
+      await execAsync('npx supabase projects list');
+      spinner.succeed('Already logged in.');
+    } catch (error) {
+      try {
+        await execAsync('npx supabase login');
+        spinner.succeed('Logged in successfully.');
+      } catch {
+        spinner.fail('Failed to log in to Supabase.');
+        console.error('Please log in manually with "supabase login" and re-run "create-stapler-app".');
+        process.exit(1);
+      }
     }
-  }
+  });
 };
 
-const initializeSupabaseProject = (): void => {
-  logger.log('supabase', 'Initialize project...');
-  try {
-    execSync(`npx supabase init`, { stdio: ['pipe'], encoding: 'utf-8' });
-  } catch (error: any) {
-    const errorMessage = error.stderr;
-
-    if (errorMessage.includes('file exists')) {
-      logger.log('supabase', 'Configuration file already exists.');
-      return;
-    } else {
-      console.error('Failed to initialize Supabase project with "supabase init".');
-      logger.log(
-        'supabase',
-        '\nPlease review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
-      ),
+const initializeSupabaseProject = async () => {
+  await logger.withSpinner('supabase', 'Initializing project...', async (spinner) => {
+    try {
+      await execAsync(`npx supabase init`);
+      spinner.succeed('Project initialized.');
+    } catch (error: any) {
+      const errorMessage = error.stderr;
+      if (errorMessage.includes('file exists')) {
+        spinner.succeed('Configuration file already exists.');
+      } else {
+        spinner.fail('Failed to initialize project.');
+        console.error(
+          'Please review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
+        );
         process.exit(1);
+      }
     }
-  }
+  });
 };
 
 export const installSupabase = async (destinationDirectory: string) => {
-  logger.log('supabase', 'Installing supabase-js...');
   try {
-    supabaseLogin();
-    initializeSupabaseProject();
+    await supabaseLogin();
+    await initializeSupabaseProject();
   } catch (error) {
     console.error('Failed to init project.', `\nError: ${error}`);
     process.exit(1);
   }
 
-  logger.log('supabase', 'Adding Files...');
+  await logger.withSpinner('supabase', 'Adding files from template...', async (spinner) => {
+    const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
+    templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
 
-  const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
+    // Add "supabase/**" to pnpm-workspace.yaml
+    const workspacePath = path.join(destinationDirectory, 'pnpm-workspace.yaml');
+    const addSupabaseToWorkspace = `  - "supabase/**"`;
+    const fileContents = fs.readFileSync(workspacePath, 'utf-8');
+    if (!fileContents.includes(addSupabaseToWorkspace)) {
+      fs.appendFileSync(workspacePath, `${addSupabaseToWorkspace}\n`);
+    }
 
-  templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
-  // add "supabase/**" to pnpm-workspace.yaml
-  const workspacePath = path.join(destinationDirectory, 'pnpm-workspace.yaml');
-  const addSupabaseToWorkspace = `  - "supabase/**"`;
-  // check if the file already contains the line
-  const fileContents = fs.readFileSync(workspacePath, 'utf-8');
-
-  if (!fileContents.includes(addSupabaseToWorkspace)) {
-    // append only if the line doesn't already exist
-    fs.appendFileSync(workspacePath, `${addSupabaseToWorkspace}\n`);
-  }
+    spinner.succeed('Files added.');
+  });
 
   process.chdir('supabase');
 
-  logger.log('supabase', 'Installing dependencies...');
-
-  execSync('pnpm i --reporter silent', { stdio: 'inherit' });
-
-  logger.log('supabase', 'Starting local database...');
-
-  try {
-    execSync('npx supabase start', { stdio: 'ignore' });
-  } catch (error) {
-    console.error(
-      `Failed to start local database. Is your ${chalk.hex('#0db7ed')('Docker')} daemon running?`,
-      `\n${error}`,
-    );
-    process.exit(1);
-  }
-
-  logger.log('supabase', 'Writing local variables to .env file...');
-
-  const output = execSync('npx supabase status --output json', {
-    encoding: 'utf-8',
-    stdio: ['ignore', 'pipe', 'ignore'],
+  await logger.withSpinner('supabase', 'Installing dependencies...', async (spinner) => {
+    await execAsync('pnpm i --reporter silent');
+    spinner.succeed('Dependencies installed.');
   });
-  // Parse the JSON output
-  const jsonData = JSON.parse(output);
 
-  // Convert JSON data to .env format
-  const envData = Object.entries(jsonData)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('\n');
+  await logger.withSpinner('supabase', 'Starting local database...', async (spinner) => {
+    try {
+      await execAsync('npx supabase start');
+      spinner.succeed('Local database started.');
+    } catch (error) {
+      spinner.fail(`Failed to start local database. Is your ${chalk.hex('#0db7ed')('Docker')} daemon running?`);
+      console.error(`\n${error}`);
+      process.exit(1);
+    }
+  });
 
-  // Write the formatted data to .env file
-  fs.writeFileSync('.env', envData, 'utf8');
+  await logger.withSpinner('supabase', 'Writing local variables to .env file...', async (spinner) => {
+    const output = await execAsync('npx supabase status --output json');
+    const jsonData = JSON.parse(output.stdout);
+    const envData = Object.entries(jsonData)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('\n');
+
+    fs.writeFileSync('.env', envData, 'utf8');
+    spinner.succeed('Local variables written to .env file.');
+  });
 
   process.chdir('..');
 };

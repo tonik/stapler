@@ -1,14 +1,28 @@
-import { execSync } from 'child_process';
 import { logger } from '../../../utils/logger';
+import { execAsync } from '../../../utils/execAsync';
 
-export const updatePackages = () => {
-  logger.log('payload', 'Updating Next and React to their respective release candidates...');
-  execSync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc --reporter silent`, {
-    stdio: 'inherit',
-  });
+export const updatePackages = async () => {
+  await logger.withSpinner(
+    'payload',
+    'Updating Next and React to their respective release candidates...',
+    async (spinner) => {
+      try {
+        await execAsync(`pnpm up next@rc react@rc react-dom@rc eslint-config-next@rc --reporter silent`);
+        spinner.succeed('Updated Next and React to their respective release candidates!');
+      } catch (error) {
+        spinner.fail('Failed to update Next and React to their respective release candidates!');
+        console.error(error);
+      }
+    },
+  );
 
-  logger.log('payload', 'Installing necessary packages...');
-  execSync(`pnpm i pg sharp --reporter silent`, {
-    stdio: 'inherit',
+  await logger.withSpinner('payload', 'Installing necessary packages...', async (spinner) => {
+    try {
+      await execAsync(`pnpm i pg sharp --reporter silent`);
+      spinner.succeed('Installed necessary packages!');
+    } catch (error) {
+      spinner.fail('Failed to install necessary packages!');
+      console.error(error);
+    }
   });
 };

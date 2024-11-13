@@ -1,28 +1,22 @@
 import chalk from 'chalk';
+import { delay } from '../../../utils/delay';
 
-const getName = (name: string) => {
-  if (!name) {
-    return '.';
-  }
-
-  return name;
+const getMessages = (name: string) => {
+  return [
+    '🍸 Filling a high ball glass with ice...',
+    '🍸 Adding gin and lime juice...',
+    `🍸 Topping with ${chalk.blue('Tonik')}...`,
+    '🍸 Garnishing with lime wedge...',
+    `🍸 ${chalk.green(`Your Stapled ${name} is ready!`)}`,
+    `🍸 You can now run: ${chalk.cyan(`cd ${name} && pnpm dev`)}`,
+  ];
 };
 
-export const prepareDrink = (name: string) => {
-  setTimeout(() => {
-    console.log('🍸 Filling a high ball glass with ice...');
-    setTimeout(() => {
-      console.log('🍸 Adding gin and lime juice...');
-      setTimeout(() => {
-        console.log('🍸 Topping with', chalk.blue('Tonik') + '...');
-        setTimeout(() => {
-          console.log('🍸 Garnishing with lime wedge...');
-          setTimeout(() => {
-            console.log(chalk.green(`🍸 Your Stapled ${getName(name)} is ready!`));
-            console.log(`🍸 You can now run:`, chalk.cyan(`cd ${name} && pnpm dev`));
-          }, 1000);
-        }, 1000);
-      }, 1000);
-    }, 1000);
-  }, 1000);
+export const prepareDrink = async (name: string) => {
+  const messages = getMessages(name);
+
+  for (const message of messages) {
+    console.log(message);
+    await delay(1000);
+  }
 };
