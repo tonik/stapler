@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const removeTurboFlag = () => {
-  logWithColoredPrefix('payload', 'Removing --turbo flag from dev script...');
+  logger.log('payload', 'Removing --turbo flag from dev script...');
 
   // Path to your package.json file
   const packageJsonPath = path.join(process.cwd(), 'package.json');

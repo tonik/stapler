@@ -1,9 +1,9 @@
 import type { PathLike } from 'fs';
 import fs from 'fs/promises';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const preparePayloadConfig = async (configPath: PathLike) => {
-  logWithColoredPrefix('payload', 'Preparing payload.config.ts...');
+  logger.log('payload', 'Preparing payload.config.ts...');
 
   try {
     // Read the payload.config.ts file

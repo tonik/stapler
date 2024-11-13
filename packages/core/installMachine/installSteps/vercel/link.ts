@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import chalk from 'chalk';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 const getUsername = (): string | null => {
   try {
@@ -12,11 +12,11 @@ const getUsername = (): string | null => {
 };
 
 const loginIfNeeded = () => {
-  logWithColoredPrefix('vercel', 'Logging in...');
+  logger.log('vercel', 'Logging in...');
   try {
     execSync('npx vercel login', { stdio: 'inherit' });
   } catch (error) {
-    logWithColoredPrefix('vercel', [
+    logger.log('vercel', [
       'Oops! Something went wrong while logging in...',
       '\nYou might already be logged in with this email in another project.',
       '\nIn this case, select "Continue with Email" and enter the email you\'re already logged in with.\n',
@@ -24,7 +24,7 @@ const loginIfNeeded = () => {
     try {
       execSync('npx vercel login', { stdio: 'inherit' });
     } catch {
-      logWithColoredPrefix('vercel', [
+      logger.log('vercel', [
         'Please check the error above and try again.',
         '\nAfter successfully logging in with "vercel login", please run create-stapler-app again.\n',
       ]);
@@ -41,8 +41,8 @@ export const linkVercelProject = async () => {
     vercelUserName = getUsername(); // Retry getting username after login
   }
 
-  logWithColoredPrefix('vercel', `You are logged in as ${chalk.cyan(vercelUserName)}`);
+  logger.log('vercel', `You are logged in as ${chalk.cyan(vercelUserName)}`);
 
-  logWithColoredPrefix('vercel', 'Linking project...');
+  logger.log('vercel', 'Linking project...');
   execSync('npx vercel link --yes', { stdio: 'ignore' });
 };

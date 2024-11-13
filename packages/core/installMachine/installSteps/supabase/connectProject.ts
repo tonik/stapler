@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { getSupabaseKeys, parseProjectsList } from './utils';
-import { logger } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
 
@@ -86,7 +86,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     spinner.text = 'Opening dashboard in your browser...';
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
-    spinner.succeed('Dashboard opened.');
+    spinner.succeed('Dashboard opened!');
 
     // Check Vercel integration
     await logger.withSpinner('vercel', 'Checking integration...', async (spinner) => {

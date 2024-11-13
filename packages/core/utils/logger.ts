@@ -83,12 +83,12 @@ const getPrefix = (name: Name): string => {
   return name === 'vercel' ? chalk.bgBlack(gradientColor(`[▲ ${color.prefix}]`)) : gradientColor(`[${color.prefix}]`);
 };
 
-export const logWithColoredPrefix = (name: Name, messages: string[] | string): void => {
+const log = (name: Name, messages: string[] | string): void => {
   const prefix = getPrefix(name);
   console.log(prefix, typeof messages === 'string' ? messages : messages.join(' '));
 };
 
-export const createSpinner = (name: Name, initialText?: string): Ora => {
+const createSpinner = (name: Name, initialText?: string): Ora => {
   const prefix = getPrefix(name);
   return ora({
     prefixText: prefix,
@@ -97,11 +97,7 @@ export const createSpinner = (name: Name, initialText?: string): Ora => {
   });
 };
 
-export const withSpinner = async <T>(
-  name: Name,
-  initialText: string,
-  action: (spinner: Ora) => Promise<T>,
-): Promise<T> => {
+const withSpinner = async <T>(name: Name, initialText: string, action: (spinner: Ora) => Promise<T>): Promise<T> => {
   const spinner = createSpinner(name, initialText);
   try {
     spinner.start();
@@ -115,7 +111,7 @@ export const withSpinner = async <T>(
 
 // Example usage with named exports
 export const logger = {
-  log: logWithColoredPrefix,
+  log,
   createSpinner,
   withSpinner,
 };

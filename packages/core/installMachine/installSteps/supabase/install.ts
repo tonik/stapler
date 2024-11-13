@@ -5,42 +5,39 @@ import chalk from 'chalk';
 import { supabaseFiles } from '../../../templates/supabase/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 const supabaseLogin = () => {
-  logWithColoredPrefix('supabase', 'Logging in...');
+  logger.log('supabase', 'Logging in...');
 
   try {
     execSync('npx supabase projects list', { stdio: 'ignore' });
-    logWithColoredPrefix('supabase', 'Already logged in.');
+    logger.log('supabase', 'Already logged in.');
     return;
   } catch (error) {
     try {
       execSync('npx supabase login', { stdio: 'inherit' });
     } catch {
       console.error('Failed to log in to Supabase.');
-      logWithColoredPrefix(
-        'supabase',
-        '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".',
-      );
+      logger.log('supabase', '\nPlease log in manually with "supabase login" and re-run "create-stapler-app".');
       process.exit(1);
     }
   }
 };
 
 const initializeSupabaseProject = (): void => {
-  logWithColoredPrefix('supabase', 'Initialize project...');
+  logger.log('supabase', 'Initialize project...');
   try {
     execSync(`npx supabase init`, { stdio: ['pipe'], encoding: 'utf-8' });
   } catch (error: any) {
     const errorMessage = error.stderr;
 
     if (errorMessage.includes('file exists')) {
-      logWithColoredPrefix('supabase', 'Configuration file already exists.');
+      logger.log('supabase', 'Configuration file already exists.');
       return;
     } else {
       console.error('Failed to initialize Supabase project with "supabase init".');
-      logWithColoredPrefix(
+      logger.log(
         'supabase',
         '\nPlease review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
       ),
@@ -50,7 +47,7 @@ const initializeSupabaseProject = (): void => {
 };
 
 export const installSupabase = async (destinationDirectory: string) => {
-  logWithColoredPrefix('supabase', 'Installing supabase-js...');
+  logger.log('supabase', 'Installing supabase-js...');
   try {
     supabaseLogin();
     initializeSupabaseProject();
@@ -59,7 +56,7 @@ export const installSupabase = async (destinationDirectory: string) => {
     process.exit(1);
   }
 
-  logWithColoredPrefix('supabase', 'Adding Files...');
+  logger.log('supabase', 'Adding Files...');
 
   const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
 
@@ -77,11 +74,11 @@ export const installSupabase = async (destinationDirectory: string) => {
 
   process.chdir('supabase');
 
-  logWithColoredPrefix('supabase', 'Installing dependencies...');
+  logger.log('supabase', 'Installing dependencies...');
 
   execSync('pnpm i --reporter silent', { stdio: 'inherit' });
 
-  logWithColoredPrefix('supabase', 'Starting local database...');
+  logger.log('supabase', 'Starting local database...');
 
   try {
     execSync('npx supabase start', { stdio: 'ignore' });
@@ -93,7 +90,7 @@ export const installSupabase = async (destinationDirectory: string) => {
     process.exit(1);
   }
 
-  logWithColoredPrefix('supabase', 'Writing local variables to .env file...');
+  logger.log('supabase', 'Writing local variables to .env file...');
 
   const output = execSync('npx supabase status --output json', {
     encoding: 'utf-8',

@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 import { installGitHubCLI, isGitHubCLIInstalled } from './ghInstaller';
 import {
   authenticateGitHub,
@@ -16,9 +16,9 @@ interface ProjectRepositoryOptions {
 
 // Helper function to check if GitHub CLI is installed
 const checkGitHubCLI = async () => {
-  logWithColoredPrefix('github', 'Checking if GitHub CLI is installed...');
+  logger.log('github', 'Checking if GitHub CLI is installed...');
   if (!isGitHubCLIInstalled()) {
-    logWithColoredPrefix('github', 'GitHub CLI is not installed.');
+    logger.log('github', 'GitHub CLI is not installed.');
     const { shouldInstallGitHubCLI } = await inquirer.prompt([
       {
         type: 'confirm',
@@ -43,11 +43,11 @@ const checkGitHubCLI = async () => {
 
 // Helper function to ensure GitHub authentication
 const ensureGitHubAuthentication = () => {
-  logWithColoredPrefix('github', 'Checking authentication status...');
+  logger.log('github', 'Checking authentication status...');
 
   // Check if the user is already authenticated
   if (isGitHubAuthenticated()) {
-    logWithColoredPrefix('github', 'You are already logged in.');
+    logger.log('github', 'You are already logged in.');
     return; // Exit early if authenticated
   }
 
@@ -59,7 +59,7 @@ const ensureGitHubAuthentication = () => {
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
   const { projectName, visibility } = options;
-  logWithColoredPrefix('github', `Initializing repository for project "${projectName}"...`);
+  logger.log('github', `Initializing repository for project "${projectName}"...`);
 
   checkGitHubCLI();
   ensureGitHubAuthentication();

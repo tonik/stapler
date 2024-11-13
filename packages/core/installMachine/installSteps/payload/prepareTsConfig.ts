@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const prepareTsConfig = () => {
-  logWithColoredPrefix('payload', 'Preparing tsconfig.json...');
+  logger.log('payload', 'Preparing tsconfig.json...');
 
   // Path to your tsconfig.json file
   const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');

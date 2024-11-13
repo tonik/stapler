@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const deployVercelProject = async () => {
   execSync('npx vercel git connect', {
@@ -7,7 +7,7 @@ export const deployVercelProject = async () => {
     encoding: 'utf-8',
   });
 
-  logWithColoredPrefix('vercel', 'Creating production deployment...');
+  logger.log('vercel', 'Creating production deployment...');
 
   const productionUrl = execSync('vercel --prod', {
     stdio: ['inherit', 'pipe', 'inherit'],
@@ -15,9 +15,9 @@ export const deployVercelProject = async () => {
   });
 
   if (productionUrl) {
-    logWithColoredPrefix('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
+    logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
   } else {
-    logWithColoredPrefix('vercel', 'Failed to create production deployment.');
+    logger.log('vercel', 'Failed to create production deployment.');
     return;
   }
 };

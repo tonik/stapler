@@ -6,11 +6,11 @@ import { preparePayloadConfig } from './preparePayloadConfig';
 import { prepareTsConfig } from './prepareTsConfig';
 import { removeTurboFlag } from './removeTurboFlag';
 import { updatePackages } from './updatePackages';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 import { loadEnvFile } from './utils/loadEnvFile';
 
 export const preparePayload = async () => {
-  logWithColoredPrefix('payload', 'Initializing...');
+  logger.log('payload', 'Initializing...');
 
   process.chdir('./apps/web/');
 
@@ -18,13 +18,13 @@ export const preparePayload = async () => {
 
   updatePackages();
 
-  logWithColoredPrefix('payload', 'Moving files to (app) directory...');
+  logger.log('payload', 'Moving files to (app) directory...');
   execSync(
     `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
     { stdio: 'inherit' },
   );
 
-  logWithColoredPrefix('payload', 'Installing to Next.js...');
+  logger.log('payload', 'Installing to Next.js...');
 
   // Show the local Supabase connection string
   loadEnvFile(path.resolve('../../supabase/.env'));

@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import * as os from 'os';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const isGitHubCLIInstalled = (): boolean => {
   try {
@@ -28,7 +28,7 @@ export const installGitHubCLI = (): boolean => {
         installCommand =
           'sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && sudo dnf install gh';
       } else {
-        logWithColoredPrefix('github', [
+        logger.log('github', [
           'Automatic installation is not supported for your Linux distribution.',
           '\n Please visit https://github.com/cli/cli#installation for installation instructions.',
         ]);
@@ -39,20 +39,20 @@ export const installGitHubCLI = (): boolean => {
       installCommand = 'winget install --id GitHub.cli';
       break;
     default:
-      logWithColoredPrefix('github', [
+      logger.log('github', [
         'Automatic installation is not supported for your operating system.',
         '\nPlease visit https://github.com/cli/cli#installation for installation instructions.',
       ]);
       return false;
   }
 
-  logWithColoredPrefix('github', 'Installing GitHub CLI...');
+  logger.log('github', 'Installing GitHub CLI...');
   try {
     execSync(installCommand, { stdio: 'inherit' });
     return true;
   } catch (error) {
     console.error('Failed to install GitHub CLI.');
-    logWithColoredPrefix('github', 'Please install it manually from: https://github.com/cli/cli#installation');
+    logger.log('github', 'Please install it manually from: https://github.com/cli/cli#installation');
     return false;
   }
 };

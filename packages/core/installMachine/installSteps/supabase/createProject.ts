@@ -1,8 +1,8 @@
 import { execSync } from 'child_process';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 
 export const createSupabaseProject = async (name: string) => {
-  logWithColoredPrefix('supabase', 'Creating Supabase project...');
+  logger.log('supabase', 'Creating Supabase project...');
 
   execSync(`npx supabase projects create ${name}`, {
     stdio: 'inherit',

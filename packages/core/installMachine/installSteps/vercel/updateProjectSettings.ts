@@ -1,9 +1,9 @@
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { logger } from '../../../utils/logger';
 import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 
 export const updateVercelProjectSettings = async () => {
-  logWithColoredPrefix('vercel', 'Changing project settings...');
+  logger.log('vercel', 'Changing project settings...');
 
   const token = await getVercelTokenFromAuthFile();
   if (!token) {
