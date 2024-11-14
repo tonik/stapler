@@ -28,10 +28,7 @@ export const deployVercelProject = async (usePayload: boolean) => {
       try {
         // Generate payload secret
         const payloadSecret = crypto.randomBytes(256).toString('hex');
-        execSync(`echo '${payloadSecret}' | vercel env add PAYLOAD_SECRET production --sensitive`, {
-          stdio: 'inherit',
-          encoding: 'utf8',
-        });
+        await execAsync(`echo '${payloadSecret}' | vercel env add PAYLOAD_SECRET production --sensitive`);
         spinner.succeed('Environment variables set up successfully.');
       } catch (error) {
         spinner.fail('Failed to set up environment variables.');
