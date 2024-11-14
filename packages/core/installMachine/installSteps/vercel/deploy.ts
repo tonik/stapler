@@ -24,7 +24,7 @@ export const deployVercelProject = async (usePayload: boolean) => {
   });
 
   if (usePayload) {
-    logger.withSpinner('vercel', 'Setting up environment variables...', async (spinner) => {
+    await logger.withSpinner('vercel', 'Setting up environment variables...', async (spinner) => {
       try {
         // Generate payload secret
         const payloadSecret = crypto.randomBytes(256).toString('hex');
@@ -32,6 +32,7 @@ export const deployVercelProject = async (usePayload: boolean) => {
           stdio: 'inherit',
           encoding: 'utf8',
         });
+        spinner.succeed('Environment variables set up successfully.');
       } catch (error) {
         spinner.fail('Failed to set up environment variables.');
         console.error(error);
