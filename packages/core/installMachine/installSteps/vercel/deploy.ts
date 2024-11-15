@@ -17,13 +17,22 @@ export const deployVercelProject = async () => {
 
   logger.log('vercel', 'Creating production deployment...');
 
-  const productionUrl = execSync('vercel --prod', {
+  const productionUrl = execSync('npx vercel --prod', {
     stdio: ['inherit', 'pipe', 'inherit'],
     encoding: 'utf8',
   });
 
-  if (productionUrl) {
-    logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
+  const domains = execSync('npx vercel alias list', {
+    stdio: ['pipe'],
+    encoding: 'utf8',
+  });
+
+  const shortestDomain = domains.match(/[\w-]+\.vercel\.app\b/g)?.reduce((shortest, current) => {
+    return !shortest || current.length < shortest.length ? current : shortest;
+  }, '');
+
+  if (productionUrl && shortestDomain) {
+    logger.log('vercel', `You can access your production deployment at: \x1b[36mhttps://${shortestDomain}\x1b[0m`);
   } else {
     logger.log('vercel', 'Failed to create production deployment.');
     return;
