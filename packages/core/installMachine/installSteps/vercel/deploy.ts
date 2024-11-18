@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
 
-export const deployVercelProject = async () => {
+export const deployVercelProject = async (projectName: string) => {
   await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
     try {
       // Execute 'vercel git connect' and capture the output
@@ -27,12 +27,14 @@ export const deployVercelProject = async () => {
     encoding: 'utf8',
   });
 
-  const shortestDomain = domains.match(/[\w-]+\.vercel\.app\b/g)?.reduce((shortest, current) => {
-    return !shortest || current.length < shortest.length ? current : shortest;
-  }, '');
+  const regex = new RegExp(`\\b${projectName}\\.vercel\\.app\\b`, 'g');
+  const shortestDomainArr = domains.match(regex);
 
-  if (productionUrl && shortestDomain) {
-    logger.log('vercel', `You can access your production deployment at: \x1b[36mhttps://${shortestDomain}\x1b[0m`);
+  if (productionUrl && shortestDomainArr?.length) {
+    logger.log(
+      'vercel',
+      `You can access your production deployment at: \x1b[36mhttps://${shortestDomainArr[0]}\x1b[0m`,
+    );
   } else {
     logger.log('vercel', 'Failed to create production deployment.');
     return;

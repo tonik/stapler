@@ -1,6 +1,11 @@
-import { createMachine, fromPromise, ActorLogic, AnyEventObject, PromiseSnapshot, createActor, and, not } from 'xstate';
+import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMachine, fromPromise, not } from 'xstate';
 
+import { InstallMachineContext, StepsCompleted } from '../types';
+import { saveStateToRcFile } from '../utils/rcFileManager';
+import { prepareDrink } from './installSteps/bar/prepareDrink';
+import { createDocFiles } from './installSteps/docs/create';
 import { initializeRepository } from './installSteps/github/install';
+import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
 import { connectSupabaseProject } from './installSteps/supabase/connectProject';
@@ -10,11 +15,6 @@ import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
-import { prepareDrink } from './installSteps/bar/prepareDrink';
-import { createDocFiles } from './installSteps/docs/create';
-import { pushToGitHub } from './installSteps/github/repositoryManager';
-import { InstallMachineContext, StepsCompleted } from '../types';
-import { saveStateToRcFile } from '../utils/rcFileManager';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -398,7 +398,8 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await deployVercelProject();
+              const { projectName } = input.stateData;
+              await deployVercelProject(projectName);
               input.stateData.stepsCompleted.deployVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
