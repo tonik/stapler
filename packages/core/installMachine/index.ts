@@ -379,7 +379,11 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         initializeRepositoryActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await initializeRepository({ projectName: input.stateData.options.name, visibility: 'private' });
+              await initializeRepository({
+                projectName: input.stateData.options.name,
+                visibility: 'private',
+                stateData: input.stateData,
+              });
               input.stateData.stepsCompleted.initializeRepository = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -391,7 +395,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await pushToGitHub(input.stateData.options.name);
+              await pushToGitHub(input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.pushToGitHub = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
