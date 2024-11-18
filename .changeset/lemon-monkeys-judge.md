@@ -1,6 +1,6 @@
 ---
-'@tonik/create-stapler-app': minor
-'@tonik/create-stapler-app-core': minor
+'stplr': minor
+'stplr-core': minor
 ---
 
 update state logic, add supabase local docker dev

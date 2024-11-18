@@ -1,5 +1,5 @@
 ---
-'@tonik/create-stapler-app': minor
+'stplr': minor
 ---
 
 Changed binaries
