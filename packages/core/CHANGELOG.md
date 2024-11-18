@@ -1,4 +1,10 @@
-# @tonik/create-stapler-app-core
+# stplr-core
+
+## 0.2.0-alpha.14
+
+### Minor Changes
+
+- Rename package
 
 ## 0.2.0-alpha.13
 

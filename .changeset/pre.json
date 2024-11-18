@@ -2,8 +2,8 @@
   "mode": "pre",
   "tag": "alpha",
   "initialVersions": {
-    "@tonik/create-stapler-app": "0.1.0-alpha.1",
-    "@tonik/create-stapler-app-core": "0.1.0"
+    "stplr": "0.1.0-alpha.1",
+    "stplr-core": "0.1.0"
   },
   "changesets": [
     "angry-hats-reflect",
@@ -34,6 +34,7 @@
     "tall-games-compete",
     "ten-swans-ring",
     "thirty-clocks-move",
+    "violet-needles-perform",
     "warm-gorillas-yawn",
     "warm-peas-behave",
     "witty-months-give"

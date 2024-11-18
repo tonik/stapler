@@ -1,9 +1,9 @@
 {
-  "name": "@tonik/create-stapler-app",
-  "version": "0.1.0-alpha.29",
+  "name": "stplr",
+  "version": "0.1.0-alpha.30",
   "main": "./dist/index.mjs",
   "bin": {
-    "create-stapler-app": "./dist/index.mjs"
+    "stplr": "./dist/index.mjs"
   },
   "publishConfig": {
     "access": "public",
@@ -24,7 +24,7 @@
     "inquirer": "^10.2.2"
   },
   "devDependencies": {
-    "@tonik/create-stapler-app-core": "workspace:*",
+    "stplr-core": "workspace:*",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.5.4",
     "tsup": "^8.2.4",

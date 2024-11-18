@@ -68,7 +68,6 @@ export const fetchGitHubUsername = async (): Promise<string | null> => {
 
 export const createGitHubRepository = async (
   projectName: string,
-  repositoryVisibility: 'public' | 'private',
   username: string,
   stateData: InstallMachineContext['stateData'],
 ) => {
@@ -104,6 +103,16 @@ export const createGitHubRepository = async (
 
   await logger.withSpinner('github', `Creating repository: ${repoName}...`, async (spinner) => {
     try {
+      spinner.stop();
+      const { repositoryVisibility } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'repositoryVisibility',
+          message: 'Choose the repository visibility:',
+          choices: ['public', 'private'],
+          default: 'public',
+        },
+      ]);
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
       const command = `gh repo create ${repoName} ${visibilityFlag}`;
       await execAsync(command);

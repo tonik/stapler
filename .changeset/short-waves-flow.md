@@ -1,5 +1,5 @@
 ---
-'@tonik/create-stapler-app': patch
+'stplr': patch
 ---
 
 Point to mjs bin file

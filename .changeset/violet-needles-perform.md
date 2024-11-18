@@ -3,4 +3,4 @@
 'stplr-core': minor
 ---
 
-Change build commands
+Rename package

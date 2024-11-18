@@ -1,6 +1,6 @@
 ---
-'@tonik/create-stapler-app-core': patch
-'@tonik/create-stapler-app': patch
+'stplr-core': patch
+'stplr': patch
 ---
 
 Modify core format
