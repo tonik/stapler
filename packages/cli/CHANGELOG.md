@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.30
+
+### Minor Changes
+
+- Rename package
+
 ## 0.1.0-alpha.29
 
 ### Minor Changes
