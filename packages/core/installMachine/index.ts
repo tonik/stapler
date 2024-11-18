@@ -327,7 +327,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             try {
               await initializeRepository({
                 projectName: input.stateData.options.name,
-                visibility: 'private',
                 stateData: input.stateData,
               });
               input.stateData.stepsCompleted.initializeRepository = true;

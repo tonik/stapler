@@ -12,7 +12,6 @@ import { InstallMachineContext } from '../../../types';
 
 interface ProjectRepositoryOptions {
   projectName: string;
-  visibility: 'public' | 'private';
   stateData: InstallMachineContext['stateData'];
 }
 
@@ -63,7 +62,7 @@ const ensureGitHubAuthentication = async () => {
 };
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
-  const { projectName, visibility, stateData } = options;
+  const { projectName, stateData } = options;
 
   await checkGitHubCLI();
   await ensureGitHubAuthentication();
@@ -76,7 +75,7 @@ export const initializeRepository = async (options: ProjectRepositoryOptions) =>
   }
 
   // Check if the repository exists and create it
-  await createGitHubRepository(projectName, visibility, username, stateData);
+  await createGitHubRepository(projectName, username, stateData);
 
   await setupGitRepository();
 };
