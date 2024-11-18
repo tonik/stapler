@@ -32,7 +32,7 @@ This amazing tool is brought to you by awesome [**Tonik**](https://www.tonik.com
 To create a new project, run the following command:
 
 ```bash
-npx @tonik/create-stapler-app
+npx stplr
 ```
 
 This command will guide you through the setup process and create a new project in the current directory.

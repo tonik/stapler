@@ -1,4 +1,4 @@
-# @tonik/create-stapler-app
+# stplr
 
 ## 0.1.0-alpha.29
 
@@ -149,7 +149,7 @@
 
 - Added separate bundled create-stapler-app package
 - Updated dependencies
-  - @tonik/create-stapler-app-core@0.2.0-alpha.2
+  - stplr-core@0.2.0-alpha.2
 
 ## 0.2.0-alpha.1
 
@@ -160,7 +160,7 @@
 ### Patch Changes
 
 - Updated dependencies [4da0a9c]
-  - @tonik/create-stapler-app-core@0.2.0-alpha.1
+  - stplr-core@0.2.0-alpha.1
 
 ## 0.2.0-alpha.0
 
@@ -171,4 +171,4 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @tonik/create-stapler-app-core@0.2.0-alpha.0
+  - stplr-core@0.2.0-alpha.0
