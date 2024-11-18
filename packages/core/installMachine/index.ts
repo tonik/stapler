@@ -402,7 +402,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await deployVercelProject();
+              await deployVercelProject(input.stateData.options.usePayload);
               input.stateData.stepsCompleted.deployVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

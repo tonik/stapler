@@ -1,4 +1,4 @@
-import { existsSync, type PathLike } from 'fs';
+import { existsSync } from 'fs';
 import fs from 'fs/promises';
 import { logger } from '../../../utils/logger';
 import { join } from 'path';
@@ -14,19 +14,40 @@ export const preparePayloadConfig = async () => {
   await logger.withSpinner('payload', 'Preparing config...', async (spinner) => {
     try {
       // Read the payload.config.ts file
-      const data = await fs.readFile(payloadConfigPath, 'utf8');
+      let data = await fs.readFile(payloadConfigPath, 'utf8');
 
-      // Use regex to find the "pool" object and append "schemaName: 'payload'" to the pool configuration
-      const updatedConfig = data.replace(/pool:\s*{([^}]*)connectionString[^}]*}/, (match, group1) => {
-        if (match.includes('schemaName')) {
-          return match; // If "schemaName" already exists, return the match unchanged
-        }
-        // Append schemaName to the existing pool configuration (avoiding the extra comma)
-        return match.replace(group1.trimEnd(), `${group1.trimEnd()} schemaName: 'payload',\n`);
-      });
+      const postgresAdapterImport = `import { postgresAdapter } from '@payloadcms/db-postgres'`;
+      const vercelPostgresAdapterImport = `import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'`;
+
+      // Add the vercelPostgresAdapter import after postgresAdapter if it's not already present
+      if (!data.includes(vercelPostgresAdapterImport)) {
+        data = data.replace(postgresAdapterImport, `${postgresAdapterImport}\n${vercelPostgresAdapterImport}`);
+      } else {
+        console.log('vercelPostgresAdapter import is already present.');
+      }
+
+      // Step 2: Replace the db configuration with conditional configuration
+      const newDbConfig = `db: process.env.POSTGRES_URL
+        ? vercelPostgresAdapter({
+            schemaName: "payload",
+            pool: {
+              connectionString: process.env.POSTGRES_URL || "",
+            },
+          })
+        : postgresAdapter({
+            schemaName: "payload",
+            pool: {
+              connectionString: process.env.DATABASE_URI || "",
+            },
+          })`;
+
+      data = data.replace(
+        /db:\s*postgresAdapter\(\{[\s\S]*?pool:\s*\{[\s\S]*?connectionString:[\s\S]*?\}[\s\S]*?\}\)/m,
+        newDbConfig,
+      );
 
       // Write the updated payload.config.ts back to the file
-      await fs.writeFile(payloadConfigPath, updatedConfig);
+      await fs.writeFile(payloadConfigPath, data);
 
       spinner.succeed('Config prepared.');
     } catch (err) {

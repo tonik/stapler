@@ -6,44 +6,9 @@ import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 import { logger } from '../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
-
-const supabaseLogin = async () => {
-  await logger.withSpinner('supabase', 'Logging in...', async (spinner) => {
-    try {
-      await execAsync('npx supabase projects list');
-      spinner.succeed('Already logged in.');
-    } catch (error) {
-      try {
-        await execAsync('npx supabase login');
-        spinner.succeed('Logged in successfully.');
-      } catch {
-        spinner.fail('Failed to log in to Supabase.');
-        console.error('Please log in manually with "supabase login" and re-run "create-stapler-app".');
-        process.exit(1);
-      }
-    }
-  });
-};
-
-const initializeSupabaseProject = async () => {
-  await logger.withSpinner('supabase', 'Initializing project...', async (spinner) => {
-    try {
-      await execAsync(`npx supabase init`);
-      spinner.succeed('Project initialized.');
-    } catch (error: any) {
-      const errorMessage = error.stderr;
-      if (errorMessage.includes('file exists')) {
-        spinner.succeed('Configuration file already exists.');
-      } else {
-        spinner.fail('Failed to initialize project.');
-        console.error(
-          'Please review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
-        );
-        process.exit(1);
-      }
-    }
-  });
-};
+import { initializeSupabaseProject } from './initializeSupabaseProject';
+import { modifySupabaseConfig } from './modifySupabaseConfig';
+import { supabaseLogin } from './supabaseLogin';
 
 export const installSupabase = async (destinationDirectory: string) => {
   try {
@@ -68,6 +33,9 @@ export const installSupabase = async (destinationDirectory: string) => {
 
     spinner.succeed('Files added.');
   });
+
+  // Modify supabase/config.toml to enable db.pooler
+  await modifySupabaseConfig(destinationDirectory);
 
   process.chdir('supabase');
 

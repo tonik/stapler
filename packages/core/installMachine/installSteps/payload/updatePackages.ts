@@ -18,7 +18,7 @@ export const updatePackages = async () => {
 
   await logger.withSpinner('payload', 'Installing necessary packages...', async (spinner) => {
     try {
-      await execAsync(`pnpm i pg sharp --reporter silent`);
+      await execAsync(`pnpm i pg sharp @payloadcms/db-vercel-postgres --reporter silent`);
       spinner.succeed('Installed necessary packages!');
     } catch (error) {
       spinner.fail('Failed to install necessary packages!');
