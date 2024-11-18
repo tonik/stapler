@@ -8,10 +8,12 @@ import {
   isGitHubAuthenticated,
   setupGitRepository,
 } from './repositoryManager';
+import { InstallMachineContext } from '../../../types';
 
 interface ProjectRepositoryOptions {
   projectName: string;
   visibility: 'public' | 'private';
+  stateData: InstallMachineContext['stateData'];
 }
 
 // Helper function to check if GitHub CLI is installed
@@ -61,7 +63,7 @@ const ensureGitHubAuthentication = async () => {
 };
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
-  const { projectName, visibility } = options;
+  const { projectName, visibility, stateData } = options;
 
   await checkGitHubCLI();
   await ensureGitHubAuthentication();
@@ -74,7 +76,7 @@ export const initializeRepository = async (options: ProjectRepositoryOptions) =>
   }
 
   // Check if the repository exists and create it
-  const repoName = await createGitHubRepository(projectName, visibility, username);
+  await createGitHubRepository(projectName, visibility, username, stateData);
 
-  await setupGitRepository(repoName, username);
+  await setupGitRepository();
 };

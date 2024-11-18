@@ -24,6 +24,7 @@ export interface StaplerState {
   projectName: string;
   stepsCompleted: StepsCompleted;
   options: ProjectOptions;
+  githubCandidateName: string;
 }
 
 export interface InstallMachineContext {

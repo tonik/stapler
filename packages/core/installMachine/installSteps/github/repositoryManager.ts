@@ -3,6 +3,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { logger } from '../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
+import { InstallMachineContext } from '../../../types';
 
 const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   const cleanBaseName = baseName.replace(/-\d+$/, ''); // Clean base name
@@ -69,6 +70,7 @@ export const createGitHubRepository = async (
   projectName: string,
   repositoryVisibility: 'public' | 'private',
   username: string,
+  stateData: InstallMachineContext['stateData'],
 ) => {
   let repoName = projectName;
 
@@ -90,6 +92,8 @@ export const createGitHubRepository = async (
           },
         ]);
         repoName = confirmedName;
+        // Update the state with the confirmed repository name in Xstate
+        stateData.githubCandidateName = confirmedName;
       }
       spinner.stop();
     } catch (error) {
@@ -126,7 +130,7 @@ const executeCommands = async (commands: string[]) => {
   }
 };
 
-export const setupGitRepository = async (projectName: string, username: string) => {
+export const setupGitRepository = async () => {
   await logger.withSpinner('github', `Setting up Git for the repository...`, async (spinner) => {
     const commands = [`git init`, `git add .`];
     await executeCommands(commands);
