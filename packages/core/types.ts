@@ -7,9 +7,7 @@ export interface StepsCompleted {
   initializeProject: boolean;
   installTailwind: boolean;
   modifyHomepage: boolean;
-  createEnvFile: boolean;
   installSupabase: boolean;
-  setupDatabaseWithDocker: boolean;
   installPayload: boolean;
   createDocFiles: boolean;
   prettifyCode: boolean;
@@ -17,7 +15,8 @@ export interface StepsCompleted {
   initializeRepository: boolean;
   pushToGitHub: boolean;
   createSupabaseProject: boolean;
-  setupAndCreateVercelProject: boolean;
+  linkVercelProject: boolean;
+  updateVercelProjectSettings: boolean;
   connectSupabaseProject: boolean;
   deployVercelProject: boolean;
 }

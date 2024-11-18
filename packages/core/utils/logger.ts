@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import gradient from 'gradient-string';
+import ora, { Ora } from 'ora';
 
 type Name =
   | 'stapler'
@@ -78,20 +79,45 @@ const names: NameProps[] = [
   },
 ];
 
-export const logWithColoredPrefix = (name: Name, messages: string[] | string) => {
+const getPrefix = (name: Name): string => {
   const color = names.find((color) => color.name === name);
   if (!color) {
-    console.log(chalk.red('Invalid color name.'));
-    return;
+    return chalk.red('[Error]');
   }
+
   const gradientColor = gradient(color.colors);
+  return name === 'vercel' ? chalk.bgBlack(gradientColor(`[▲ ${color.prefix}]`)) : gradientColor(`[${color.prefix}]`);
+};
 
-  if (name === 'vercel') {
-    return console.log(
-      chalk.bgBlack(gradientColor(`[▲ ${color.prefix}]`)),
-      typeof messages === 'string' ? messages : messages.join(' '),
-    );
+const log = (name: Name, messages: string[] | string): void => {
+  const prefix = getPrefix(name);
+  console.log(prefix, typeof messages === 'string' ? messages : messages.join(' '));
+};
+
+const createSpinner = (name: Name, initialText?: string): Ora => {
+  const prefix = getPrefix(name);
+  return ora({
+    prefixText: prefix,
+    text: initialText,
+    spinner: 'dots',
+  });
+};
+
+const withSpinner = async <T>(name: Name, initialText: string, action: (spinner: Ora) => Promise<T>): Promise<T> => {
+  const spinner = createSpinner(name, initialText);
+  try {
+    spinner.start();
+    const result = await action(spinner);
+    return result;
+  } catch (error) {
+    spinner.fail();
+    throw error;
   }
+};
 
-  return console.log(gradientColor(`[${color.prefix}]`), typeof messages === 'string' ? messages : messages.join(' '));
+// Example usage with named exports
+export const logger = {
+  log,
+  createSpinner,
+  withSpinner,
 };

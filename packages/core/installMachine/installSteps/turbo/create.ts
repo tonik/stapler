@@ -1,9 +1,14 @@
-import { execSync } from 'child_process';
-import { logWithColoredPrefix } from '../../../utils/logWithColoredPrefix';
+import { execAsync } from '../../../utils/execAsync';
+import { logger } from '../../../utils/logger';
 
 export const createTurboRepo = async (name: string) => {
-  logWithColoredPrefix('turborepo', 'Initializing...');
-  execSync(`npx create-turbo@latest ${name} -m pnpm`, {
-    stdio: 'inherit',
+  await logger.withSpinner('turborepo', 'Initializing...', async (spinner) => {
+    try {
+      await execAsync(`npx create-turbo@latest ${name} -m pnpm`);
+      spinner.succeed('Initialized!');
+    } catch (error) {
+      spinner.fail('Failed to initialize!');
+      console.error(error);
+    }
   });
 };

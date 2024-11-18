@@ -1,5 +1,21 @@
 import Link from 'next/link';
 
+const hLineTransforms = [545.79, 635.35, 723.689, 813.69, 902.448, 991.201];
+const vLineTransforms = [
+  { x: 586.769, id: 7 },
+  { x: 675.878, id: 8 },
+  { x: 764.079, id: 9 },
+  { x: 143.554, id: 10 },
+  { x: 852.7, id: 11 },
+  { x: 232.175, id: 12 },
+  { x: 941.885, id: 13 },
+  { x: 321.361, id: 14 },
+  { x: 1030.37, id: 15 },
+  { x: 409.843, id: 16 },
+  { x: 1120.75, id: 17 },
+  { x: 500.226, id: 18 },
+];
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white">
@@ -7,7 +23,7 @@ export default function Home() {
         <div className="flex items-center space-x-2">
           <span className="text-xl font-bold">Stapler</span>
         </div>
-        <Link href="https://github.com/tonik/stapler" className="hover:text-gray-300 transition-colors">
+        <Link href="https://github.com/your-repo" className="hover:text-gray-300 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" width="24" height="24" viewBox="0 0 24 24">
             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
           </svg>
@@ -17,22 +33,114 @@ export default function Home() {
 
       <main className="container mx-auto px-4">
         <section className="relative min-h-[70vh] flex flex-col justify-center items-center text-center mb-16">
+          <div className="absolute inset-0 flex items-center justify-center opacity-15 ">
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 1096 638"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                fillRule: 'evenodd',
+                clipRule: 'evenodd',
+                strokeLinecap: 'round',
+                strokeLinejoin: 'round',
+                strokeMiterlimit: 1.5,
+              }}
+            >
+              <g transform="matrix(1,0,0,1,-172.354,-535.261)">
+                <g>
+                  {hLineTransforms.map((yPos, index) => (
+                    <g key={`hline-${index}`} transform={`matrix(0.763071,0,0,0.393502,172.517,${yPos})`}>
+                      <path
+                        d="M0.442,198.747L1434.5,198.747"
+                        style={{
+                          fill: 'none',
+                          stroke: `url(#_Linear${index + 1})`,
+                          strokeWidth: '1.65px',
+                        }}
+                      />
+                    </g>
+                  ))}
+                  {vLineTransforms.map(({ x, id }, index) => (
+                    <g key={`vline-${index}`} transform={`matrix(0.443961,0,0,0.475574,${x},535.761)`}>
+                      <path
+                        d="M201.864,0L201.864,1338.02"
+                        style={{
+                          fill: 'none',
+                          stroke: `url(#_Linear${id})`,
+                          strokeWidth: '1.65px',
+                        }}
+                      />
+                    </g>
+                  ))}
+                </g>
+              </g>
+              <defs>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <linearGradient
+                    key={`grad-h-${i}`}
+                    id={`_Linear${i + 1}`}
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(1441.18,0,0,2794.7,-0.600974,521.908)"
+                  >
+                    <stop offset="0" style={{ stopColor: 'black', stopOpacity: 0 }} />
+                    <stop offset="0.5" style={{ stopColor: 'rgb(211,211,211)', stopOpacity: 1 }} />
+                    <stop offset="1" style={{ stopColor: 'black', stopOpacity: 0 }} />
+                  </linearGradient>
+                ))}
+                {Array.from({ length: 12 }, (_, i) => (
+                  <linearGradient
+                    key={`grad-v-${i}`}
+                    id={`_Linear${i + 7}`}
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                    gradientUnits="userSpaceOnUse"
+                    gradientTransform="matrix(7.94473e-14,1211.23,-1297.47,7.41661e-14,86.0422,47.59)"
+                  >
+                    <stop offset="0" style={{ stopColor: 'black', stopOpacity: 0 }} />
+                    <stop
+                      offset="0.23"
+                      style={{
+                        stopColor: 'rgb(167,167,167)',
+                        stopOpacity: 0.79,
+                      }}
+                    />
+                    <stop offset="0.51" style={{ stopColor: 'rgb(211,211,211)', stopOpacity: 1 }} />
+                    <stop
+                      offset="0.74"
+                      style={{
+                        stopColor: 'rgb(173,173,173)',
+                        stopOpacity: 0.72,
+                      }}
+                    />
+                    <stop offset="1" style={{ stopColor: 'rgb(77,77,77)', stopOpacity: 0 }} />
+                  </linearGradient>
+                ))}
+              </defs>
+            </svg>
+          </div>
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className="absolute inset-0 bg-gradient-to-b from-slate-400 via-blue-500 to-black"
+              className="absolute inset-0 bg-gradient-to-b from-slate-400 via-blue-500 to-black opacity-70"
               style={{
-                maskImage: 'radial-gradient(ellipse at 50% 80%, black 0%, transparent 70%)',
-                WebkitMaskImage: 'radial-gradient(ellipse at 50% 80%, black 0%, transparent 70%)',
+                maskImage: 'radial-gradient(ellipse at 50% 80%, black 0%, transparent 70%)' as string,
+                WebkitMaskImage: 'radial-gradient(ellipse at 50% 80%, black 0%, transparent 70%)' as string,
               }}
             ></div>
           </div>
           <div className="relative z-10">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to your Stapler! 📎</h1>
             <p className="max-w-4xl text-xl text-center text-gray-300 leading-relaxed">
-              We hope you saved a lot of time and effort by using Stapler. At{' '}
-              <Link href="https://www.tonik.com/">Tonik</Link> we are always looking for ways to make your life easier.
-              If you have any feedback or suggestions, please let us know. We would love to hear from you! Edit this
-              page in the <b>apps/web/app/page.tsx</b> file. 🚀
+              We hope you saved a lot of time and effort by using Stapler. At Tonik we are always looking for ways to
+              make your life easier. If you have any feedback or suggestions, please let us know. We would love to hear
+              from you! Edit this page in the <b>apps/web/app/page.tsx</b> file! 🚀
             </p>
           </div>
         </section>
@@ -56,10 +164,10 @@ export default function Home() {
                 ></path>
                 <path d="M201.6 56.7148L192.679 45.6229L165.455 79.4326H183.32L201.6 56.7148Z" fill="#fff"></path>
                 <path
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                   d="M80.907 79.339L17.0151 0H0V79.3059H13.6121V16.9516L63.8067 79.339H80.907Z"
                   fill="#fff"
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                 ></path>
                 <path
                   d="M333.607 78.8546C332.61 78.8546 331.762 78.5093 331.052 77.8186C330.342 77.1279 329.991 76.2917 330 75.3011C329.991 74.3377 330.342 73.5106 331.052 72.8199C331.762 72.1292 332.61 71.7838 333.607 71.7838C334.566 71.7838 335.405 72.1292 336.115 72.8199C336.835 73.5106 337.194 74.3377 337.204 75.3011C337.194 75.9554 337.028 76.5552 336.696 77.0914C336.355 77.6368 335.922 78.064 335.377 78.373C334.842 78.6911 334.252 78.8546 333.607 78.8546Z"
@@ -85,8 +193,8 @@ export default function Home() {
                 fill="#fff"
                 stroke="#fff"
               >
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
                 <g id="SVGRepo_iconCarrier">
                   {' '}
                   <g>
@@ -94,7 +202,7 @@ export default function Home() {
                     <path
                       d="M255.420487,28.975665 C235.427278,28.975665 221.011885,42.0147142 221.011885,61.5732881 C221.011885,81.1318619 237.238257,94.1709111 257.231466,94.1709111 C269.310696,94.1709111 279.959253,89.3899264 286.551217,81.3310696 L272.697227,73.3265422 C269.039049,77.3288059 263.479344,79.6649689 257.231466,79.6649689 C248.556876,79.6649689 241.186191,75.1375212 238.451613,67.893605 L289.195246,67.893605 C289.593662,65.8653084 289.829089,63.7645727 289.829089,61.5551783 C289.829089,42.0147142 275.413696,28.975665 255.420487,28.975665 Z M238.288625,55.2348613 C240.552349,48.0090549 246.745897,43.4634975 255.402377,43.4634975 C264.076967,43.4634975 270.270515,48.0090549 272.516129,55.2348613 L238.288625,55.2348613 L238.288625,55.2348613 Z M450.426712,28.975665 C430.433503,28.975665 416.01811,42.0147142 416.01811,61.5732881 C416.01811,81.1318619 432.244482,94.1709111 452.237691,94.1709111 C464.316921,94.1709111 474.965478,89.3899264 481.557442,81.3310696 L467.703452,73.3265422 C464.045274,77.3288059 458.485569,79.6649689 452.237691,79.6649689 C443.563101,79.6649689 436.192417,75.1375212 433.457838,67.893605 L484.201471,67.893605 C484.599887,65.8653084 484.835314,63.7645727 484.835314,61.5551783 C484.835314,42.0147142 470.419921,28.975665 450.426712,28.975665 L450.426712,28.975665 Z M433.31296,55.2348613 C435.576684,48.0090549 441.770232,43.4634975 450.426712,43.4634975 C459.101302,43.4634975 465.29485,48.0090549 467.540464,55.2348613 L433.31296,55.2348613 Z M362.630447,61.5732881 C362.630447,72.4391624 369.729485,79.6830787 380.740238,79.6830787 C388.201471,79.6830787 393.797397,76.2965478 396.676853,70.7730617 L410.585173,78.7956989 C404.826259,88.3938879 394.032824,94.1709111 380.740238,94.1709111 C360.728919,94.1709111 346.331636,81.1318619 346.331636,61.5732881 C346.331636,42.0147142 360.747029,28.975665 380.740238,28.975665 C394.032824,28.975665 404.808149,34.7526882 410.585173,44.3508772 L396.676853,52.3735144 C393.797397,46.8500283 388.201471,43.4634975 380.740238,43.4634975 C369.747595,43.4634975 362.630447,50.7074137 362.630447,61.5732881 Z M512,9.0548953 L512,92.3599321 L495.701188,92.3599321 L495.701188,9.0548953 L512,9.0548953 Z M66.9156763,-1.42108547e-14 L133.831353,115.90266 L0,115.90266 L66.9156763,-1.42108547e-14 Z M234.213922,9.0548953 L184.031692,95.9818902 L133.849462,9.0548953 L152.665535,9.0548953 L184.031692,63.3842671 L215.397849,9.0548953 L234.213922,9.0548953 Z M340.898698,30.786644 L340.898698,48.3350311 C339.087719,47.8098472 337.168081,47.4476514 335.103565,47.4476514 C324.581777,47.4476514 316.993775,54.6915676 316.993775,65.557442 L316.993775,92.3599321 L300.694963,92.3599321 L300.694963,30.786644 L316.993775,30.786644 L316.993775,47.4476514 C316.993775,38.2478778 327.696661,30.786644 340.898698,30.786644 Z"
                       fill="#fff"
-                      fill-rule="nonzero"
+                      fillRule="nonzero"
                     >
                       {' '}
                     </path>{' '}
@@ -106,28 +214,28 @@ export default function Home() {
               <svg xmlns="http://www.w3.org/2000/svg" width="120" height="25" viewBox="0 0 512 115">
                 <defs>
                   <linearGradient id="logosTurborepo0" x1="123.779%" x2="123.779%" y1="0%" y2="698.962%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                   <linearGradient id="logosTurborepo1" x1="11.486%" x2="11.486%" y1="-2.194%" y2="512.398%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                   <linearGradient id="logosTurborepo2" x1="-153.743%" x2="-153.743%" y1="-62.263%" y2="278.479%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                   <linearGradient id="logosTurborepo3" x1="-153.743%" x2="-153.743%" y1="-178.48%" y2="162.264%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                   <linearGradient id="logosTurborepo4" x1="11.486%" x2="11.486%" y1="-412.397%" y2="102.194%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                   <linearGradient id="logosTurborepo5" x1="123.779%" x2="123.779%" y1="-598.961%" y2="100%">
-                    <stop offset="0%" stop-color="#1e90ff" />
-                    <stop offset="100%" stop-color="#ff1e56" />
+                    <stop offset="0%" stopColor="#1e90ff" />
+                    <stop offset="100%" stopColor="#ff1e56" />
                   </linearGradient>
                 </defs>
                 <path
@@ -207,7 +315,7 @@ export default function Home() {
                 <path
                   d="M63.7076 110.284C60.8481 113.885 55.0502 111.912 54.9813 107.314L53.9738 40.0627L99.1935 40.0627C107.384 40.0627 111.952 49.5228 106.859 55.9374L63.7076 110.284Z"
                   fill="url(#paint1_linear)"
-                  fill-opacity="0.2"
+                  fillOpacity="0.2"
                 />
                 <path
                   d="M45.317 2.07103C48.1765 -1.53037 53.9745 0.442937 54.0434 5.041L54.4849 72.2922H9.83113C1.64038 72.2922 -2.92775 62.8321 2.1655 56.4175L45.317 2.07103Z"
@@ -222,8 +330,8 @@ export default function Home() {
                     y2="71.8295"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stop-color="#249361" />
-                    <stop offset="1" stop-color="#3ECF8E" />
+                    <stop stopColor="#249361" />
+                    <stop offset="1" stopColor="#3ECF8E" />
                   </linearGradient>
                   <linearGradient
                     id="paint1_linear"
@@ -234,7 +342,7 @@ export default function Home() {
                     gradientUnits="userSpaceOnUse"
                   >
                     <stop />
-                    <stop offset="1" stop-opacity="0" />
+                    <stop offset="1" stopOpacity="0" />
                   </linearGradient>
                 </defs>
               </svg>
@@ -242,8 +350,8 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <footer className="container mx-auto mt-16 px-4 pb-6 text-center text-gray-400">
-        <p>&copy; {new Date().getFullYear()} Tonik.</p>
+      <footer className="container mx-auto px-4 py-6 text-center text-gray-400">
+        <p>&copy; {new Date().getFullYear()} Tonik. All rights reserved.</p>
       </footer>
     </div>
   );

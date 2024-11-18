@@ -1,6 +1,5 @@
 import { createMachine, fromPromise, ActorLogic, AnyEventObject, PromiseSnapshot, createActor, and, not } from 'xstate';
 
-import { createEnvFile } from './installSteps/env/createEnvFile';
 import { initializeRepository } from './installSteps/github/install';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
@@ -9,13 +8,13 @@ import { createSupabaseProject } from './installSteps/supabase/createProject';
 import { installSupabase } from './installSteps/supabase/install';
 import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
-import { setupAndCreateVercelProject } from './installSteps/vercel/setupAndCreate';
+import { linkVercelProject } from './installSteps/vercel/link';
+import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
 import { prepareDrink } from './installSteps/bar/prepareDrink';
 import { createDocFiles } from './installSteps/docs/create';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { setupDatabaseWithDocker } from './installSteps/supabase/setupDatabaseWithDocker';
 import { installTailwind } from './installSteps/tailwind/install';
 import { modifyHomepage } from './installSteps/homepage/install';
 
@@ -89,25 +88,11 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('modifyHomepage'),
-              target: 'createEnvFile',
-            },
-          ],
-          invoke: {
-            src: 'modifyHomepageActor',
-            input: ({ context }) => context,
-            onDone: 'createEnvFile',
-            onError: 'failed',
-          },
-        },
-        createEnvFile: {
-          always: [
-            {
-              guard: isStepCompleted('createEnvFile'),
               target: 'installSupabase',
             },
           ],
           invoke: {
-            src: 'createEnvFileActor',
+            src: 'modifyHomepageActor',
             input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
@@ -116,31 +101,17 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installSupabase: {
           always: [
             {
-              guard: isStepCompleted('installSupabase'),
-              target: 'setupDatabaseWithDocker',
-            },
-          ],
-          invoke: {
-            input: ({ context }) => context,
-            src: 'installSupabaseActor',
-            onDone: 'setupDatabaseWithDocker',
-            onError: 'failed',
-          },
-        },
-        setupDatabaseWithDocker: {
-          always: [
-            {
-              guard: and([isStepCompleted('setupDatabaseWithDocker'), 'shouldInstallPayload']),
+              guard: and([isStepCompleted('installSupabase'), 'shouldInstallPayload']),
               target: 'installPayload',
             },
             {
-              guard: isStepCompleted('setupDatabaseWithDocker'),
+              guard: isStepCompleted('installSupabase'),
               target: 'createDocFiles',
             },
           ],
           invoke: {
             input: ({ context }) => context,
-            src: 'setupDatabaseWithDockerActor',
+            src: 'installSupabaseActor',
             onDone: [{ guard: 'shouldInstallPayload', target: 'installPayload' }, { target: 'createDocFiles' }],
             onError: 'failed',
           },
@@ -219,26 +190,40 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('createSupabaseProject'),
-              target: 'setupAndCreateVercelProject',
+              target: 'linkVercelProject',
             },
           ],
           invoke: {
             input: ({ context }) => context,
             src: 'createSupabaseProjectActor',
-            onDone: 'setupAndCreateVercelProject',
+            onDone: 'linkVercelProject',
             onError: 'failed',
           },
         },
-        setupAndCreateVercelProject: {
+        linkVercelProject: {
           always: [
             {
-              guard: isStepCompleted('setupAndCreateVercelProject'),
+              guard: isStepCompleted('linkVercelProject'),
+              target: 'updateVercelProjectSettings',
+            },
+          ],
+          invoke: {
+            input: ({ context }) => context,
+            src: 'linkVercelProjectActor',
+            onDone: 'updateVercelProjectSettings',
+            onError: 'failed',
+          },
+        },
+        updateVercelProjectSettings: {
+          always: [
+            {
+              guard: isStepCompleted('updateVercelProjectSettings'),
               target: 'connectSupabaseProject',
             },
           ],
           invoke: {
             input: ({ context }) => context,
-            src: 'setupAndCreateVercelProjectActor',
+            src: 'updateVercelProjectSettingsActor',
             onDone: 'connectSupabaseProject',
             onError: 'failed',
           },
@@ -342,18 +327,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             }
           }),
         ),
-        createEnvFileActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              createEnvFile(input.projectDir);
-              input.stateData.stepsCompleted.createEnvFile = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in createEnvFileActor:', error);
-              throw error;
-            }
-          }),
-        ),
         installSupabaseActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
@@ -363,18 +336,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in installSupabaseActor:', error);
-              throw error;
-            }
-          }),
-        ),
-        setupDatabaseWithDockerActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              setupDatabaseWithDocker();
-              input.stateData.stepsCompleted.setupDatabaseWithDocker = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in setupDatabaseWithDockerActor:', error);
               throw error;
             }
           }),
@@ -394,7 +355,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createDocFilesActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              createDocFiles();
+              await createDocFiles();
               input.stateData.stepsCompleted.createDocFiles = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -406,7 +367,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prettifyCodeActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              prettify();
+              await prettify();
               input.stateData.stepsCompleted.prettifyCode = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -430,7 +391,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              pushToGitHub(input.stateData.options.name);
+              await pushToGitHub(input.stateData.options.name);
               input.stateData.stepsCompleted.pushToGitHub = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -451,14 +412,26 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             }
           }),
         ),
-        setupAndCreateVercelProjectActor: createStepMachine(
+        linkVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await setupAndCreateVercelProject();
-              input.stateData.stepsCompleted.setupAndCreateVercelProject = true;
+              await linkVercelProject();
+              input.stateData.stepsCompleted.linkVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
-              console.error('Error in setupAndCreateVercelProjectActor:', error);
+              console.error('Error in linkVercelProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        updateVercelProjectSettingsActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await updateVercelProjectSettings();
+              input.stateData.stepsCompleted.updateVercelProjectSettings = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in updateVercelProjectSettingsActor:', error);
               throw error;
             }
           }),
