@@ -5,6 +5,8 @@ export interface ProjectOptions {
 
 export interface StepsCompleted {
   initializeProject: boolean;
+  installTailwind: boolean;
+  modifyHomepage: boolean;
   installSupabase: boolean;
   installPayload: boolean;
   createDocFiles: boolean;

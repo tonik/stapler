@@ -10,13 +10,6 @@
     "rootDir": ".",
     "composite": true
   },
-  "include": [
-    "index.ts",
-    "types.ts",
-    "utils/**/*.ts",
-    "installMachine/**/*.ts",
-    "templates/supabase/installConfig.ts",
-    "templates/docs/installConfig.ts"
-  ],
-  "exclude": ["node_modules", "dist", "templates/supabase/files/**/*", "templates/docs/files/**/*"]
+  "include": ["index.ts", "types.ts", "utils/**/*.ts", "installMachine/**/*.ts", "templates/**/installConfig.ts"],
+  "exclude": ["node_modules", "dist", "templates/**/files/**/*"]
 }

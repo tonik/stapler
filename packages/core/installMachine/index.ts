@@ -15,6 +15,8 @@ import { createDocFiles } from './installSteps/docs/create';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
+import { installTailwind } from './installSteps/tailwind/install';
+import { modifyHomepage } from './installSteps/homepage/install';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -58,11 +60,39 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('initializeProject'),
-              target: 'installSupabase',
+              target: 'installTailwind',
             },
           ],
           invoke: {
             src: 'initializeProjectActor',
+            input: ({ context }) => context,
+            onDone: 'installTailwind',
+            onError: 'failed',
+          },
+        },
+        installTailwind: {
+          always: [
+            {
+              guard: isStepCompleted('installTailwind'),
+              target: 'modifyHomepage',
+            },
+          ],
+          invoke: {
+            src: 'installTailwindActor',
+            input: ({ context }) => context,
+            onDone: 'modifyHomepage',
+            onError: 'failed',
+          },
+        },
+        modifyHomepage: {
+          always: [
+            {
+              guard: isStepCompleted('modifyHomepage'),
+              target: 'installSupabase',
+            },
+          ],
+          invoke: {
+            src: 'modifyHomepageActor',
             input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
@@ -269,6 +299,30 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in initializeProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        installTailwindActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              installTailwind(input.projectDir);
+              input.stateData.stepsCompleted.installTailwind = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installTailwindActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        modifyHomepageActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              modifyHomepage(input.projectDir);
+              input.stateData.stepsCompleted.modifyHomepage = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in modifyHomepageActor:', error);
               throw error;
             }
           }),
