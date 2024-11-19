@@ -141,13 +141,13 @@
 
 ### Minor Changes
 
-- Configure create-stapler-app package
+- Configure stplr package
 
 ## 0.2.0-alpha.2
 
 ### Patch Changes
 
-- Added separate bundled create-stapler-app package
+- Added separate bundled stplr package
 
 ## 0.2.0-alpha.1
 

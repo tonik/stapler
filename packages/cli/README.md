@@ -1,4 +1,4 @@
-# Create Stapler App 🖇️
+# Stapler 🖇️
 
 **Stapler** is a CLI tool that scaffolds an entire fullstack app.
 It integrates **Next.js**, **Supabase**, **Vercel**, and more, just by running a single command.

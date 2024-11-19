@@ -2,4 +2,4 @@
 'stplr': minor
 ---
 
-Add dependencies to create-stapler-app package.json
+Add dependencies to stplr package.json

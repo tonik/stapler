@@ -32,7 +32,7 @@ const displayHeader = () => {
 const program = new Command();
 
 program
-  .name('create-stapler-app')
+  .name('stplr')
   .description(
     'CLI tool to bootstrap an app with a variety of integrated steps. This tool guides you through the entire process of initializing, configuring, and deploying a new project.',
   )

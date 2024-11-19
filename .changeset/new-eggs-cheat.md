@@ -3,4 +3,4 @@
 'stplr-core': patch
 ---
 
-Added separate bundled create-stapler-app package
+Added separate bundled stplr package

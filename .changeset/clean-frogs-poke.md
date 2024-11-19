@@ -3,4 +3,4 @@
 'stplr-core': minor
 ---
 
-Configure create-stapler-app package
+Configure stplr package

@@ -3,4 +3,4 @@
 'stplr-core': patch
 ---
 
-use index file from create-stapler-app
+use index file from stplr
