@@ -1,17 +1,31 @@
-import { execSync } from 'child_process';
 import * as os from 'os';
 import { logger } from '../../../utils/logger';
+import { execAsync } from '../../../utils/execAsync';
 
-export const isGitHubCLIInstalled = (): boolean => {
+const getLinuxDistro = async (): Promise<string> => {
   try {
-    execSync('gh --version', { stdio: 'ignore' });
+    const osRelease = execAsync('cat /etc/os-release').toString();
+    if (osRelease.includes('Ubuntu')) return 'ubuntu';
+    if (osRelease.includes('Debian')) return 'debian';
+    if (osRelease.includes('Fedora')) return 'fedora';
+    if (osRelease.includes('CentOS')) return 'centos';
+    if (osRelease.includes('Red Hat')) return 'rhel';
+    return 'unknown';
+  } catch (error) {
+    return 'unknown';
+  }
+};
+
+export const isGitHubCLIInstalled = async (): Promise<boolean> => {
+  try {
+    await execAsync('gh --version');
     return true;
   } catch (error) {
     return false;
   }
 };
 
-export const installGitHubCLI = (): boolean => {
+export const installGitHubCLI = async (): Promise<boolean> => {
   const platform = os.platform();
   let installCommand: string;
 
@@ -20,7 +34,10 @@ export const installGitHubCLI = (): boolean => {
       installCommand = 'brew install gh';
       break;
     case 'linux': // Linux
-      const linuxDistro = getLinuxDistro();
+      const linuxDistro = await getLinuxDistro();
+      if (linuxDistro === 'unknown') {
+        logger.log('github', 'Automatic installation is not supported for your Linux distribution.');
+      }
       if (linuxDistro === 'ubuntu' || linuxDistro === 'debian') {
         installCommand =
           'sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0 && sudo apt-add-repository https://cli.github.com/packages && sudo apt update && sudo apt install gh';
@@ -48,25 +65,11 @@ export const installGitHubCLI = (): boolean => {
 
   logger.log('github', 'Installing GitHub CLI...');
   try {
-    execSync(installCommand, { stdio: 'inherit' });
+    await execAsync(installCommand);
     return true;
   } catch (error) {
     console.error('Failed to install GitHub CLI.');
     logger.log('github', 'Please install it manually from: https://github.com/cli/cli#installation');
     return false;
-  }
-};
-
-export const getLinuxDistro = (): string => {
-  try {
-    const osRelease = execSync('cat /etc/os-release').toString();
-    if (osRelease.includes('Ubuntu')) return 'ubuntu';
-    if (osRelease.includes('Debian')) return 'debian';
-    if (osRelease.includes('Fedora')) return 'fedora';
-    if (osRelease.includes('CentOS')) return 'centos';
-    if (osRelease.includes('Red Hat')) return 'rhel';
-    return 'unknown';
-  } catch (error) {
-    return 'unknown';
   }
 };

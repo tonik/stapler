@@ -30,7 +30,7 @@ const checkGitHubCLI = async () => {
       ]);
 
       if (shouldInstallGitHubCLI) {
-        const installed = installGitHubCLI();
+        const installed = await installGitHubCLI();
         if (!installed) {
           spinner.fail('GitHub CLI installation failed. Exiting...');
           console.error('GitHub CLI installation failed. Exiting...');
