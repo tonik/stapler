@@ -21,9 +21,9 @@ export const createTurboRepo = async (name: string) => {
       await checkPnpmVersion();
       // Run the command to create a turbo repo
       await execAsync(`npx create-turbo@latest ${name} -m pnpm`);
-      spinner.succeed('Initialized!');
+      spinner.succeed('Initialized.');
     } catch (error) {
-      spinner.fail('Failed to initialize!');
+      spinner.fail('Failed to initialize.');
       console.error(error);
     }
   });
