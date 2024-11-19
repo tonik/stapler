@@ -395,7 +395,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await pushToGitHub(input.stateData.githubCandidateName);
+              await pushToGitHub(input.stateData.selectedAccount, input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.pushToGitHub = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

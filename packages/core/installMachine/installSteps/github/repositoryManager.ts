@@ -73,6 +73,7 @@ export const createGitHubRepository = async (
   stateData: InstallMachineContext['stateData'],
 ) => {
   let repoName = projectName;
+  stateData.githubCandidateName = repoName; // Update state with confirmed name
 
   // Fetch organizations and build choices for the prompt
   const organizations = await fetchOrganizations();
@@ -94,23 +95,22 @@ export const createGitHubRepository = async (
       choices: accountChoices,
     },
   ]);
+  stateData.selectedAccount = selectedAccount; // Update state with selected account
 
-  const fullRepositoryName = `${selectedAccount}/${projectName}`;
   await logger.withSpinner('github', 'Checking if repository already exists...', async (spinner) => {
     try {
-      const repoNameJSON = await execAsync(`echo "$(gh repo view ${fullRepositoryName} --json name)"`);
+      const repoNameJSON = await execAsync(`echo "$(gh repo view ${selectedAccount}/${projectName} --json name)"`);
       const repoExists = repoNameJSON.stdout.trim().includes(`{"name":"${projectName}"}`);
 
       if (repoExists) {
         spinner.stop();
-        const newRepoName = await generateUniqueRepoName(fullRepositoryName);
+        const newRepoName = await generateUniqueRepoName(projectName);
         const { confirmedName } = await inquirer.prompt([
           {
             type: 'input',
             name: 'confirmedName',
             message: 'The repository already exists. Please confirm or modify the repository name:',
             default: newRepoName,
-            validate: (input: string) => /^[a-zA-Z0-9._-]+$/.test(input) || 'Invalid repository name.',
           },
         ]);
         repoName = confirmedName;
@@ -123,7 +123,7 @@ export const createGitHubRepository = async (
     }
   });
 
-  await logger.withSpinner('github', `Creating repository: ${fullRepositoryName}...`, async (spinner) => {
+  await logger.withSpinner('github', `Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
     try {
       spinner.stop();
       const { repositoryVisibility } = await inquirer.prompt([
@@ -136,7 +136,7 @@ export const createGitHubRepository = async (
         },
       ]);
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
-      const command = `gh repo create ${fullRepositoryName} ${visibilityFlag}`;
+      const command = `gh repo create ${selectedAccount}/${repoName} ${visibilityFlag}`;
       await execAsync(command);
       spinner.succeed(`Repository created: ${chalk.cyan(repoName)}`);
       return repoName;
@@ -169,13 +169,13 @@ export const setupGitRepository = async () => {
   });
 };
 
-export const pushToGitHub = async (projectName: string) => {
-  const username = await fetchGitHubUsername();
+export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
+
   await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
       `git branch -M main`,
-      `git remote add origin git@github.com:${username}/${projectName}.git`,
+      `git remote add origin git@github.com:${selectedAccount}/${githubCandidateName}.git`,
       `git commit -m "feat: initial commit"`,
       `git push -u origin main`,
     ];
