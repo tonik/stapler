@@ -306,7 +306,8 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installTailwindActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              installTailwind(input.projectDir);
+              const currentDir = process.cwd();
+              await installTailwind(currentDir);
               input.stateData.stepsCompleted.installTailwind = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -318,7 +319,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         modifyHomepageActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              modifyHomepage(input.projectDir);
+              await modifyHomepage(input.projectDir);
               input.stateData.stepsCompleted.modifyHomepage = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

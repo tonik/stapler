@@ -8,6 +8,7 @@ export const modifyHomepage = async (destinationDirectory: string) => {
     try {
       const templateDirectory = getTemplateDirectory(`/templates/homepage/files/`);
       templateGenerator(homepageFiles, templateDirectory, destinationDirectory);
+      spinner.succeed('Homepage setup completed.');
     } catch (error) {
       spinner.fail('Tailwind installation failed');
       console.error('Error during tailwind installation:', error);
