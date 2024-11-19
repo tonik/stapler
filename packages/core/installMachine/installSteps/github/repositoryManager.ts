@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { logger } from '../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
 import { InstallMachineContext } from '../../../types';
+import { fetchOrganizations } from './fetchOrganizations';
 
 const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   const cleanBaseName = baseName.replace(/-\d+$/, ''); // Clean base name
@@ -72,36 +73,57 @@ export const createGitHubRepository = async (
   stateData: InstallMachineContext['stateData'],
 ) => {
   let repoName = projectName;
+  stateData.githubCandidateName = repoName; // Update state with confirmed name
+
+  // Fetch organizations and build choices for the prompt
+  const organizations = await fetchOrganizations();
+  const accountChoices = [
+    { name: `${username} (personal account)`, value: username },
+    ...organizations.map((org: { writable: any; name: any }) => ({
+      name: org.writable ? org.name : chalk.gray(`${org.name} (read-only)`),
+      value: org.name,
+      disabled: org.writable ? false : 'No write access',
+    })),
+  ];
+
+  // Prompt the user to select an account or organization
+  const { selectedAccount } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'selectedAccount',
+      message: 'Select the account or organization to create the repository under:',
+      choices: accountChoices,
+    },
+  ]);
+  stateData.selectedAccount = selectedAccount; // Update state with selected account
 
   await logger.withSpinner('github', 'Checking if repository already exists...', async (spinner) => {
     try {
-      const repoCheckCommand = `echo "$(gh repo view ${username}/${projectName} --json name)"`;
-      const existingRepo = execAsync(repoCheckCommand).toString().trim();
+      const repoNameJSON = await execAsync(`echo "$(gh repo view ${selectedAccount}/${projectName} --json name)"`);
+      const repoExists = repoNameJSON.stdout.trim().includes(`{"name":"${projectName}"}`);
 
-      if (existingRepo) {
+      if (repoExists) {
         spinner.stop();
         const newRepoName = await generateUniqueRepoName(projectName);
         const { confirmedName } = await inquirer.prompt([
           {
             type: 'input',
             name: 'confirmedName',
-            message: 'Please confirm or modify the repository name:',
+            message: 'The repository already exists. Please confirm or modify the repository name:',
             default: newRepoName,
-            validate: (input: string) => /^[a-zA-Z0-9._-]+$/.test(input) || 'Invalid repository name.',
           },
         ]);
         repoName = confirmedName;
-        // Update the state with the confirmed repository name in Xstate
-        stateData.githubCandidateName = confirmedName;
+        stateData.githubCandidateName = confirmedName; // Update state with confirmed name
       }
       spinner.stop();
     } catch (error) {
-      spinner.fail('Error checking repository existence');
+      spinner.fail('Error checking repository existence.');
       console.error(error);
     }
   });
 
-  await logger.withSpinner('github', `Creating repository: ${repoName}...`, async (spinner) => {
+  await logger.withSpinner('github', `Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
     try {
       spinner.stop();
       const { repositoryVisibility } = await inquirer.prompt([
@@ -114,7 +136,7 @@ export const createGitHubRepository = async (
         },
       ]);
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
-      const command = `gh repo create ${repoName} ${visibilityFlag}`;
+      const command = `gh repo create ${selectedAccount}/${repoName} ${visibilityFlag}`;
       await execAsync(command);
       spinner.succeed(`Repository created: ${chalk.cyan(repoName)}`);
       return repoName;
@@ -147,13 +169,13 @@ export const setupGitRepository = async () => {
   });
 };
 
-export const pushToGitHub = async (projectName: string) => {
-  const username = await fetchGitHubUsername();
+export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
+
   await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
       `git branch -M main`,
-      `git remote add origin git@github.com:${username}/${projectName}.git`,
+      `git remote add origin git@github.com:${selectedAccount}/${githubCandidateName}.git`,
       `git commit -m "feat: initial commit"`,
       `git push -u origin main`,
     ];
