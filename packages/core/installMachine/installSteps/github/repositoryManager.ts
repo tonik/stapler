@@ -170,7 +170,6 @@ export const setupGitRepository = async () => {
 };
 
 export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
-
   await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
