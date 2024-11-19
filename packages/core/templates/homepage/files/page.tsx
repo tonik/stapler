@@ -136,7 +136,7 @@ export default function Home() {
             ></div>
           </div>
           <div className="relative z-10">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to your Stapler! 📎</h1>
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">Welcome to your Stapled app! 📎</h1>
             <p className="max-w-4xl text-xl text-center text-gray-300 leading-relaxed">
               We hope you saved a lot of time and effort by using Stapler. At Tonik we are always looking for ways to
               make your life easier. If you have any feedback or suggestions, please let us know. We would love to hear
@@ -146,7 +146,7 @@ export default function Home() {
         </section>
 
         <section className="mb-20">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center">This stapler use following stack:</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-center">Stapler uses the following stack:</h2>
           <div className="flex flex-wrap justify-center items-center gap-2 md:gap-8">
             <div key={'vercel'} className="p-4 rounded-lg">
               <svg aria-label="Next.js logotype" width="120" role="img" viewBox="0 0 394 79">
