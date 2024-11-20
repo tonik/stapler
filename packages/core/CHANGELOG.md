@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.15
+
+### Minor Changes
+
+- Added prompts for Vercel
+
 ## 0.2.0-alpha.14
 
 ### Minor Changes
