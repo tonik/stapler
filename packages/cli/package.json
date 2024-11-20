@@ -13,6 +13,20 @@
     "dist",
     "templates"
   ],
+  "keywords": [
+    "cli",
+    "next.js",
+    "fullstack",
+    "monorepo",
+    "stplr",
+    "supabase",
+    "tailwindcss",
+    "tonik",
+    "turbo",
+    "turborepo",
+    "typescript",
+    "vercel"
+  ],
   "scripts": {
     "build": "tsup index.ts --out-dir ./dist --format esm",
     "dev": "tsc -w"
