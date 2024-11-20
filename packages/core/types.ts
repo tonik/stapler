@@ -15,6 +15,7 @@ export interface StepsCompleted {
   initializeRepository: boolean;
   pushToGitHub: boolean;
   createSupabaseProject: boolean;
+  chooseVercelTeam: boolean;
   linkVercelProject: boolean;
   updateVercelProjectSettings: boolean;
   connectSupabaseProject: boolean;

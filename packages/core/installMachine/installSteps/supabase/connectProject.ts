@@ -111,7 +111,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
           }
 
           attempts++;
-          spinner.text = `Checking integration status ${chalk.hex('#259764')(`[${attempts}/${maxAttempts}]`)}`;
+          spinner.text = `Waiting for user to complete integration...`;
           await delay(interval);
         } catch (error) {
           spinner.fail('Failed to check Vercel integration status');
