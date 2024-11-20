@@ -1,0 +1,5 @@
+---
+'stplr': patch
+---
+
+Add keywords
