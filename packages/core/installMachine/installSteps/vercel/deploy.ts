@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
+import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
 
 export const deployVercelProject = async () => {
   await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
@@ -17,15 +18,20 @@ export const deployVercelProject = async () => {
 
   logger.log('vercel', 'Creating production deployment...');
 
-  const productionUrl = execSync('vercel --prod', {
+  const productionUrl = execSync('npx vercel --prod', {
     stdio: ['inherit', 'pipe', 'inherit'],
     encoding: 'utf8',
   });
 
-  if (productionUrl) {
-    logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
-  } else {
+  const shortestVercelAlias = await getShortestVercelAlias(productionUrl);
+
+  if (!productionUrl) {
     logger.log('vercel', 'Failed to create production deployment.');
+    return;
+  }
+
+  if (shortestVercelAlias) {
+    logger.log('vercel', `You can access your production deployment at: \x1b[36m${shortestVercelAlias}\x1b[0m`);
     return;
   }
 };

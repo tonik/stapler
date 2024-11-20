@@ -1,22 +1,22 @@
-import { createMachine, fromPromise, ActorLogic, AnyEventObject, PromiseSnapshot, createActor, and, not } from 'xstate';
+import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMachine, fromPromise, not } from 'xstate';
 
+import { InstallMachineContext, StepsCompleted } from '../types';
+import { saveStateToRcFile } from '../utils/rcFileManager';
+import { prepareDrink } from './installSteps/bar/prepareDrink';
+import { createDocFiles } from './installSteps/docs/create';
 import { initializeRepository } from './installSteps/github/install';
+import { pushToGitHub } from './installSteps/github/repositoryManager';
+import { modifyHomepage } from './installSteps/homepage/install';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
 import { connectSupabaseProject } from './installSteps/supabase/connectProject';
 import { createSupabaseProject } from './installSteps/supabase/createProject';
 import { installSupabase } from './installSteps/supabase/install';
+import { installTailwind } from './installSteps/tailwind/install';
 import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
-import { prepareDrink } from './installSteps/bar/prepareDrink';
-import { createDocFiles } from './installSteps/docs/create';
-import { pushToGitHub } from './installSteps/github/repositoryManager';
-import { InstallMachineContext, StepsCompleted } from '../types';
-import { saveStateToRcFile } from '../utils/rcFileManager';
-import { installTailwind } from './installSteps/tailwind/install';
-import { modifyHomepage } from './installSteps/homepage/install';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
