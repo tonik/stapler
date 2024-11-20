@@ -34,9 +34,4 @@ export const deployVercelProject = async () => {
     logger.log('vercel', `You can access your production deployment at: \x1b[36m${shortestVercelAlias}\x1b[0m`);
     return;
   }
-
-  if (productionUrl && !shortestVercelAlias) {
-    logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
-    return;
-  }
 };
