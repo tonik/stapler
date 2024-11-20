@@ -1,8 +1,9 @@
 import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
+import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
 
-export const deployVercelProject = async (projectName: string) => {
+export const deployVercelProject = async () => {
   await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
     try {
       // Execute 'vercel git connect' and capture the output
@@ -22,21 +23,20 @@ export const deployVercelProject = async (projectName: string) => {
     encoding: 'utf8',
   });
 
-  const domains = execSync('npx vercel alias list', {
-    stdio: ['pipe'],
-    encoding: 'utf8',
-  });
+  const shortestVercelAlias = await getShortestVercelAlias(productionUrl);
 
-  const regex = new RegExp(`\\b${projectName}\\.vercel\\.app\\b`, 'g');
-  const shortestDomainArr = domains.match(regex);
-
-  if (productionUrl && shortestDomainArr?.length) {
-    logger.log(
-      'vercel',
-      `You can access your production deployment at: \x1b[36mhttps://${shortestDomainArr[0]}\x1b[0m`,
-    );
-  } else {
+  if (!productionUrl) {
     logger.log('vercel', 'Failed to create production deployment.');
+    return;
+  }
+
+  if (productionUrl && shortestVercelAlias) {
+    logger.log('vercel', `You can access your production deployment at: \x1b[36m${shortestVercelAlias}\x1b[0m`);
+    return;
+  }
+
+  if (productionUrl && !shortestVercelAlias) {
+    logger.log('vercel', `You can access your production deployment at: \x1b[36m${productionUrl}\x1b[0m`);
     return;
   }
 };

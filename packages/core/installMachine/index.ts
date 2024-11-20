@@ -398,8 +398,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              const { projectName } = input.stateData;
-              await deployVercelProject(projectName);
+              await deployVercelProject();
               input.stateData.stepsCompleted.deployVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
