@@ -5,6 +5,8 @@ export interface ProjectOptions {
 
 export interface StepsCompleted {
   initializeProject: boolean;
+  installTailwind: boolean;
+  modifyHomepage: boolean;
   installSupabase: boolean;
   installPayload: boolean;
   createDocFiles: boolean;
@@ -24,6 +26,8 @@ export interface StaplerState {
   projectName: string;
   stepsCompleted: StepsCompleted;
   options: ProjectOptions;
+  githubCandidateName: string;
+  selectedAccount: string;
 }
 
 export interface InstallMachineContext {

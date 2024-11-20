@@ -23,7 +23,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
         );
       }
 
-      spinner.succeed('Project found!');
+      spinner.succeed('Project found.');
       return project;
     });
 
@@ -42,7 +42,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
           throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
         }
 
-        spinner.succeed('API keys retrieved!');
+        spinner.succeed('API keys retrieved.');
         return keys;
       },
     );
@@ -84,7 +84,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     spinner.text = 'Opening dashboard in your browser...';
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
-    spinner.succeed('Dashboard opened!');
+    spinner.succeed('Dashboard opened.');
 
     // Check Vercel integration
     await logger.withSpinner('vercel', 'Checking integration...', async (spinner) => {
@@ -106,7 +106,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
           const supabaseUrl = envVarsSet.envs.find((env: { key: string }) => env.key === 'SUPABASE_URL')?.value;
 
           if (supabaseUrl) {
-            spinner.succeed('Integration complete!');
+            spinner.succeed('Integration complete.');
             return true;
           }
 

@@ -1,6 +1,6 @@
 # Stapler CLI 🖇️
 
-This is a monorepo for our **Stapler** [CLI tool](https://www.npmjs.com/package/@tonik/create-stapler-app) that scaffolds an entire fullstack app using a monorepo structure. It integrates **Next.js**, **Supabase**, **Payload CMS**, **Vercel**, and more, leveraging **Turbo** and **pnpm** to optimize your development workflow.
+This is a monorepo for our **Stapler** [CLI tool](https://www.npmjs.com/package/stplr) that scaffolds an entire fullstack app using a monorepo structure. It integrates **Next.js**, **Supabase**, **Payload CMS**, **Vercel**, and more, leveraging **Turbo** and **pnpm** to optimize your development workflow.
 
 ## Requirements
 
@@ -48,7 +48,7 @@ npm link
 Once the CLI is linked, you can use it to create a new fullstack project by running:
 
 ```bash
-@tonik/create-stapler-app
+stplr
 ```
 
 This will scaffold a new project in the directory you're currently in.

@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { StaplerState } from '@tonik/create-stapler-app-core/types';
+import { StaplerState } from 'stplr-core/types';
 
 const MAX_DEPTH = 2;
 

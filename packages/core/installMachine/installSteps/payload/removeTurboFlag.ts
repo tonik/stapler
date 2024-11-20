@@ -19,7 +19,7 @@ export const removeTurboFlag = async () => {
 
       // Remove '--turbo' flag from the "dev" script
       if (packageJson.scripts && packageJson.scripts.dev) {
-        packageJson.scripts.dev = packageJson.scripts.dev.replace('--turbo', '').trim();
+        packageJson.scripts.dev = packageJson.scripts.dev.replace('--turbopack', '').trim();
       }
 
       // Write the updated package.json back to the file

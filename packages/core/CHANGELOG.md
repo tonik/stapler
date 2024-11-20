@@ -1,4 +1,10 @@
-# @tonik/create-stapler-app-core
+# stplr-core
+
+## 0.2.0-alpha.14
+
+### Minor Changes
+
+- Rename package
 
 ## 0.2.0-alpha.13
 
@@ -135,13 +141,13 @@
 
 ### Minor Changes
 
-- Configure create-stapler-app package
+- Configure stplr package
 
 ## 0.2.0-alpha.2
 
 ### Patch Changes
 
-- Added separate bundled create-stapler-app package
+- Added separate bundled stplr package
 
 ## 0.2.0-alpha.1
 

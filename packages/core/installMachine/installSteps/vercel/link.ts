@@ -31,7 +31,7 @@ const loginIfNeeded = async () => {
         spinner.fail('Failed to log in.');
         logger.log('vercel', [
           'Please check the error above and try again.',
-          '\nAfter successfully logging in with "vercel login", please run create-stapler-app again.\n',
+          '\nAfter successfully logging in with "vercel login", please run stplr again.\n',
         ]);
         process.exit(1);
       }

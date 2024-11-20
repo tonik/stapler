@@ -1,4 +1,4 @@
-# Create Stapler App 🖇️
+# Stapler 🖇️
 
 **Stapler** is a CLI tool that scaffolds an entire fullstack app.
 It integrates **Next.js**, **Supabase**, **Vercel**, and more, just by running a single command.
@@ -10,11 +10,11 @@ This amazing tool is brought to you by awesome [**Tonik**](https://www.tonik.com
 
 ### System
 
-- node.js
+- Node.js
 - pnpm (for managing the monorepo in scaffolded project)
-- gh cli (will be installed automatically if not found)
-- vercel cli (will be installed automatically if not found)
-- docker (optional), if you want to use Supabase locally
+- GitHub CLI (will be installed automatically if not found)
+- Vercel CLI (will be installed automatically if not found)
+- Docker to run local Supabase database
 
 ### Accounts
 
@@ -32,7 +32,7 @@ This amazing tool is brought to you by awesome [**Tonik**](https://www.tonik.com
 To create a new project, run the following command:
 
 ```bash
-npx @tonik/create-stapler-app
+npx stplr
 ```
 
 This command will guide you through the setup process and create a new project in the current directory.

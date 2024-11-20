@@ -1,6 +1,6 @@
 ---
-'@tonik/create-stapler-app': minor
-'@tonik/create-stapler-app-core': patch
+'stplr': minor
+'stplr-core': patch
 ---
 
-Added separate bundled create-stapler-app package
+Added separate bundled stplr package

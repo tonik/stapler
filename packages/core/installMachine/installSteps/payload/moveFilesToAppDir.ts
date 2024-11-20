@@ -10,7 +10,7 @@ export const moveFilesToAppDir = async () => {
       spinner.succeed('Files moved.');
     } catch (error) {
       spinner.fail(
-        'Failed to move files from ./app to ./app/(app). Please move the files manually and re-run "create-stapler-app".',
+        'Failed to move files from ./app to ./app/(app). Please move the files manually and re-run "stplr".',
       );
       console.error(error);
     }

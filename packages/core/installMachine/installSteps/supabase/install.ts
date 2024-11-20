@@ -18,7 +18,7 @@ const supabaseLogin = async () => {
         spinner.succeed('Logged in successfully.');
       } catch {
         spinner.fail('Failed to log in to Supabase.');
-        console.error('Please log in manually with "supabase login" and re-run "create-stapler-app".');
+        console.error('Please log in manually with "supabase login" and re-run "stplr".');
         process.exit(1);
       }
     }
@@ -37,7 +37,7 @@ const initializeSupabaseProject = async () => {
       } else {
         spinner.fail('Failed to initialize project.');
         console.error(
-          'Please review the error message below, follow the initialization instructions, and try running "create-stapler-app" again.',
+          'Please review the error message below, follow the initialization instructions, and try running "stplr" again.',
         );
         process.exit(1);
       }

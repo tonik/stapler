@@ -6,11 +6,13 @@ import { prepareDrink } from './installSteps/bar/prepareDrink';
 import { createDocFiles } from './installSteps/docs/create';
 import { initializeRepository } from './installSteps/github/install';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
+import { modifyHomepage } from './installSteps/homepage/install';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
 import { connectSupabaseProject } from './installSteps/supabase/connectProject';
 import { createSupabaseProject } from './installSteps/supabase/createProject';
 import { installSupabase } from './installSteps/supabase/install';
+import { installTailwind } from './installSteps/tailwind/install';
 import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
@@ -58,11 +60,39 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('initializeProject'),
-              target: 'installSupabase',
+              target: 'installTailwind',
             },
           ],
           invoke: {
             src: 'initializeProjectActor',
+            input: ({ context }) => context,
+            onDone: 'installTailwind',
+            onError: 'failed',
+          },
+        },
+        installTailwind: {
+          always: [
+            {
+              guard: isStepCompleted('installTailwind'),
+              target: 'modifyHomepage',
+            },
+          ],
+          invoke: {
+            src: 'installTailwindActor',
+            input: ({ context }) => context,
+            onDone: 'modifyHomepage',
+            onError: 'failed',
+          },
+        },
+        modifyHomepage: {
+          always: [
+            {
+              guard: isStepCompleted('modifyHomepage'),
+              target: 'installSupabase',
+            },
+          ],
+          invoke: {
+            src: 'modifyHomepageActor',
             input: ({ context }) => context,
             onDone: 'installSupabase',
             onError: 'failed',
@@ -273,6 +303,31 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
             }
           }),
         ),
+        installTailwindActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              const currentDir = process.cwd();
+              await installTailwind(currentDir);
+              input.stateData.stepsCompleted.installTailwind = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installTailwindActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        modifyHomepageActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await modifyHomepage(input.projectDir);
+              input.stateData.stepsCompleted.modifyHomepage = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in modifyHomepageActor:', error);
+              throw error;
+            }
+          }),
+        ),
         installSupabaseActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
@@ -325,7 +380,10 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         initializeRepositoryActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await initializeRepository({ projectName: input.stateData.options.name, visibility: 'private' });
+              await initializeRepository({
+                projectName: input.stateData.options.name,
+                stateData: input.stateData,
+              });
               input.stateData.stepsCompleted.initializeRepository = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -337,7 +395,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         pushToGitHubActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await pushToGitHub(input.stateData.options.name);
+              await pushToGitHub(input.stateData.selectedAccount, input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.pushToGitHub = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

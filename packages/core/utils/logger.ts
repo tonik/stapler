@@ -6,6 +6,7 @@ type Name =
   | 'stapler'
   | 'turborepo'
   | 'supabase'
+  | 'tailwind'
   | 'payload'
   | 'github'
   | 'prettier'
@@ -35,6 +36,11 @@ const names: NameProps[] = [
     name: 'supabase',
     prefix: 'Supabase',
     colors: ['#3ABC82', '#259764'],
+  },
+  {
+    name: 'tailwind',
+    prefix: 'Tailwind',
+    colors: ['#38B2AC', '#0099F7'],
   },
   {
     name: 'payload',
