@@ -1,5 +1,4 @@
 import { execSync } from 'child_process';
-import chalk from 'chalk';
 import { logger } from '../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
 

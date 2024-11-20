@@ -17,6 +17,7 @@ import { createTurboRepo } from './installSteps/turbo/create';
 import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
+import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -190,12 +191,26 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('createSupabaseProject'),
-              target: 'linkVercelProject',
+              target: 'chooseVercelTeam',
             },
           ],
           invoke: {
             input: ({ context }) => context,
             src: 'createSupabaseProjectActor',
+            onDone: 'chooseVercelTeam',
+            onError: 'failed',
+          },
+        },
+        chooseVercelTeam: {
+          always: [
+            {
+              guard: isStepCompleted('chooseVercelTeam'),
+              target: 'linkVercelProject',
+            },
+          ],
+          invoke: {
+            input: ({ context }) => context,
+            src: 'chooseVercelTeamActor',
             onDone: 'linkVercelProject',
             onError: 'failed',
           },
@@ -412,6 +427,18 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in createSupabaseProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        chooseVercelTeamActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await chooseVercelTeam();
+              input.stateData.stepsCompleted.chooseVercelTeam = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in chooseVercelTeamActor:', error);
               throw error;
             }
           }),
