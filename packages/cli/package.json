@@ -1,6 +1,6 @@
 {
   "name": "stplr",
-  "version": "0.1.0-alpha.31",
+  "version": "0.1.0-alpha.32",
   "main": "./dist/index.mjs",
   "bin": {
     "stplr": "./dist/index.mjs"
@@ -12,6 +12,21 @@
   "files": [
     "dist",
     "templates"
+  ],
+  "keywords": [
+    "cli",
+    "next",
+    "next.js",
+    "fullstack",
+    "monorepo",
+    "stplr",
+    "supabase",
+    "tailwindcss",
+    "tonik",
+    "turbo",
+    "turborepo",
+    "typescript",
+    "vercel"
   ],
   "scripts": {
     "build": "tsup index.ts --out-dir ./dist --format esm",

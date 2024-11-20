@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.32
+
+### Patch Changes
+
+- Add keywords
+
 ## 0.1.0-alpha.31
 
 ### Minor Changes
