@@ -1,7 +1,9 @@
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
+import { loadEnvFile } from './utils/loadEnvFile';
 
 export const runInstallCommand = async () => {
+  loadEnvFile('../../supabase/.env');
   await logger.withSpinner('payload', 'Installing to Next.js...', async (spinner) => {
     try {
       await execAsync(`echo y | npx create-payload-app --db postgres --db-connection-string ${process.env.DB_URL}`);
