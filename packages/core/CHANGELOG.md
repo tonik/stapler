@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.16
+
+### Minor Changes
+
+- Fix local Payload instance
+
 ## 0.2.0-alpha.15
 
 ### Minor Changes

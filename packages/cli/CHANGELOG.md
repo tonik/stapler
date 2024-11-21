@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.33
+
+### Minor Changes
+
+- Fix local Payload instance
+
 ## 0.1.0-alpha.32
 
 ### Patch Changes
