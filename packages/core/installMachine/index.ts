@@ -18,6 +18,7 @@ import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
 import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
+import { modifyGitignore } from './installSteps/stapler/modifyGitignore';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -61,11 +62,25 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('initializeProject'),
-              target: 'installTailwind',
+              target: 'modifyGitignore',
             },
           ],
           invoke: {
             src: 'initializeProjectActor',
+            input: ({ context }) => context,
+            onDone: 'modifyGitignore',
+            onError: 'failed',
+          },
+        },
+        modifyGitignore: {
+          always: [
+            {
+              guard: isStepCompleted('modifyGitignore'),
+              target: 'installTailwind',
+            },
+          ],
+          invoke: {
+            src: 'modifyGitignoreActor',
             input: ({ context }) => context,
             onDone: 'installTailwind',
             onError: 'failed',
@@ -314,6 +329,18 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in initializeProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        modifyGitignoreActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await modifyGitignore('.staplerrc');
+              input.stateData.stepsCompleted.modifyGitignore = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in modifyGitignoreActor:', error);
               throw error;
             }
           }),

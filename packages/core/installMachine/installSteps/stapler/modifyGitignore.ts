@@ -7,7 +7,7 @@ const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
 export const modifyGitignore = async (entry: string) => {
-  await logger.withSpinner('stapler', `Adding ${entry} to .gitignore..`, async (spinner) => {
+  await logger.withSpinner('stapler', `Adding entries to .gitignore..`, async (spinner) => {
     const gitignorePath = path.join(process.cwd(), '.gitignore');
 
     try {
@@ -22,7 +22,7 @@ export const modifyGitignore = async (entry: string) => {
         // Write the updated .gitignore back to the file
         await writeFileAsync(gitignorePath, updatedData);
 
-        spinner.succeed(`${entry} added to .gitignore.`);
+        spinner.succeed(`File .gitignore updated.`);
       } else {
         spinner.info(`${entry} is already listed in .gitignore.`);
       }
