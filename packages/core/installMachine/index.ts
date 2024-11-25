@@ -422,7 +422,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createSupabaseProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await createSupabaseProject(input.stateData.options.name);
+              await createSupabaseProject(input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.createSupabaseProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -446,7 +446,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         linkVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await linkVercelProject();
+              await linkVercelProject(input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.linkVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -471,7 +471,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
               const currentDir = process.cwd();
-              await connectSupabaseProject(input.stateData.options.name, currentDir);
+              await connectSupabaseProject(input.stateData.githubCandidateName, currentDir);
               input.stateData.stepsCompleted.connectSupabaseProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
