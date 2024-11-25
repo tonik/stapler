@@ -10,45 +10,58 @@ export interface UnfinishedProject {
   state: StaplerState;
 }
 
-export const findUnfinishedProjects = (
-  dir: string,
-  depth: number = 0,
-  results: UnfinishedProject[] = [],
-): UnfinishedProject[] => {
-  if (depth > MAX_DEPTH) return results;
+const findStaplerConfigFiles = (dir: string, depth: number = 0): string[] => {
+  if (depth > MAX_DEPTH) return [];
 
   const files = fs.readdirSync(dir);
+  const configFiles: string[] = [];
 
   for (const file of files) {
     const fullPath = path.join(dir, file);
-
     try {
       const stat = fs.statSync(fullPath);
-
       if (stat.isDirectory()) {
-        // Recursively search subdirectories
-        findUnfinishedProjects(fullPath, depth + 1, results);
+        configFiles.push(...findStaplerConfigFiles(fullPath, depth + 1));
       } else if (file === '.staplerrc') {
-        // Found a .staplerrc file, check if the project is unfinished
-        const data = fs.readFileSync(fullPath, 'utf-8');
-        const state: StaplerState = JSON.parse(data);
-
-        if (isProjectUnfinished(state)) {
-          results.push({
-            projectName: state.projectName || path.basename(dir),
-            projectPath: dir,
-            state,
-          });
-        }
+        configFiles.push(fullPath);
       }
     } catch (error) {
       console.error(`Error accessing ${fullPath}:`, error);
     }
   }
 
-  return results;
+  return configFiles;
 };
 
-const isProjectUnfinished = (state: StaplerState): boolean => {
-  return Object.values(state.stepsCompleted).some((completed) => !completed);
+const readStaplerConfig = (filePath: string): StaplerState | null => {
+  try {
+    const data = fs.readFileSync(filePath, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(`Error reading ${filePath}:`, error);
+    return null;
+  }
+};
+
+const isProjectFinished = (state: StaplerState): boolean => {
+  return Object.values(state.stepsCompleted).every((completed) => completed);
+};
+
+export const findUnfinishedProjects = (dir: string): UnfinishedProject[] => {
+  const configFiles = findStaplerConfigFiles(dir);
+  const results: UnfinishedProject[] = [];
+
+  for (const filePath of configFiles) {
+    const state = readStaplerConfig(filePath);
+
+    if (state && !isProjectFinished(state)) {
+      results.push({
+        projectName: state.projectName || path.basename(path.dirname(filePath)),
+        projectPath: path.dirname(filePath),
+        state,
+      });
+    }
+  }
+
+  return results;
 };
