@@ -57,13 +57,13 @@ export const authenticateGitHub = async () => {
   });
 };
 
-export const fetchGitHubUsername = async (): Promise<string | null> => {
+export const fetchGitHubUsername = async (): Promise<string> => {
   try {
     const username = execSync('echo "$(gh api user --jq .login)"', { stdio: 'pipe' }).toString().trim();
-    return username || null;
+    return username;
   } catch (error) {
     console.error('Error fetching username:', error);
-    return null;
+    process.exit(1);
   }
 };
 
@@ -170,7 +170,6 @@ export const setupGitRepository = async () => {
 };
 
 export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
-
   await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
