@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.34
+
+### Minor Changes
+
+- Updated flow and UX
+
 ## 0.1.0-alpha.33
 
 ### Minor Changes

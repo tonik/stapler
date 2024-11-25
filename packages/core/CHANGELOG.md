@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.17
+
+### Minor Changes
+
+- Updated flow and UX
+
 ## 0.2.0-alpha.16
 
 ### Minor Changes
