@@ -38,7 +38,7 @@ const loginIfNeeded = async () => {
   });
 };
 
-export const linkVercelProject = async () => {
+export const linkVercelProject = async (projectName: string) => {
   let vercelUserName = await getUsername();
 
   if (!vercelUserName) {
@@ -48,7 +48,7 @@ export const linkVercelProject = async () => {
 
   await logger.withSpinner('vercel', 'Linking project...', async (spinner) => {
     try {
-      await execAsync('npx vercel link --yes');
+      await execAsync(`npx vercel link --yes --project ${projectName}`);
       spinner.succeed('Project linked successfully.');
     } catch (error) {
       spinner.fail('Failed to install.');
