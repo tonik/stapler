@@ -2,8 +2,9 @@ import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
 import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
+import { type InstallMachineContext } from '../../../types';
 
-export const deployVercelProject = async () => {
+export const deployVercelProject = async (stateData: InstallMachineContext['stateData']) => {
   await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
     try {
       // Execute 'vercel git connect' and capture the output
@@ -25,13 +26,9 @@ export const deployVercelProject = async () => {
 
   const shortestVercelAlias = await getShortestVercelAlias(productionUrl);
 
-  if (!productionUrl) {
-    logger.log('vercel', 'Failed to create production deployment.');
-    return;
-  }
+  if (!productionUrl) logger.log('vercel', 'Failed to create production deployment.');
 
-  if (shortestVercelAlias) {
-    logger.log('vercel', `You can access your production deployment at: \x1b[36m${shortestVercelAlias}\x1b[0m`);
-    return;
-  }
+  stateData.prettyDeploymentUrl = productionUrl;
+
+  if (shortestVercelAlias) stateData.prettyDeploymentUrl = shortestVercelAlias;
 };

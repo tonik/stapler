@@ -29,6 +29,7 @@ export interface StaplerState {
   options: ProjectOptions;
   githubCandidateName: string;
   selectedAccount: string;
+  prettyDeploymentUrl: string;
 }
 
 export interface InstallMachineContext {

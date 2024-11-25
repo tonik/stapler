@@ -483,7 +483,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await deployVercelProject();
+              await deployVercelProject(input.stateData);
               input.stateData.stepsCompleted.deployVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
@@ -495,8 +495,8 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prepareDrinkActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              const { projectName } = input.stateData;
-              prepareDrink(projectName);
+              const { projectName, prettyDeploymentUrl } = input.stateData;
+              prepareDrink(projectName, prettyDeploymentUrl);
               input.stateData.stepsCompleted.prepareDrink = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
