@@ -2,8 +2,8 @@ import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMa
 
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { prepareDrink } from './installSteps/bar/prepareDrink';
-import { createDocFiles } from './installSteps/docs/create';
+import { prepareDrink } from './installSteps/stapler/prepareDrink';
+import { createDocFiles } from './installSteps/stapler/createDocFiles';
 import { initializeRepository } from './installSteps/github/install';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { modifyHomepage } from './installSteps/homepage/install';
