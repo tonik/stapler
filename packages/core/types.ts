@@ -11,7 +11,6 @@ export interface StepsCompleted {
   installPayload: boolean;
   createDocFiles: boolean;
   prettifyCode: boolean;
-  prepareDrink: boolean;
   initializeRepository: boolean;
   pushToGitHub: boolean;
   createSupabaseProject: boolean;
@@ -20,6 +19,7 @@ export interface StepsCompleted {
   updateVercelProjectSettings: boolean;
   connectSupabaseProject: boolean;
   deployVercelProject: boolean;
+  prepareDrink: boolean;
 }
 
 export interface StaplerState {
