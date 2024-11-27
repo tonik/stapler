@@ -7,7 +7,7 @@
     "skipLibCheck": true,
     "declaration": true,
     "lib": ["ES2018"],
-    "types": ["vitest/globals"],
+    "types": [],
     "noImplicitAny": true
   },
   "exclude": ["node_modules", "dist"],
