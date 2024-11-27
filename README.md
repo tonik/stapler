@@ -53,6 +53,58 @@ stplr
 
 This will scaffold a new project in the directory you're currently in.
 
+### Testing
+
+Stapler uses **Vitest** for unit testing, providing a fast and efficient testing environment. The monorepo structure enables targeted testing for specific packages or the entire project.
+
+#### Running Tests
+
+1. To run all tests in the monorepo:
+
+```bash
+pnpm test
+```
+
+This runs all test files across the monorepo.
+
+2. To test the core package specifically:
+
+```bash
+pnpm test:core
+```
+
+This focuses testing on the core functionality of Stapler.
+
+3. To use the interactive Vitest UI:
+
+```bash
+pnpm test:ui
+```
+
+This opens a browser-based interface to monitor and debug your tests in real-time.
+
+#### To add unit tests for Stapler CLI or core packages:
+
+1. Create a `__tests__` directory within the relevant package (e.g., `packages/core/__tests__/`).
+
+2. Write your test files using a `.test.ts`` or `.spec.ts` extension.
+
+3. Use Vitest's utilities like `describe`, `it`, and `expect` for test cases.
+
+4. Example:
+
+```js
+import { describe, it, expect } from 'vitest';
+import { exampleFunction } from '../src/example';
+
+describe('exampleFunction', () => {
+  it('should return the correct value', () => {
+    const result = exampleFunction('input');
+    expect(result).toBe('expected output');
+  });
+});
+```
+
 ### Versioning
 
 We use [Changesets](https://github.com/changesets/changesets) for versioning.
