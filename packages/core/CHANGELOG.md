@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.18
+
+### Patch Changes
+
+- fix payload state logic
+
 ## 0.2.0-alpha.17
 
 ### Minor Changes
