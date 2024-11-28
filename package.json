@@ -8,13 +8,20 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "test": "vitest",
+    "test:core": "vitest packages/core",
+    "test:ui": "vitest --ui"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
+    "@types/node": "^22.5.4",
+    "@vitest/ui": "^2.1.5",
+    "memfs": "^4.14.0",
     "prettier": "^3.2.5",
     "turbo": "^2.1.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitest": "^2.1.5"
   },
   "packageManager": "pnpm@9.13.2+sha512.88c9c3864450350e65a33587ab801acf946d7c814ed1134da4a924f6df5a2120fd36b46aab68f7cd1d413149112d53c7db3a4136624cfd00ff1846a0c6cef48a",
   "engines": {
