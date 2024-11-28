@@ -117,7 +117,11 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installSupabase: {
           always: [
             {
-              guard: and([isStepCompleted('installSupabase'), 'shouldInstallPayload']),
+              guard: and([
+                isStepCompleted('installSupabase'),
+                not(isStepCompleted('installPayload')),
+                'shouldInstallPayload',
+              ]),
               target: 'installPayload',
             },
             {
@@ -128,7 +132,13 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           invoke: {
             input: ({ context }) => context,
             src: 'installSupabaseActor',
-            onDone: [{ guard: 'shouldInstallPayload', target: 'installPayload' }, { target: 'createDocFiles' }],
+            onDone: [
+              {
+                guard: and(['shouldInstallPayload', not(isStepCompleted('installPayload'))]),
+                target: 'installPayload',
+              },
+              { target: 'createDocFiles' },
+            ],
             onError: 'failed',
           },
         },
