@@ -87,7 +87,7 @@ This opens a browser-based interface to monitor and debug your tests in real-tim
 
 1. Create a `__tests__` directory within the relevant package (e.g., `packages/core/__tests__/`).
 
-2. Write your test files using a `.test.ts`` or `.spec.ts` extension.
+2. Write your test files using a `.test.ts` or `.spec.ts` extension.
 
 3. Use Vitest's utilities like `describe`, `it`, and `expect` for test cases.
 
