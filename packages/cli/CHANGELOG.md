@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.35
+
+### Patch Changes
+
+- fix payload state logic, introduced Vitest and unit tests
+
 ## 0.1.0-alpha.34
 
 ### Minor Changes
