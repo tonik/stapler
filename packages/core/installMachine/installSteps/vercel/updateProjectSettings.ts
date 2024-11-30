@@ -1,5 +1,5 @@
 import { logger } from '../../../utils/logger';
-import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
+import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 
 export const updateVercelProjectSettings = async () => {
@@ -11,8 +11,8 @@ export const updateVercelProjectSettings = async () => {
         process.exit(1);
       }
 
-      const projectId = await getProjectIdFromVercelConfig();
-      const response = await fetch(`https://api.vercel.com/v9/projects/${projectId}`, {
+      const { projectId, orgId } = await getDataFromVercelConfig();
+      const response = await fetch(`https://api.vercel.com/v9/projects/${projectId}?teamId=${orgId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
