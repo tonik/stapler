@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.21
+
+### Minor Changes
+
+- Fix tailwind config
+
 ## 0.2.0-alpha.20
 
 ### Patch Changes
