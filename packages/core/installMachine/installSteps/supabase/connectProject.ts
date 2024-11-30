@@ -4,7 +4,7 @@ import boxen from 'boxen';
 import { getSupabaseKeys, parseProjectsList } from './utils';
 import { logger } from '../../../utils/logger';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
-import { getProjectIdFromVercelConfig } from '../../../utils/getProjectIdFromVercelConfig';
+import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
 import { execAsync } from '../../../utils/execAsync';
 import { delay } from '../../../utils/delay';
 
@@ -89,18 +89,20 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     // Check Vercel integration
     await logger.withSpinner('vercel', 'Checking integration...', async (spinner) => {
       const token = await getVercelTokenFromAuthFile();
-      const vercelProjectId = await getProjectIdFromVercelConfig();
-
+      const { projectId: vercelProjectId, orgId: vercelTeamId } = await getDataFromVercelConfig();
       let attempts = 0;
       const maxAttempts = 30;
       const interval = 5000;
 
       while (attempts < maxAttempts) {
         try {
-          const response = await fetch(`https://api.vercel.com/v9/projects/${vercelProjectId}/env`, {
-            headers: { Authorization: `Bearer ${token}` },
-            method: 'get',
-          });
+          const response = await fetch(
+            `https://api.vercel.com/v9/projects/${vercelProjectId}/env?teamId=${vercelTeamId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              method: 'get',
+            },
+          );
 
           const envVarsSet = await response.json();
           const supabaseUrl = envVarsSet.envs.find((env: { key: string }) => env.key === 'SUPABASE_URL')?.value;
