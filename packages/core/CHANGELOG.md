@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.20
+
+### Patch Changes
+
+- Removed rc version of Next and fixed Tailwind
+
 ## 0.2.0-alpha.19
 
 ### Patch Changes

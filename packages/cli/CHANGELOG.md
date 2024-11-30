@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.37
+
+### Minor Changes
+
+- Removed rc version of Next and fixed Tailwind
+
 ## 0.1.0-alpha.36
 
 ### Minor Changes
