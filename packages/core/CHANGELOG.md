@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.19
+
+### Patch Changes
+
+- Fixed bugs and removed local database startup step
+
 ## 0.2.0-alpha.18
 
 ### Patch Changes

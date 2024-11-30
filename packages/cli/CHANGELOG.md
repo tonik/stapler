@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.36
+
+### Minor Changes
+
+- Fixed bugs and removed local database startup step
+
 ## 0.1.0-alpha.35
 
 ### Patch Changes
