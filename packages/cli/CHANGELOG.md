@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.39
+
+### Patch Changes
+
+- fix postcss config
+
 ## 0.1.0-alpha.38
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.22
+
+### Patch Changes
+
+- fix postcss config
+
 ## 0.2.0-alpha.21
 
 ### Minor Changes
