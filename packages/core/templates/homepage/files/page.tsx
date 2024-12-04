@@ -183,7 +183,7 @@ export default function Home() {
                 ></path>
               </svg>
             </div>
-            <div key={'vercel'} className="p-4 rounded-lg">
+            <div key={'vercel2'} className="p-4 rounded-lg">
               <svg
                 viewBox="0 0 512 140"
                 version="1.1"
@@ -210,7 +210,7 @@ export default function Home() {
                 </g>
               </svg>
             </div>
-            <div key={'vercel'} className="p-4 rounded-lg">
+            <div key={'vercel3'} className="p-4 rounded-lg">
               <svg xmlns="http://www.w3.org/2000/svg" width="120" height="25" viewBox="0 0 512 115">
                 <defs>
                   <linearGradient id="logosTurborepo0" x1="123.779%" x2="123.779%" y1="0%" y2="698.962%">
@@ -274,7 +274,7 @@ export default function Home() {
                 />
               </svg>
             </div>
-            <div key={'vercel'} className="p-4 rounded-lg">
+            <div key={'vercel4'} className="p-4 rounded-lg">
               <svg width="130" height="28" viewBox="0 0 581 113" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M151.397 66.7608C151.996 72.3621 157.091 81.9642 171.877 81.9642C184.764 81.9642 190.959 73.7624 190.959 65.7607C190.959 58.559 186.063 52.6577 176.373 50.6571L169.379 49.1569C166.682 48.6568 164.884 47.1565 164.884 44.7559C164.884 41.9552 167.681 39.8549 171.178 39.8549C176.772 39.8549 178.87 43.5556 179.27 46.4564L190.359 43.9558C189.76 38.6546 185.064 29.7527 171.078 29.7527C160.488 29.7527 152.696 37.0543 152.696 45.8561C152.696 52.7576 156.991 58.4591 166.482 60.5594L172.976 62.0598C176.772 62.8599 178.271 64.6605 178.271 66.8609C178.271 69.4615 176.173 71.762 171.777 71.762C165.983 71.762 163.085 68.1611 162.786 64.2602L151.397 66.7608Z"
