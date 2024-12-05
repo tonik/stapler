@@ -1,6 +1,6 @@
 {
   "name": "stplr",
-  "version": "0.1.0-alpha.39",
+  "version": "0.1.0-alpha.40",
   "main": "./dist/index.mjs",
   "bin": {
     "stplr": "./dist/index.mjs"

@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.23
+
+### Patch Changes
+
+- Fix interactive auth processes hanging
+
 ## 0.2.0-alpha.22
 
 ### Patch Changes
