@@ -40,7 +40,11 @@ export const isGitHubAuthenticated = (): boolean => {
 export const authenticateGitHub = async () => {
   await logger.withSpinner('github', 'Attempting to authenticate...', async (spinner) => {
     try {
+      spinner.stop();
+
       execSync('gh auth login', { stdio: 'inherit' });
+
+      spinner.start('Authenticating...');
       const isAuthenticated = isGitHubAuthenticated();
       if (isAuthenticated) {
         spinner.succeed('Authentication successful.');

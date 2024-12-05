@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.40
+
+### Patch Changes
+
+- Fix interactive auth processes hanging
+
 ## 0.1.0-alpha.39
 
 ### Patch Changes
