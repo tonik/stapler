@@ -2,23 +2,29 @@ import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMa
 
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { prepareDrink } from './installSteps/stapler/prepareDrink';
-import { createDocFiles } from './installSteps/stapler/createDocFiles';
+import { checkGitHubCLI } from './installSteps/github/checkGitHubCLI';
+import { ensureGitHubAuthentication } from './installSteps/github/ensureGitHubAuthentication';
 import { initializeRepository } from './installSteps/github/install';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { modifyHomepage } from './installSteps/homepage/install';
 import { preparePayload } from './installSteps/payload/install';
 import { prettify } from './installSteps/prettier/prettify';
+import { createDocFiles } from './installSteps/stapler/createDocFiles';
+import { modifyGitignore } from './installSteps/stapler/modifyGitignore';
+import { prepareDrink } from './installSteps/stapler/prepareDrink';
+import { checkSupabaseCLI } from './installSteps/supabase/checkSupabaseCLI';
 import { connectSupabaseProject } from './installSteps/supabase/connectProject';
 import { createSupabaseProject } from './installSteps/supabase/createProject';
+import { ensureSupabaseAuthentication } from './installSteps/supabase/ensureSupabaseAuthentication';
 import { installSupabase } from './installSteps/supabase/install';
 import { installTailwind } from './installSteps/tailwind/install';
 import { createTurboRepo } from './installSteps/turbo/create';
+import { checkVercelCLI } from './installSteps/vercel/checkVercelCLI';
+import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
 import { deployVercelProject } from './installSteps/vercel/deploy';
+import { ensureVercelAuthentication } from './installSteps/vercel/ensureVercelAuthentication';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
-import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
-import { modifyGitignore } from './installSteps/stapler/modifyGitignore';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -62,11 +68,39 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('initializeProject'),
-              target: 'modifyGitignore',
+              target: 'installServices',
             },
           ],
           invoke: {
             src: 'initializeProjectActor',
+            input: ({ context }) => context,
+            onDone: 'installServices',
+            onError: 'failed',
+          },
+        },
+        installServices: {
+          always: [
+            {
+              guard: isStepCompleted('installServices'),
+              target: 'isUserSignedIn',
+            },
+          ],
+          invoke: {
+            src: 'installServicesActor',
+            input: ({ context }) => context,
+            onDone: 'isUserSignedIn',
+            onError: 'failed',
+          },
+        },
+        isUserSignedIn: {
+          always: [
+            {
+              guard: isStepCompleted('isUserSignedIn'),
+              target: 'modifyGitignore',
+            },
+          ],
+          invoke: {
+            src: 'isUserSignedInActor',
             input: ({ context }) => context,
             onDone: 'modifyGitignore',
             onError: 'failed',
@@ -339,6 +373,35 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in initializeProjectActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        installServicesActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await checkGitHubCLI();
+              await checkSupabaseCLI();
+              await checkVercelCLI();
+
+              input.stateData.stepsCompleted.installServices = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in installServicesActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        isUserSignedInActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              await ensureGitHubAuthentication();
+              await ensureSupabaseAuthentication();
+              await ensureVercelAuthentication();
+              input.stateData.stepsCompleted.isUserSignedIn = true;
+              saveStateToRcFile(input.stateData, input.projectDir);
+            } catch (error) {
+              console.error('Error in isUserSignedInActor:', error);
               throw error;
             }
           }),

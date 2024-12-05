@@ -1,11 +1,9 @@
-import { loginToSupabase } from './loginToSupabase';
-import { initializeSupabaseProject } from './initializeSupabaseProject';
 import { addTemplateFiles } from './addTemplateFiles';
-import { installDependencies } from './installDependencies';
 import { createEnvFile } from './createEnvFile';
+import { initializeSupabaseProject } from './initializeSupabaseProject';
+import { installDependencies } from './installDependencies';
 
 export const installSupabase = async (destinationDirectory: string) => {
-  await loginToSupabase();
   await initializeSupabaseProject();
   await addTemplateFiles(destinationDirectory);
 

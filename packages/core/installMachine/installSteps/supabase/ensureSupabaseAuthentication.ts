@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
 import { logger } from '../../../utils/logger';
 
-export const loginToSupabase = async () => {
+export const ensureSupabaseAuthentication = async () => {
   await logger.withSpinner('supabase', 'Logging in...', async (spinner) => {
     try {
       await execAsync('npx supabase projects list');

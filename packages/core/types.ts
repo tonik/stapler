@@ -5,6 +5,8 @@ export interface ProjectOptions {
 
 export interface StepsCompleted {
   initializeProject: boolean;
+  installServices: boolean;
+  isUserSignedIn: boolean;
   modifyGitignore: boolean;
   installTailwind: boolean;
   modifyHomepage: boolean;

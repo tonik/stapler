@@ -1,10 +1,10 @@
 import { logger } from '../../../utils/logger';
-import { isGitHubAuthenticated, authenticateGitHub } from './repositoryManager';
+import { authenticateGitHub, isGitHubAuthenticated } from './repositoryManager';
 
 export const ensureGitHubAuthentication = async () => {
   await logger.withSpinner('github', 'Checking authentication status...', async (spinner) => {
     if (isGitHubAuthenticated()) {
-      spinner.succeed('You are already logged in.');
+      spinner.succeed('Already logged in.');
       return; // Exit early if authenticated
     }
 
