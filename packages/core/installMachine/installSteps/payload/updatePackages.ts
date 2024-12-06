@@ -2,12 +2,12 @@ import { logger } from '../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
 
 export const updatePackages = async () => {
-  await logger.withSpinner('payload', `Updating React to it's respective release candidate...`, async (spinner) => {
+  await logger.withSpinner('payload', `Updating React to version 19...`, async (spinner) => {
     try {
-      await execAsync(`pnpm up react@rc react-dom@rc eslint-config-next@rc --reporter silent`);
-      spinner.succeed(`Updated React to it's respective release candidate.`);
+      await execAsync(`pnpm up react@19 react-dom@19 --reporter silent`);
+      spinner.succeed(`Updated React to version 19.`);
     } catch (error) {
-      spinner.fail(`Failed to update React to it's respective release candidate.`);
+      spinner.fail(`Failed to update React to version 19.`);
       console.error(error);
     }
   });
