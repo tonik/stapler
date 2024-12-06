@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { logger } from 'stplr-utils';
@@ -40,17 +40,26 @@ export const isGitHubAuthenticated = (): boolean => {
 export const authenticateGitHub = async () => {
   await logger.withSpinner('github', 'Attempting to authenticate...', async (spinner) => {
     try {
-      spinner.stop();
-
-      execSync('gh auth login', { stdio: 'inherit' });
-
       spinner.start('Authenticating...');
       const isAuthenticated = isGitHubAuthenticated();
+
       if (isAuthenticated) {
         spinner.succeed('Logged in');
         return true;
-      } else {
-        spinner.fail('Authentication failed.');
+      }
+
+      spinner.stop();
+
+      try {
+        const result = spawnSync('gh', ['auth', 'login'], {
+          stdio: 'inherit',
+          shell: true,
+        });
+        spinner.succeed('Logged in');
+        return true;
+      } catch (error) {
+        spinner.fail('Logging in failed.');
+        console.error('Logging in failed:', error);
         return false;
       }
     } catch (error) {
