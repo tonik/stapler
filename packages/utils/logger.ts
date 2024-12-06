@@ -25,7 +25,7 @@ const names: NameProps[] = [
   {
     name: 'stapler',
     prefix: 'Stapler',
-    colors: ['#FAFAFA', '#FAFAFA'],
+    colors: ['#FAD400', '#FAD400'],
   },
   {
     name: 'turborepo',

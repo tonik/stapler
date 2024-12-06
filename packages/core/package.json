@@ -13,10 +13,10 @@
     "fs-extra": "^11.2.0",
     "gradient-string": "^3.0.0",
     "inquirer": "^10.2.2",
-    "ora": "^8.1.1",
     "xstate": "^5.18.2"
   },
   "devDependencies": {
+    "stplr-utils": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.5.4",
     "tsup": "^8.3.0",
