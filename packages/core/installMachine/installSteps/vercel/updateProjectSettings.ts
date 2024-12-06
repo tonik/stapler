@@ -1,4 +1,4 @@
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 

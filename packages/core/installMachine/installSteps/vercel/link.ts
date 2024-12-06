@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 export const linkVercelProject = async (projectName: string) => {
   await logger.withSpinner('vercel', 'Linking project...', async (spinner) => {

@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 const isVercelCLIInstalled = async (): Promise<boolean> => {
   try {
@@ -33,9 +33,9 @@ export const checkVercelCLI = async () => {
         console.error('Vercel CLI installation failed. Exiting...');
         process.exit(1);
       }
-      spinner.succeed('Vercel CLI installed successfully.');
+      spinner.succeed('CLI: Ready');
     } else {
-      spinner.succeed('Vercel CLI is already installed.');
+      spinner.succeed('CLI: Ready');
     }
   });
 };

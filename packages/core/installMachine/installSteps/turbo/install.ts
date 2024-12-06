@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 const checkPnpmVersion = async () => {
   await logger.withSpinner('turborepo', 'Checking pnpm version...', async (spinner) => {
@@ -14,13 +14,13 @@ const checkPnpmVersion = async () => {
   });
 };
 
-export const createTurboRepo = async (name: string) => {
+export const createTurbo = async (name: string) => {
   await logger.withSpinner('turborepo', 'Initializing...', async (spinner) => {
     try {
       // Check the pnpm version
       await checkPnpmVersion();
       // Run the command to create a turbo repo
-      await execAsync(`npx create-turbo@latest ${name} -m pnpm`);
+      await execAsync(`npx create-turbo ${name} -m pnpm`);
       spinner.succeed('Initialized.');
     } catch (error) {
       spinner.fail('Failed to initialize.');

@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 export const fetchOrganizations = async (): Promise<{ name: string; writable: boolean }[]> => {
   return await logger.withSpinner('github', 'Fetching organizations you belong to...', async (spinner) => {

@@ -4,8 +4,10 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import gradient from 'gradient-string';
 import inquirer from 'inquirer';
-import { findUnfinishedProjects, UnfinishedProject } from './utils/findUnfinishedProjects';
 import { createProject } from 'stplr-core';
+import { checkAuthentication } from './utils/checkAuthentication';
+import { checkTools } from './utils/checkTools';
+import { findUnfinishedProjects, UnfinishedProject } from './utils/findUnfinishedProjects';
 
 const asciiArt = `
 .&&&%                                                         &&&&                                    
@@ -145,6 +147,9 @@ const createAction = async (options: Flags) => {
         ]);
 
     const finalOptions = { name: projectName, ...payloadAnswer };
+
+    await checkAuthentication();
+    await checkTools();
 
     await createProject(finalOptions, projectDir).catch((error) => {
       console.error(chalk.red('Error creating project:', error));

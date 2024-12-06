@@ -1,7 +1,7 @@
 import { homepageFiles } from '../../../templates/homepage/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 export const modifyHomepage = async (destinationDirectory: string) => {
   await logger.withSpinner('tailwind', 'Setting up your welcome homepage...', async (spinner) => {

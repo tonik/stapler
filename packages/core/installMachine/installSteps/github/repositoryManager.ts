@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { execAsync } from '../../../utils/execAsync';
 import { InstallMachineContext } from '../../../types';
 import { fetchOrganizations } from './fetchOrganizations';
@@ -47,7 +47,7 @@ export const authenticateGitHub = async () => {
       spinner.start('Authenticating...');
       const isAuthenticated = isGitHubAuthenticated();
       if (isAuthenticated) {
-        spinner.succeed('Authentication successful.');
+        spinner.succeed('Logged in');
         return true;
       } else {
         spinner.fail('Authentication failed.');

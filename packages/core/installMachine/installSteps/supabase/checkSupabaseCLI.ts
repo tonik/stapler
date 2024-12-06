@@ -1,6 +1,6 @@
 import * as os from 'os';
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 const isSupabaseCLIInstalled = async (): Promise<boolean> => {
   try {
@@ -56,9 +56,9 @@ export const checkSupabaseCLI = async () => {
         console.error('Supabase CLI installation failed. Exiting...');
         process.exit(1);
       }
-      spinner.succeed('Supabase CLI installed successfully.');
+      spinner.succeed('CLI: Ready');
     } else {
-      spinner.succeed('Supabase CLI is already installed.');
+      spinner.succeed('CLI: Ready');
     }
   });
 };

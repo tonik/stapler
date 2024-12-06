@@ -2,8 +2,6 @@ import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMa
 
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { checkGitHubCLI } from './installSteps/github/checkGitHubCLI';
-import { ensureGitHubAuthentication } from './installSteps/github/ensureGitHubAuthentication';
 import { initializeRepository } from './installSteps/github/install';
 import { pushToGitHub } from './installSteps/github/repositoryManager';
 import { modifyHomepage } from './installSteps/homepage/install';
@@ -12,17 +10,13 @@ import { prettify } from './installSteps/prettier/prettify';
 import { createDocFiles } from './installSteps/stapler/createDocFiles';
 import { modifyGitignore } from './installSteps/stapler/modifyGitignore';
 import { prepareDrink } from './installSteps/stapler/prepareDrink';
-import { checkSupabaseCLI } from './installSteps/supabase/checkSupabaseCLI';
 import { connectSupabaseProject } from './installSteps/supabase/connectProject';
 import { createSupabaseProject } from './installSteps/supabase/createProject';
-import { ensureSupabaseAuthentication } from './installSteps/supabase/ensureSupabaseAuthentication';
 import { installSupabase } from './installSteps/supabase/install';
 import { installTailwind } from './installSteps/tailwind/install';
-import { createTurboRepo } from './installSteps/turbo/create';
-import { checkVercelCLI } from './installSteps/vercel/checkVercelCLI';
+import { createTurbo } from './installSteps/turbo/install';
 import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
 import { deployVercelProject } from './installSteps/vercel/deploy';
-import { ensureVercelAuthentication } from './installSteps/vercel/ensureVercelAuthentication';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
 
@@ -61,46 +55,18 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
   const installMachine = createMachine(
     {
       id: 'installProcess',
-      initial: 'initializeProject',
+      initial: 'createTurbo',
       context: initialContext,
       states: {
-        initializeProject: {
+        createTurbo: {
           always: [
             {
-              guard: isStepCompleted('initializeProject'),
-              target: 'installServices',
-            },
-          ],
-          invoke: {
-            src: 'initializeProjectActor',
-            input: ({ context }) => context,
-            onDone: 'installServices',
-            onError: 'failed',
-          },
-        },
-        installServices: {
-          always: [
-            {
-              guard: isStepCompleted('installServices'),
-              target: 'isUserSignedIn',
-            },
-          ],
-          invoke: {
-            src: 'installServicesActor',
-            input: ({ context }) => context,
-            onDone: 'isUserSignedIn',
-            onError: 'failed',
-          },
-        },
-        isUserSignedIn: {
-          always: [
-            {
-              guard: isStepCompleted('isUserSignedIn'),
+              guard: isStepCompleted('createTurbo'),
               target: 'modifyGitignore',
             },
           ],
           invoke: {
-            src: 'isUserSignedInActor',
+            src: 'createTurboActor',
             input: ({ context }) => context,
             onDone: 'modifyGitignore',
             onError: 'failed',
@@ -363,45 +329,15 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         },
       },
       actors: {
-        initializeProjectActor: createStepMachine(
+        createTurboActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              const { name } = input.stateData.options;
-              await createTurboRepo(name);
-              process.chdir(name);
-              input.stateData.stepsCompleted.initializeProject = true;
+              await createTurbo(input.stateData.options.name);
+              process.chdir(input.projectDir);
+              input.stateData.stepsCompleted.createTurbo = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
-              console.error('Error in initializeProjectActor:', error);
-              throw error;
-            }
-          }),
-        ),
-        installServicesActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              await checkGitHubCLI();
-              await checkSupabaseCLI();
-              await checkVercelCLI();
-
-              input.stateData.stepsCompleted.installServices = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in installServicesActor:', error);
-              throw error;
-            }
-          }),
-        ),
-        isUserSignedInActor: createStepMachine(
-          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
-            try {
-              await ensureGitHubAuthentication();
-              await ensureSupabaseAuthentication();
-              await ensureVercelAuthentication();
-              input.stateData.stepsCompleted.isUserSignedIn = true;
-              saveStateToRcFile(input.stateData, input.projectDir);
-            } catch (error) {
-              console.error('Error in isUserSignedInActor:', error);
+              console.error('Error in createTurboActor:', error);
               throw error;
             }
           }),
@@ -409,7 +345,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         modifyGitignoreActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              await modifyGitignore('.staplerrc');
+              await modifyGitignore('.initializeRcFile');
               input.stateData.stepsCompleted.modifyGitignore = true;
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {

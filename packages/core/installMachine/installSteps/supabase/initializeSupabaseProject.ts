@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 
 export const initializeSupabaseProject = async () => {
   await logger.withSpinner('supabase', 'Initializing project...', async (spinner) => {

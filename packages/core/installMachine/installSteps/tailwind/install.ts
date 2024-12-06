@@ -3,7 +3,7 @@ import path from 'path';
 import { tailwindFiles } from '../../../templates/tailwind/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
-import { logger } from '../../../utils/logger';
+import { logger } from '../../../../utils/logger';
 import { execAsync } from '../../../utils/execAsync';
 
 const copyTailwindFiles = (currentDir: string) => {
