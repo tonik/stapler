@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.24
+
+### Patch Changes
+
+- Moved all checks before installation steps
+
 ## 0.2.0-alpha.23
 
 ### Patch Changes

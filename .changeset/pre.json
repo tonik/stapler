@@ -3,7 +3,8 @@
   "tag": "alpha",
   "initialVersions": {
     "stplr": "0.1.0-alpha.1",
-    "stplr-core": "0.1.0"
+    "stplr-core": "0.1.0",
+    "stplr-utils": "0.0.0"
   },
   "changesets": [
     "angry-hats-reflect",
@@ -42,6 +43,7 @@
     "small-ghosts-listen",
     "tall-games-compete",
     "ten-swans-ring",
+    "tender-gorillas-relax",
     "thirty-clocks-move",
     "tough-jobs-switch",
     "violet-needles-perform",

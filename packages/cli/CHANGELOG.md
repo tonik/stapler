@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.42
+
+### Minor Changes
+
+- Moved all checks before installation steps
+
 ## 0.1.0-alpha.41
 
 ### Patch Changes
