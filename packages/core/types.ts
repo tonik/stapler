@@ -4,7 +4,7 @@ export interface ProjectOptions {
 }
 
 export interface StepsCompleted {
-  initializeProject: boolean;
+  createTurbo: boolean;
   modifyGitignore: boolean;
   installTailwind: boolean;
   modifyHomepage: boolean;

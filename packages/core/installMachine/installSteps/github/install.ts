@@ -1,7 +1,5 @@
-import { checkGitHubCLI } from './checkGitHubCLI';
-import { ensureGitHubAuthentication } from './ensureGitHubAuthentication';
-import { createGitHubRepository, fetchGitHubUsername, setupGitRepository } from './repositoryManager';
 import { InstallMachineContext } from '../../../types';
+import { createGitHubRepository, fetchGitHubUsername, setupGitRepository } from './repositoryManager';
 
 interface ProjectRepositoryOptions {
   projectName: string;
@@ -10,9 +8,6 @@ interface ProjectRepositoryOptions {
 
 export const initializeRepository = async (options: ProjectRepositoryOptions) => {
   const { projectName, stateData } = options;
-
-  await checkGitHubCLI();
-  await ensureGitHubAuthentication();
 
   const username = await fetchGitHubUsername();
 

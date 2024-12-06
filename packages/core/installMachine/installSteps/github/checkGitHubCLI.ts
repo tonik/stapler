@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { isGitHubCLIInstalled, installGitHubCLI } from './ghInstaller';
 
 export const checkGitHubCLI = async () => {
@@ -22,14 +22,14 @@ export const checkGitHubCLI = async () => {
           console.error('GitHub CLI installation failed. Exiting...');
           process.exit(1);
         }
-        spinner.succeed('GitHub CLI installed successfully.');
+        spinner.succeed('CLI: Ready');
       } else {
         spinner.fail('GitHub CLI is not installed. Please install GitHub CLI and try again.');
         console.error('GitHub CLI is not installed. Please install GitHub CLI and try again.');
         process.exit(1);
       }
     } else {
-      spinner.succeed('GitHub CLI is already installed.');
+      spinner.succeed('CLI: Ready');
     }
   });
 };

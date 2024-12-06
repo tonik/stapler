@@ -1,4 +1,4 @@
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { execAsync } from '../../../utils/execAsync';
 
 export const updatePackages = async () => {

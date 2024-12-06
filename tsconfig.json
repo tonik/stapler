@@ -11,5 +11,5 @@
     "noImplicitAny": true
   },
   "exclude": ["node_modules", "dist"],
-  "references": [{ "path": "./packages/cli" }, { "path": "./packages/core" }]
+  "references": [{ "path": "./packages/cli" }, { "path": "./packages/core" }, { "path": "./packages/utils" }]
 }

@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { loadEnvFile } from './utils/loadEnvFile';
 
 export const runInstallCommand = async () => {

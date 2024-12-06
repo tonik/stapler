@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const prettify = async () => {
   await logger.withSpinner('prettier', 'Prettifying...', async (spinner) => {

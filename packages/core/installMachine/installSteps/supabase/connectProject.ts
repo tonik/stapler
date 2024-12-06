@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import chalk from 'chalk';
 import boxen from 'boxen';
 import { getSupabaseKeys, parseProjectsList } from './utils';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
 import { execAsync } from '../../../utils/execAsync';

@@ -1,6 +1,6 @@
 import { docFiles } from '../../../templates/docs/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 
 export const createDocFiles = async () => {

@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const createSupabaseProject = async (name: string) => {
   logger.log('supabase', 'Creating Supabase project...');

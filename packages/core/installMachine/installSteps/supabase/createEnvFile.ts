@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { logger } from '../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const createEnvFile = async () => {
   await logger.withSpinner('supabase', 'Writing local variables to .env file...', async (spinner) => {

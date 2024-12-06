@@ -15,7 +15,7 @@ export const initializeRcFile = (projectDir: string, name: string, usePayload: b
       version: 1,
       projectName: name,
       stepsCompleted: {
-        initializeProject: false,
+        createTurbo: false,
         modifyGitignore: false,
         installTailwind: false,
         modifyHomepage: false,
