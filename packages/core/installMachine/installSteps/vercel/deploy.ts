@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
 import { type InstallMachineContext } from '../../../types';
 

@@ -1,5 +1,5 @@
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 const isVercelCLIInstalled = async (): Promise<boolean> => {
   try {

@@ -3,7 +3,7 @@ import path from 'path';
 import { supabaseFiles } from '../../../templates/supabase/installConfig';
 import { templateGenerator } from '../../../utils/generator/generator';
 import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const addTemplateFiles = async (destinationDirectory: string) => {
   await logger.withSpinner('supabase', 'Adding files from template...', async (spinner) => {

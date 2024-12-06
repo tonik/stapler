@@ -1,5 +1,5 @@
 import { execSync } from 'child_process';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const authenticateVercel = async () => {
   await logger.withSpinner('vercel', 'Logging in to Vercel...', async (spinner) => {

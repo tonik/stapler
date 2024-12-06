@@ -1,6 +1,6 @@
 import * as os from 'os';
 import { execAsync } from '../../../utils/execAsync';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 const isSupabaseCLIInstalled = async (): Promise<boolean> => {
   try {

@@ -1,4 +1,4 @@
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { authenticateGitHub, isGitHubAuthenticated } from './repositoryManager';
 
 export const ensureGitHubAuthentication = async () => {

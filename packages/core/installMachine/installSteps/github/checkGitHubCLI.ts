@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { isGitHubCLIInstalled, installGitHubCLI } from './ghInstaller';
 
 export const checkGitHubCLI = async () => {

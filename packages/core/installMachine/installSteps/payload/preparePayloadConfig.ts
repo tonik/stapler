@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import fs from 'fs/promises';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 import { join } from 'path';
 
 export const preparePayloadConfig = async () => {

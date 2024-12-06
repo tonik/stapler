@@ -1,7 +1,7 @@
 import * as os from 'os';
 import { execAsync } from '../../../utils/execAsync';
 import { getLinuxDistro } from '../../../utils/getLinuxDistro';
-import { logger } from '../../../../utils/logger';
+import { logger } from 'stplr-utils';
 
 export const isGitHubCLIInstalled = async (): Promise<boolean> => {
   try {
