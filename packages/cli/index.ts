@@ -42,22 +42,29 @@ program
   .hook('preAction', () => {
     displayHeader();
   })
+  .option(
+    '-l, --local',
+    'Setup project locally without creating github repository, supabase project and vercel deployment',
+  )
   .option('-n, --name <name>', 'Set the name of the project')
-  .option('--skip-payload', 'Skip adding Payload to the app')
-  .option('--resume', 'Resume an unfinished project');
+  .option('--skip-payload', 'Skip adding Payload to the app');
+
+program.parse(process.argv);
 
 interface Flags {
+  local?: boolean;
   name?: string;
   skipPayload?: boolean;
 }
 
 const createAction = async (options: Flags) => {
+  const shouldDeploy = !options.local;
   const currentDir = process.cwd();
   const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
   let proceedWithNewProject = true;
   let selectedProject: UnfinishedProject | null = null;
 
-  if (unfinishedProjects.length > 0) {
+  if (!options.name && unfinishedProjects.length > 0) {
     const projectChoices = unfinishedProjects.map((proj) => ({
       name: proj.projectName,
       value: proj,
@@ -99,6 +106,9 @@ const createAction = async (options: Flags) => {
     });
   } else {
     // Create new project
+    options.name &&
+      console.log('You have provided a project name of:', chalk.yellow(options.name), "let's continue...");
+
     const projectName =
       options.name ||
       (
@@ -146,10 +156,12 @@ const createAction = async (options: Flags) => {
           },
         ]);
 
-    const finalOptions = { name: projectName, ...payloadAnswer };
+    const finalOptions = { name: projectName, shouldDeploy: !options.local, ...payloadAnswer };
 
-    await checkAuthentication();
-    await checkTools();
+    if (shouldDeploy) {
+      await checkAuthentication();
+      await checkTools();
+    }
 
     await createProject(finalOptions, projectDir).catch((error) => {
       console.error(chalk.red('Error creating project:', error));
@@ -162,8 +174,6 @@ program
   .description(
     'CLI tool to bootstrap an app with a variety of integrated steps. This tool guides you through the entire process of initializing, configuring, and deploying a new project.',
   )
-  .option('-n, --name <name>', 'Set the name of the project')
-  .option('--skip-payload', 'Skip adding Payload to the app')
-  .action(createAction);
+  .action(() => createAction(program.opts()));
 
 program.parse();

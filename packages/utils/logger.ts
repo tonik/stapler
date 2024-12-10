@@ -10,6 +10,7 @@ type Name =
   | 'payload'
   | 'github'
   | 'prettier'
+  | 'deployment'
   | 'vercel'
   | 'docker'
   | 'postgres'

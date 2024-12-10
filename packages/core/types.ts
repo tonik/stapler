@@ -1,6 +1,7 @@
 export interface ProjectOptions {
   name: string;
   usePayload: boolean;
+  shouldDeploy: boolean;
 }
 
 export interface StepsCompleted {
