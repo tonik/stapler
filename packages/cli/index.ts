@@ -101,6 +101,12 @@ const createAction = async (options: Flags) => {
   if (!proceedWithNewProject && selectedProject) {
     process.chdir(selectedProject.projectPath);
     selectedProject.state.options.name = selectedProject.projectName;
+
+    if (shouldDeploy) {
+      await checkAuthentication();
+      await checkTools();
+    }
+
     await createProject(selectedProject.state.options, selectedProject.projectPath).catch((error) => {
       console.error('Error resuming project:', error);
     });
@@ -157,7 +163,6 @@ const createAction = async (options: Flags) => {
         ]);
 
     const finalOptions = { name: projectName, shouldDeploy: !options.local, ...payloadAnswer };
-
     if (shouldDeploy) {
       await checkAuthentication();
       await checkTools();

@@ -19,6 +19,7 @@ import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
 import { deployVercelProject } from './installSteps/vercel/deploy';
 import { linkVercelProject } from './installSteps/vercel/link';
 import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
+import { shouldDeploy } from './installSteps/shouldDeploy/shouldDeploy';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -174,13 +175,35 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           always: [
             {
               guard: isStepCompleted('prettifyCode'),
-              target: 'initializeRepository',
+              target: 'shouldDeploy',
             },
           ],
           invoke: {
             input: ({ context }) => context,
             src: 'prettifyCodeActor',
-            onDone: 'initializeRepository',
+            onDone: 'shouldDeploy',
+            onError: 'failed',
+          },
+        },
+        shouldDeploy: {
+          always: [
+            {
+              guard: 'shouldDeploy',
+              target: 'initializeRepository',
+            },
+          ],
+          invoke: {
+            input: ({ context }) => context,
+            src: 'shouldDeployActor',
+            onDone: [
+              {
+                guard: 'shouldDeploy',
+                target: 'initializeRepository',
+              },
+              {
+                target: 'prepareDrink',
+              },
+            ],
             onError: 'failed',
           },
         },
@@ -327,6 +350,9 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         shouldInstallPayload: ({ context }) => {
           return context.stateData.options.usePayload;
         },
+        shouldDeploy: ({ context }) => {
+          return context.stateData.options.shouldDeploy;
+        },
       },
       actors: {
         createTurboActor: createStepMachine(
@@ -424,6 +450,17 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in prettifyCodeActor:', error);
+              throw error;
+            }
+          }),
+        ),
+        shouldDeployActor: createStepMachine(
+          fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
+            try {
+              const shouldContinue = await shouldDeploy(input.stateData.options.shouldDeploy);
+              input.stateData.options.shouldDeploy = shouldContinue;
+            } catch (error) {
+              console.error('Error in shouldDeployActor:', error);
               throw error;
             }
           }),

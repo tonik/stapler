@@ -1,13 +1,10 @@
 import inquirer from 'inquirer';
 import { logger } from 'stplr-utils';
 
-export const shouldDeploy = async (shouldContinue: boolean) => {
-  await logger.withSpinner('deployment', 'Deciding deployment...', async (spinner) => {
-    if (!shouldContinue) {
-      spinner.succeed('Local installation completed.');
-      return false;
-    }
+export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
+  return await logger.withSpinner('deployment', 'Deciding deployment...', async (spinner) => {
     try {
+      spinner.stop();
       const answers = (await inquirer.prompt([
         {
           type: 'confirm',
@@ -17,12 +14,14 @@ export const shouldDeploy = async (shouldContinue: boolean) => {
           default: true,
         },
       ])) as { continue: boolean };
+      spinner.start();
       spinner.succeed("Let's continue with remote setup.");
 
       return answers.continue;
     } catch (error) {
-      spinner.fail('Prettifying failed');
-      console.error('Error during prettifying:', error);
+      spinner.fail('Local deployment failed');
+      console.error('Error during local deployment:', error);
+      return false;
     }
   });
 };
