@@ -61,8 +61,8 @@ const createAction = async (options: Flags) => {
   const shouldDeploy = !options.local;
   const currentDir = process.cwd();
   const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
-  let proceedWithNewProject = true;
   let selectedProject: UnfinishedProject | null = null;
+  let proceedWithNewProject = true;
 
   if (!options.name && unfinishedProjects.length > 0) {
     const projectChoices = unfinishedProjects.map((proj) => ({

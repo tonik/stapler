@@ -59,6 +59,11 @@ const names: NameProps[] = [
     colors: ['#F11D28', '#FFA12C'],
   },
   {
+    name: 'deployment',
+    prefix: 'Deployment',
+    colors: ['#c83488', '#FAD400'],
+  },
+  {
     name: 'vercel',
     prefix: 'Vercel',
     colors: ['#FFF', '#FFF'],

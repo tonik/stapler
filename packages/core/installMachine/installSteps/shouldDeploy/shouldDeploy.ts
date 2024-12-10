@@ -2,7 +2,12 @@ import inquirer from 'inquirer';
 import { logger } from 'stplr-utils';
 
 export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
-  return await logger.withSpinner('deployment', 'Deciding deployment...', async (spinner) => {
+  return await logger.withSpinner('deployment', 'Deciding next steps...', async (spinner) => {
+    if (!shouldContinue) {
+      spinner.succeed('Local deployment completed');
+      return false;
+    }
+
     try {
       spinner.stop();
       const answers = (await inquirer.prompt([
@@ -15,7 +20,8 @@ export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> =>
         },
       ])) as { continue: boolean };
       spinner.start();
-      spinner.succeed("Let's continue with remote setup.");
+      const spinnerMessage = answers.continue ? 'Continuing with remote setup...' : 'Local deployment completed';
+      spinner.succeed(spinnerMessage);
 
       return answers.continue;
     } catch (error) {

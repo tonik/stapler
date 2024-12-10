@@ -13,6 +13,7 @@ export interface StepsCompleted {
   installPayload: boolean;
   createDocFiles: boolean;
   prettifyCode: boolean;
+  shouldDeploy: boolean;
   initializeRepository: boolean;
   pushToGitHub: boolean;
   createSupabaseProject: boolean;

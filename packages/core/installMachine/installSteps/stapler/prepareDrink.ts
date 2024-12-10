@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { delay } from '../../../utils/delay';
 
-const getMessages = (name: string, prettyDeploymentUrl: string) => {
+const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: boolean) => {
   return [
     '🍸 Filling a high ball glass with ice...',
     '🍸 Adding gin and lime juice...',
@@ -9,12 +9,12 @@ const getMessages = (name: string, prettyDeploymentUrl: string) => {
     '🍸 Garnishing with lime wedge...',
     `🍸 ${chalk.green(`Your Stapled ${name} is ready!`)}`,
     `🍸 Ready to explore? Jump into your project with: ${chalk.cyan(`cd ${name} && pnpm dev`)}`,
-    `🍸 Prefer to see it online? Check it out here: ${chalk.cyan(prettyDeploymentUrl)}`,
+    shouldDeploy ? `🍸 Prefer to see it online? Check it out here: ${chalk.cyan(prettyDeploymentUrl)}` : null,
   ];
 };
 
-export const prepareDrink = async (name: string, prettyDeploymentUrl: string) => {
-  const messages = getMessages(name, prettyDeploymentUrl);
+export const prepareDrink = async (name: string, prettyDeploymentUrl: string, shouldDeploy: boolean) => {
+  const messages = getMessages(name, prettyDeploymentUrl, shouldDeploy);
 
   for (const message of messages) {
     console.log(message);

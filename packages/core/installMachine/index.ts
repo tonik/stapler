@@ -568,9 +568,16 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prepareDrinkActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
-              const { projectName, prettyDeploymentUrl } = input.stateData;
-              prepareDrink(projectName, prettyDeploymentUrl);
-              input.stateData.stepsCompleted.prepareDrink = true;
+              const {
+                projectName,
+                prettyDeploymentUrl,
+                options: { shouldDeploy },
+              } = input.stateData;
+              prepareDrink(projectName, prettyDeploymentUrl, shouldDeploy);
+              if (shouldDeploy) {
+                input.stateData.stepsCompleted.shouldDeploy = true;
+                input.stateData.stepsCompleted.prepareDrink = true;
+              }
               saveStateToRcFile(input.stateData, input.projectDir);
             } catch (error) {
               console.error('Error in prepareDrinkActor:', error);
