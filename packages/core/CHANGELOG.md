@@ -1,5 +1,11 @@
 # stplr-core
 
+## 0.2.0-alpha.25
+
+### Patch Changes
+
+- Add --no-deploy flag workflow
+
 ## 0.2.0-alpha.24
 
 ### Patch Changes
