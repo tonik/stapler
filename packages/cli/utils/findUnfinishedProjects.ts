@@ -65,3 +65,14 @@ export const findUnfinishedProjects = (dir: string): UnfinishedProject[] => {
 
   return results;
 };
+
+export interface ProjectChoice {
+  name: string;
+  value: UnfinishedProject;
+}
+
+export const getProjectChoices = (unfinishedProjects: UnfinishedProject[]): ProjectChoice[] =>
+  unfinishedProjects.map((proj) => ({
+    name: proj.projectName,
+    value: proj,
+  }));

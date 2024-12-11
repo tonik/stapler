@@ -10,6 +10,7 @@ type Name =
   | 'payload'
   | 'github'
   | 'prettier'
+  | 'deployment'
   | 'vercel'
   | 'docker'
   | 'postgres'
@@ -56,6 +57,11 @@ const names: NameProps[] = [
     name: 'prettier',
     prefix: 'Prettier',
     colors: ['#F11D28', '#FFA12C'],
+  },
+  {
+    name: 'deployment',
+    prefix: 'Deployment',
+    colors: ['#c83488', '#FAD400'],
   },
   {
     name: 'vercel',

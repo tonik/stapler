@@ -1,5 +1,11 @@
 # stplr
 
+## 0.1.0-alpha.43
+
+### Patch Changes
+
+- Add --no-deploy flag workflow
+
 ## 0.1.0-alpha.42
 
 ### Minor Changes
