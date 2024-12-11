@@ -4,32 +4,11 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import gradient from 'gradient-string';
 import inquirer from 'inquirer';
+import { logger } from 'stplr-utils';
 import { createProject } from 'stplr-core';
 import { checkAuthentication } from './utils/checkAuthentication';
 import { checkTools } from './utils/checkTools';
 import { findUnfinishedProjects, UnfinishedProject } from './utils/findUnfinishedProjects';
-
-const asciiArt = `
-.&&&%                                                         &&&&                                    
-.&&&%                                                         &&&&                                    
-.&&&&&&&&*    (&&&&&&&&&&*      (&&&.&&&&&&&&&&      *&&&#    &&&&     #&&&&,                         
-.&&&&((((,  %&&&&(, .,#&&&&#    (&&&&&%(**(%&&&&(    *&&&#    &&&&   (&&&%                            
-.&&&%      %&&&.        ,&&&%   (&&&/        &&&&.   *&&&#    &&&& #&&&#                              
-.&&&%     ,&&&*          (&&&.  (&&&/        %&&&,   *&&&#    &&&&&&&&&&.                             
-.&&&%      %&&&.        *&&&#   (&&&/        %&&&,   *&&&#    &&&&&* *&&&%                            
-.&&&%       %&&&&%.  ,&&&&&#    (&&&/        %&&&,   *&&&#    &&&&     #&&&/                          
-.&&&%         (&&&&&&&&&%*      (&&&/        %&&&,   *&&&#    &&&&      .&&&&,                        
-`;
-
-const displayHeader = () => {
-  const metalGradient = gradient([
-    { color: '#3C3C3C', pos: 0 },
-    { color: '#FFFFFF', pos: 1 },
-  ]);
-
-  console.log(metalGradient(asciiArt));
-  console.log(chalk.bold('\nWelcome to Stapler!\n'));
-};
 
 const program = new Command();
 
@@ -40,7 +19,7 @@ program
   )
   .version('0.1.0')
   .hook('preAction', () => {
-    displayHeader();
+    logger.displayHeader();
   })
   .option('-n, --name <name>', 'Set the name of the project')
   .option('--skip-payload', 'Skip adding Payload to the app')
