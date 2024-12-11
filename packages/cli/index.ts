@@ -3,14 +3,20 @@ import fs from 'fs';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import { createProject } from 'stplr-core';
-import { checkAuthentication } from './utils/checkAuthentication';
-import { checkTools } from './utils/checkTools';
-import { findUnfinishedProjects, getProjectChoices, UnfinishedProject } from './utils/findUnfinishedProjects';
-import { unfinishedProjectsChoice } from './command-prompts/unfinishedProjectsChoicePrompt';
-import { overwriteDirectoryPrompt } from './command-prompts/overwriteDirectoryPrompt';
-import { shouldUsePayloadPrompt } from './command-prompts/shouldUsePayloadPrompt';
-import { displayHeader } from './utils/displayHeader';
-import { getProjectNamePrompt } from './command-prompts/getProjectNamePrompt';
+import {
+  checkAuthentication,
+  checkTools,
+  displayHeader,
+  findUnfinishedProjects,
+  getProjectChoices,
+  UnfinishedProject,
+} from './utils';
+import {
+  getProjectNamePrompt,
+  overwriteDirectoryPrompt,
+  shouldUsePayloadPrompt,
+  unfinishedProjectsChoice,
+} from './command-prompts';
 
 interface Flags {
   deploy?: boolean;

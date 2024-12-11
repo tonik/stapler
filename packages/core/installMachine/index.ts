@@ -2,24 +2,21 @@ import { ActorLogic, AnyEventObject, PromiseSnapshot, and, createActor, createMa
 
 import { InstallMachineContext, StepsCompleted } from '../types';
 import { saveStateToRcFile } from '../utils/rcFileManager';
-import { initializeRepository } from './installSteps/github/install';
-import { pushToGitHub } from './installSteps/github/repositoryManager';
-import { modifyHomepage } from './installSteps/homepage/install';
-import { preparePayload } from './installSteps/payload/install';
-import { prettify } from './installSteps/prettier/prettify';
-import { createDocFiles } from './installSteps/stapler/createDocFiles';
-import { modifyGitignore } from './installSteps/stapler/modifyGitignore';
-import { prepareDrink } from './installSteps/stapler/prepareDrink';
-import { connectSupabaseProject } from './installSteps/supabase/connectProject';
-import { createSupabaseProject } from './installSteps/supabase/createProject';
-import { installSupabase } from './installSteps/supabase/install';
-import { installTailwind } from './installSteps/tailwind/install';
-import { createTurbo } from './installSteps/turbo/install';
-import { chooseVercelTeam } from './installSteps/vercel/chooseTeam';
-import { deployVercelProject } from './installSteps/vercel/deploy';
-import { linkVercelProject } from './installSteps/vercel/link';
-import { updateVercelProjectSettings } from './installSteps/vercel/updateProjectSettings';
-import { shouldDeploy } from './installSteps/shouldDeploy/shouldDeploy';
+import { initializeRepository, pushToGitHub } from './installSteps/github';
+import { modifyHomepage } from './installSteps/homepage';
+import { preparePayload } from './installSteps/payload';
+import { prettify } from './installSteps/prettier';
+import { createDocFiles, modifyGitignore, prepareDrink } from './installSteps/stapler';
+import { connectSupabaseProject, createSupabaseProject, installSupabase } from './installSteps/supabase';
+import { installTailwind } from './installSteps/tailwind';
+import { createTurbo } from './installSteps/turbo';
+import {
+  chooseVercelTeam,
+  deployVercelProject,
+  linkVercelProject,
+  updateVercelProjectSettings,
+} from './installSteps/vercel';
+import { shouldDeploy } from './installSteps/shouldDeploy';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
