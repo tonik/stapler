@@ -2,7 +2,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import inquirer from 'inquirer';
 import { createProject } from 'stplr-core';
 import { checkAuthentication } from './utils/checkAuthentication';
 import { checkTools } from './utils/checkTools';
@@ -14,7 +13,7 @@ import { displayHeader } from './utils/displayHeader';
 import { getProjectNamePrompt } from './command-prompts/getProjectNamePrompt';
 
 interface Flags {
-  local?: boolean;
+  noDeploy?: boolean;
   name?: string;
   skipPayload?: boolean;
 }
@@ -31,7 +30,7 @@ program
     displayHeader();
   })
   .option(
-    '-l, --local',
+    '--no-deploy',
     'Setup project locally without creating github repository, supabase project and vercel deployment',
   )
   .option('-n, --name <name>', 'Set the name of the project')
@@ -40,7 +39,7 @@ program
 program.parse(process.argv);
 
 const createAction = async (options: Flags) => {
-  const shouldDeploy = !options.local;
+  const shouldDeploy = !options.noDeploy;
   const currentDir = process.cwd();
 
   let proceedWithNewProject = true;
@@ -105,7 +104,7 @@ const createAction = async (options: Flags) => {
     // Skip Payload if specified by the flag
     const payloadAnswer = options.skipPayload ? { usePayload: false } : await shouldUsePayloadPrompt();
 
-    const finalOptions = { name: projectName, shouldDeploy: !options.local, ...payloadAnswer };
+    const finalOptions = { name: projectName, shouldDeploy, ...payloadAnswer };
     if (shouldDeploy) {
       await checkAuthentication();
       await checkTools();
