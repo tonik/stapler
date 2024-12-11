@@ -29,11 +29,11 @@ program
   .hook('preAction', () => {
     displayHeader();
   })
+  .option('-n, --name <name>', 'Set the name of the project')
   .option(
     '--no-deploy',
     'Setup project locally without creating github repository, supabase project and vercel deployment',
   )
-  .option('-n, --name <name>', 'Set the name of the project')
   .option('--skip-payload', 'Skip adding Payload to the app');
 
 program.parse(process.argv);

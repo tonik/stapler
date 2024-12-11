@@ -186,12 +186,6 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
           },
         },
         shouldDeploy: {
-          always: [
-            {
-              guard: 'shouldDeploy',
-              target: 'initializeRepository',
-            },
-          ],
           invoke: {
             input: ({ context }) => context,
             src: 'shouldDeployActor',
