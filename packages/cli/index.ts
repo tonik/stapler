@@ -39,7 +39,7 @@ program
 program.parse(process.argv);
 
 const createAction = async (options: Flags) => {
-  const shouldDeploy = options.deploy;
+  const shouldDeploy = options.deploy as boolean;
   const currentDir = process.cwd();
 
   let proceedWithNewProject = true;
