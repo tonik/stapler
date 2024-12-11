@@ -4,7 +4,12 @@ import { StaplerState } from '../../types';
 
 const RC_FILE_NAME = '.staplerrc';
 
-export const initializeRcFile = (projectDir: string, name: string, usePayload: boolean): StaplerState => {
+export const initializeRcFile = (
+  projectDir: string,
+  name: string,
+  usePayload: boolean,
+  shouldDeploy: boolean,
+): StaplerState => {
   const rcFilePath = path.join(projectDir, RC_FILE_NAME);
   if (fs.existsSync(rcFilePath)) {
     const data = fs.readFileSync(rcFilePath, 'utf-8');
@@ -23,6 +28,7 @@ export const initializeRcFile = (projectDir: string, name: string, usePayload: b
         installPayload: false,
         createDocFiles: false,
         prettifyCode: false,
+        shouldDeploy: false,
         prepareDrink: false,
         initializeRepository: false,
         pushToGitHub: false,
@@ -36,6 +42,7 @@ export const initializeRcFile = (projectDir: string, name: string, usePayload: b
       options: {
         name: name,
         usePayload: usePayload,
+        shouldDeploy: shouldDeploy,
       },
       githubCandidateName: name,
       selectedAccount: '',
