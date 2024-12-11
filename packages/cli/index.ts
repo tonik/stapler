@@ -13,7 +13,7 @@ import { displayHeader } from './utils/displayHeader';
 import { getProjectNamePrompt } from './command-prompts/getProjectNamePrompt';
 
 interface Flags {
-  noDeploy?: boolean;
+  deploy?: boolean;
   name?: string;
   skipPayload?: boolean;
 }
@@ -39,7 +39,7 @@ program
 program.parse(process.argv);
 
 const createAction = async (options: Flags) => {
-  const shouldDeploy = !options.noDeploy;
+  const shouldDeploy = !options.deploy;
   const currentDir = process.cwd();
 
   let proceedWithNewProject = true;
