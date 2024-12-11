@@ -13,6 +13,8 @@ const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: bo
 
   if (shouldDeploy) {
     messages.push(`🍸 Prefer to see it online? Check it out here: ${chalk.cyan(prettyDeploymentUrl)}`);
+  } else {
+    messages.push('🍸 Want to deploy your project? Run `stplr` within your project directory.');
   }
 
   return messages;
