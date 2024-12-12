@@ -186,7 +186,7 @@ const reset = () => {
 };
 
 const displayHeader = () => {
-  const block = chalk.hex(LABEL_BG_COLOR)('█');
+  const block = chalk.bgHex(LABEL_BG_COLOR).hex(LABEL_BG_COLOR)('█');
   const stplrText = chalk.bgHex(LABEL_BG_COLOR).hex(LABEL_TEXT_COLOR)('stplr');
   const stplrLeft = chalk.bgHex(LABEL_BG_COLOR).hex(LABEL_TEXT_COLOR)(String.fromCharCode(9484));
   const stplrMiddle = chalk.bgHex(LABEL_BG_COLOR).hex(LABEL_TEXT_COLOR)(String.fromCharCode(9472));
