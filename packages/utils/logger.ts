@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import ora, { Ora } from 'ora';
 
-const LABEL_WIDTH = 8;
+const LABEL_WIDTH = 7;
 const LABEL_BG_COLOR = '#FAD400';
 const LABEL_TEXT_COLOR = '#000000';
 const DIMMED_LABEL_BG_COLOR = '#5C4D00';
@@ -41,27 +41,26 @@ const labels: Record<Name, LabelConfig> = {
   db: { text: 'db' },
   vrcl: { text: 'vrcl' },
   stapler: { text: 'stplr' },
-  turborepo: { text: 'turbo', align: 'right' },
-  supabase: { text: 'supa', align: 'right' },
-  tailwind: { text: 'tw', align: 'right' },
-  payload: { text: 'cms', align: 'right' },
-  github: { text: 'git', align: 'right' },
-  prettier: { text: 'fmt', align: 'right' },
-  vercel: { text: 'vrcl', align: 'right' },
-  docker: { text: 'dock', align: 'right' },
-  postgres: { text: 'pg', align: 'right' },
-  error: { text: 'error', align: 'right' },
+  turborepo: { text: 'turbo' },
+  supabase: { text: 'supa' },
+  tailwind: { text: 'tw' },
+  payload: { text: 'cms' },
+  github: { text: 'git' },
+  prettier: { text: 'fmt' },
+  deployment: { text: 'dep' },
+  vercel: { text: 'vrcl' },
+  docker: { text: 'dock' },
+  postgres: { text: 'pg' },
+  error: { text: 'error' },
 };
 
-let currentStep: Name | null = null;
 const completedSteps = new Set<Name>();
 const stepOutputs = new Map<Name, string[]>();
 
 const formatLabel = (name: Name): string => {
   const config = labels[name];
-  const label = config.text.padEnd(LABEL_WIDTH);
-  const isDimmed = currentStep !== null && name !== currentStep && !completedSteps.has(name);
-  const bgColor = isDimmed ? DIMMED_LABEL_BG_COLOR : LABEL_BG_COLOR;
+  const label = config.text.padStart(LABEL_WIDTH);
+  const bgColor = LABEL_BG_COLOR;
 
   return chalk.bgHex(bgColor).hex(LABEL_TEXT_COLOR)(` ${label} `);
 };
@@ -80,10 +79,11 @@ const reprintPreviousOutput = () => {
       const label = formatLabel(step);
       const checkmark = formatCheckMark() + ' ';
       const padding = ' '.repeat(SPACING);
-      const isCompleted = step !== currentStep;
-      const formattedOutput = formatMessage(output, isCompleted);
+      const formattedOutput = formatMessage(output);
 
       const labelConfig = labels[step];
+      labelConfig.align = labelConfig.align || 'right';
+      console.log(labelConfig.align);
       if (labelConfig.align === 'right') {
         const leftPadding = ' '.repeat(LABEL_WIDTH + SPACING);
         console.log(`${leftPadding}${label}${padding}${checkmark}${formattedOutput}`);
@@ -96,17 +96,8 @@ const reprintPreviousOutput = () => {
 
 const log = (name: Name, messages: string[] | string, showCheck: boolean = true): void => {
   // Update current step
-  if (currentStep !== name) {
-    if (currentStep) {
-      completedSteps.add(currentStep);
-    }
-    currentStep = name;
-
-    // Clear console and reprint previous outputs
-    console.clear();
-    displayHeader();
-    reprintPreviousOutput();
-  }
+  console.clear();
+  reprintPreviousOutput();
 
   const messageText = typeof messages === 'string' ? messages : messages.join(' ');
 
@@ -120,38 +111,33 @@ const log = (name: Name, messages: string[] | string, showCheck: boolean = true)
   const label = formatLabel(name);
   const checkmark = showCheck ? formatCheckMark() + ' ' : '  ';
   const padding = ' '.repeat(SPACING);
-  const isCompleted = name !== currentStep;
 
   const labelConfig = labels[name];
   if (labelConfig.align === 'right') {
     const leftPadding = ' '.repeat(LABEL_WIDTH + SPACING);
-    console.log(`${leftPadding}${label}${padding}${checkmark}${formatMessage(messageText, isCompleted)}`);
+    console.log(`${leftPadding}${label}${padding}${checkmark}${formatMessage(messageText)}`);
   } else {
-    console.log(`${label}${padding}${checkmark}${formatMessage(messageText, isCompleted)}`);
+    console.log(`${label}${padding}${checkmark}${formatMessage(messageText)}`);
   }
 };
 
-const createSpinner = (name: Name, initialText?: string): Ora => {
-  const label = formatLabel(name);
+const createSpinner = (initialText?: string): Ora => {
   const padding = ' '.repeat(SPACING);
 
   return ora({
-    prefixText: `${label}${padding}`,
+    prefixText: `${padding}`,
     text: initialText,
     spinner: 'dots',
     color: 'yellow',
   });
 };
 
-const withSpinner = async <T>(name: Name, initialText: string, action: (spinner: Ora) => Promise<T>): Promise<T> => {
-  if (currentStep !== name) {
-    if (currentStep) {
-      completedSteps.add(currentStep);
-    }
-    currentStep = name;
-  }
-
-  const spinner = createSpinner(name, initialText);
+const withSpinner = async <T>(
+  initialText: string,
+  action: (spinner: Ora) => Promise<T>,
+  label?: string,
+): Promise<T> => {
+  const spinner = createSpinner(initialText);
   try {
     spinner.start();
     const result = await action(spinner);
@@ -181,7 +167,6 @@ const logUserInput = (step: Name, input: string) => {
 
 // Reset all state (useful for testing or restarting the process)
 const reset = () => {
-  currentStep = null;
   completedSteps.clear();
   stepOutputs.clear();
 };
@@ -206,7 +191,6 @@ const displayHeader = () => {
   const subText2 = 'Everything is fine.';
   const subText3 = "I've done this like a million times.";
 
-  const logoWidth = logoLines[0].length;
   const padding = 4;
 
   const output = [
