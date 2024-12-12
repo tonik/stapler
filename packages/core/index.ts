@@ -3,9 +3,9 @@ import { initializeRcFile } from './utils/rcFileManager';
 import { installMachine } from './installMachine/index';
 
 export const createProject = async (options: ProjectOptions, projectDir: string): Promise<void> => {
-  const { name, usePayload } = options;
+  const { name, usePayload, shouldDeploy } = options;
 
-  let state: StaplerState = initializeRcFile(projectDir, name, usePayload);
+  let state: StaplerState = initializeRcFile(projectDir, name, usePayload, shouldDeploy);
   state.options = options;
 
   const context: InstallMachineContext = {

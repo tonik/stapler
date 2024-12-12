@@ -107,3 +107,50 @@ This command will guide you through the setup process and create a new project i
 - [Next.js](https://nextjs.org/)
 - [Supabase](https://supabase.io/)
 - [Payload CMS](https://payloadcms.com/)
+
+## Available Flags
+
+### `-n, --name <name>`
+
+**Description**: Set a specific name for the project being created. If not provided, the CLI will prompt you to enter a name.
+
+**_Usage:_**:
+
+```bash
+npx stplr -n my-awesome-project
+```
+
+### `--no-deploy`
+
+**Description**: Use this flag to set up the project locally without creating a GitHub repository, Supabase project, or deploying to Vercel. This is ideal if you want to scaffold the project and set up these integrations later.
+
+**What Happens?**
+
+- The project will be scaffolded in the specified (or current) directory.
+- Required accounts (e.g., Supabase, Vercel) will not be linked during setup.
+- You can resume the setup later to complete the integration steps.
+
+**_Usage:_**
+
+```bash
+npx stplr --no-deploy
+```
+
+**To Resume Setup:**
+Simply run `stplr` again in the project directory and select the unfinished project when prompted:
+
+```bash
+npx stplr
+```
+
+The CLI will detect that the project was not fully set up and guide you through the remaining steps.
+
+### `--skip-payload`
+
+**Description**: Skip adding Payload CMS to your project. Use this flag if you do not want Payload CMS to be part of your stack.
+
+**_Usage_**:
+
+```bash
+npx stplr --skip-payload
+```
