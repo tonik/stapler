@@ -17,6 +17,7 @@ import {
   updateVercelProjectSettings,
 } from './installSteps/vercel';
 import { shouldDeploy } from './installSteps/shouldDeploy';
+import { logger } from 'stplr-utils';
 
 const isStepCompleted = (stepName: keyof StepsCompleted) => {
   return ({ context }: { context: InstallMachineContext; event: AnyEventObject }) => {
@@ -349,6 +350,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createTurboActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('turborepo', 'Creating Turbo project');
               await createTurbo(input.stateData.options.name);
               process.chdir(input.projectDir);
               input.stateData.stepsCompleted.createTurbo = true;
@@ -362,6 +364,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         modifyGitignoreActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('git', 'Modifying .gitignore');
               await modifyGitignore('.initializeRcFile');
               input.stateData.stepsCompleted.modifyGitignore = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -374,6 +377,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installTailwindActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('tailwind', 'Installing Tailwind CSS');
               const currentDir = process.cwd();
               await installTailwind(currentDir);
               input.stateData.stepsCompleted.installTailwind = true;
@@ -399,6 +403,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installSupabaseActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('supabase', 'Installing Supabase');
               const currentDir = process.cwd();
               await installSupabase(currentDir);
               input.stateData.stepsCompleted.installSupabase = true;
@@ -412,6 +417,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         installPayloadActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('payload', 'Preparing Payload');
               await preparePayload();
               input.stateData.stepsCompleted.installPayload = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -424,6 +430,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createDocFilesActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('stapler', 'Creating documentation files');
               await createDocFiles();
               input.stateData.stepsCompleted.createDocFiles = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -436,6 +443,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prettifyCodeActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('prettier', 'Prettifying code');
               await prettify();
               input.stateData.stepsCompleted.prettifyCode = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -459,6 +467,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         initializeRepositoryActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('github', 'Initializing GitHub repository');
               await initializeRepository({
                 projectName: input.stateData.options.name,
                 stateData: input.stateData,
@@ -486,6 +495,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         createSupabaseProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('supabase', 'Creating Supabase project');
               await createSupabaseProject(input.stateData.githubCandidateName);
               input.stateData.stepsCompleted.createSupabaseProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -498,6 +508,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         chooseVercelTeamActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('vercel', 'Managing your Vercel');
               await chooseVercelTeam();
               input.stateData.stepsCompleted.chooseVercelTeam = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -534,6 +545,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         connectSupabaseProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('supabase', 'Connecting Supabase project');
               const currentDir = process.cwd();
               await connectSupabaseProject(input.stateData.githubCandidateName, currentDir);
               input.stateData.stepsCompleted.connectSupabaseProject = true;
@@ -547,6 +559,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         deployVercelProjectActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('vercel', 'Deploying Vercel project');
               await deployVercelProject(input.stateData);
               input.stateData.stepsCompleted.deployVercelProject = true;
               saveStateToRcFile(input.stateData, input.projectDir);
@@ -559,6 +572,7 @@ const createInstallMachine = (initialContext: InstallMachineContext) => {
         prepareDrinkActor: createStepMachine(
           fromPromise<void, InstallMachineContext, AnyEventObject>(async ({ input }) => {
             try {
+              logger.withLabel('stapler', 'Preparing your drink');
               const {
                 projectName,
                 prettyDeploymentUrl,

@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 
-export const getProjectNamePrompt = async (): Promise<string> =>
-  (
+export const getProjectNamePrompt = async (): Promise<string> => {
+  return (
     await inquirer.prompt([
       {
         type: 'input',
@@ -11,3 +11,4 @@ export const getProjectNamePrompt = async (): Promise<string> =>
       },
     ])
   ).name;
+};

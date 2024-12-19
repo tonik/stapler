@@ -47,6 +47,7 @@ const createAction = async (options: Flags) => {
 
   const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
 
+  logger.withLabel('dir', 'Your project name and location');
   // If no project name is provided, and there are unfinished projects, we prompt the user to resume one of them
   if (!options.name && unfinishedProjects.length > 0) {
     const projectChoices = getProjectChoices(unfinishedProjects);
@@ -102,6 +103,7 @@ const createAction = async (options: Flags) => {
     }
 
     // Skip Payload if specified by the flag
+    logger.withLabel('cms', 'Want to use Payload?');
     const payloadAnswer = options.skipPayload ? { usePayload: false } : await shouldUsePayloadPrompt();
 
     const finalOptions = { name: projectName, shouldDeploy, ...payloadAnswer };

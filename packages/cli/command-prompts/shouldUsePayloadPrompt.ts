@@ -13,7 +13,7 @@ export const shouldUsePayloadPrompt = async (): Promise<{ usePayload: boolean }>
     {
       type: 'confirm',
       name: 'usePayload',
-      message: 'Would you like to add Payload to your app?',
+      message: '',
       default: true,
     },
   ]);

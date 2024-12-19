@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { delay } from '../../../utils/delay';
+import { LABEL_WIDTH, SPACING } from 'stplr-utils';
 
 const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: boolean) => {
   const messages = [
@@ -21,10 +22,11 @@ const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: bo
 };
 
 export const prepareDrink = async (name: string, prettyDeploymentUrl: string, shouldDeploy: boolean) => {
+  const leftPadding = ' '.repeat(SPACING + LABEL_WIDTH);
   const messages = getMessages(name, prettyDeploymentUrl, shouldDeploy);
 
   for (const message of messages) {
-    console.log(message);
+    console.log(`${leftPadding}${message}`);
     await delay(1000);
   }
 };

@@ -1,5 +1,6 @@
 import inquirer from 'inquirer';
 import { ProjectChoice, UnfinishedProject } from '../utils/findUnfinishedProjects';
+import { LABEL_WIDTH, SPACING } from 'stplr-utils';
 
 export type UnfinishedProjectsChoiceAnswers = {
   resume: boolean;
@@ -15,11 +16,13 @@ export type UnfinishedProjectsChoiceAnswers = {
  *
  **/
 
+const leftPadding = ' '.repeat(LABEL_WIDTH + SPACING);
+
 export const unfinishedProjectsChoice = async (
   unfinishedProjects: UnfinishedProject[],
   projectChoices: ProjectChoice[],
-): Promise<UnfinishedProjectsChoiceAnswers> =>
-  await inquirer.prompt([
+): Promise<UnfinishedProjectsChoiceAnswers> => {
+  return await inquirer.prompt([
     {
       type: 'confirm',
       name: 'resume',
@@ -36,3 +39,4 @@ export const unfinishedProjectsChoice = async (
       when: (answers) => answers.resume && unfinishedProjects.length > 1,
     },
   ]);
+};
