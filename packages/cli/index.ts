@@ -98,8 +98,10 @@ const createAction = async (options: Flags) => {
       }
 
       // Clear the directory if overwrite is confirmed
-      fs.rmSync(projectDir, { recursive: true, force: true });
-      console.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
+      logger.withSpinner('dir', 'Clearing existing directory...', async () => {
+        fs.rmSync(projectDir, { recursive: true, force: true });
+      });
+      logger.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
     }
 
     // Skip Payload if specified by the flag

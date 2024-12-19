@@ -1,5 +1,5 @@
-import inquirer from 'inquirer';
-import { logger } from 'stplr-utils';
+import Enquirer from 'enquirer';
+import { LEFT_PADDING, logger } from 'stplr-utils';
 
 export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
   return await logger.withSpinner('deployment', 'Deciding next steps...', async (spinner) => {
@@ -10,15 +10,18 @@ export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> =>
 
     try {
       spinner.stop();
-      const answers = (await inquirer.prompt([
+      const enquirer = new Enquirer();
+      const answers = (await enquirer.prompt([
         {
           type: 'confirm',
           name: 'continue',
           message:
             'Local installation completed. Would you like to continue with remote setup (GitHub, Supabase, Vercel)?',
-          default: true,
+          initial: true,
+          prefix: LEFT_PADDING,
         },
       ])) as { continue: boolean };
+
       spinner.start();
       const spinnerMessage = answers.continue ? 'Continuing with remote setup...' : 'Local deployment completed';
       spinner.succeed(spinnerMessage);

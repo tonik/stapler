@@ -11,6 +11,8 @@ export const CHECK_MARK_COLOR = '#FAD400';
 export const ACTIVE_TEXT_COLOR = '#FFFFFF';
 export const COMPLETED_TEXT_COLOR = '#666666';
 
+export const LEFT_PADDING = ' '.repeat(SPACING + LABEL_WIDTH - 1);
+
 type Name =
   | 'dir'
   | 'cms'
@@ -52,7 +54,7 @@ const labels: Record<Name, LabelConfig> = {
   error: { text: 'error' },
 };
 
-const padding = ' '.repeat(SPACING);
+const gap = ' '.repeat(SPACING);
 const leftPadding = ' '.repeat(LABEL_WIDTH);
 
 const formatLabel = (name: Name): string => {
@@ -71,17 +73,20 @@ const formatMessage = (message: string, isCompleted: boolean = false): string =>
   return isCompleted ? chalk.hex(COMPLETED_TEXT_COLOR)(message) : chalk.hex(ACTIVE_TEXT_COLOR)(message);
 };
 
-const logMessage = (name: Name, message: string, showCheck: boolean = true): void => {
+const log = (messages: string[] | string, showCheck: boolean = true): void => {
   // Print current message
   const checkmark = showCheck ? formatCheckMark() + ' ' : '  ';
 
-  console.log(`${leftPadding}${padding}${checkmark}${formatMessage(message)}`);
+  messages = Array.isArray(messages) ? messages : [messages];
+  messages.forEach((message) => {
+    console.log(`${leftPadding}${gap}${checkmark}${formatMessage(message)}`);
+  });
 };
 
 const withLabel = (label: Name, message: string): void => {
   const formattedLabel = formatLabel(label);
   console.log(` `);
-  console.log(`${formattedLabel}${padding}${formatMessage(message)}`);
+  console.log(`${formattedLabel}${gap}${formatMessage(message)}`);
   console.log(` `);
 };
 
@@ -122,7 +127,7 @@ const withSpinner = async <T>(name: Name, initialText: string, action: (spinner:
 
 export const logger = {
   createSpinner,
-  logMessage,
+  log,
   withSpinner,
   withLabel,
   displayHeader: () => displayHeader(LABEL_BG_COLOR, LABEL_TEXT_COLOR, ACTIVE_TEXT_COLOR),

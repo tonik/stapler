@@ -11,13 +11,13 @@ const isVercelCLIInstalled = async (): Promise<boolean> => {
 };
 
 const installVercelCLI = async (): Promise<boolean> => {
-  logger.log('vercel', 'Installing Vercel CLI...');
+  logger.log('Installing Vercel CLI...');
   try {
     await execAsync('npm i -g vercel@latest');
     return true;
   } catch (error) {
     console.error('Failed to install Vercel CLI.');
-    logger.log('vercel', 'Please install it manually from: https://vercel.com/docs/cli');
+    logger.log('Please install it manually from: https://vercel.com/docs/cli');
     return false;
   }
 };
@@ -25,7 +25,7 @@ const installVercelCLI = async (): Promise<boolean> => {
 export const checkVercelCLI = async () => {
   await logger.withSpinner('vercel', 'Checking if Vercel CLI is installed...', async (spinner) => {
     if (!isVercelCLIInstalled()) {
-      logger.log('vercel', 'Vercel CLI is not installed.');
+      logger.log('Vercel CLI is not installed.');
 
       const installed = await installVercelCLI();
       if (!installed) {

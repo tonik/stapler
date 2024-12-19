@@ -13,7 +13,7 @@ export const authenticateVercel = async () => {
         spinner.succeed('Logged in successfully.');
       } catch {
         spinner.fail('Failed to log in.');
-        logger.log('vercel', [
+        logger.log([
           'Oops! Something went wrong while logging in to Vercel...',
           '\nYou might already be logged in with this email in another project.',
           '\nIn this case, select "Continue with Email" and enter the email you\'re already logged in with.\n',
@@ -24,7 +24,7 @@ export const authenticateVercel = async () => {
           spinner.succeed('Logged in');
         } catch {
           spinner.fail('Failed to log in.');
-          logger.log('vercel', [
+          logger.log([
             'Please check the error above and try again.',
             '\nAfter successfully logging in with "vercel login", please run stplr again.\n',
           ]);

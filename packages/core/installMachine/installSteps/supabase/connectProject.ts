@@ -48,7 +48,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     );
 
     // Link project
-    logger.log('supabase', 'Linking project...');
+    logger.log('Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, {
       stdio: 'inherit',
     });
@@ -74,7 +74,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     );
 
     // Countdown and open dashboard
-    const spinner = logger.createSpinner('supabase', 'Preparing to open dashboard');
+    const spinner = logger.createSpinner('Preparing to open dashboard');
     spinner.start();
 
     for (let i = 3; i > 0; i--) {
@@ -140,7 +140,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       return false;
     });
   } catch (error) {
-    logger.log('error', error instanceof Error ? error.message : 'An unknown error occurred');
+    logger.log(error instanceof Error ? error.message : 'An unknown error occurred', false);
     throw error;
   }
 };

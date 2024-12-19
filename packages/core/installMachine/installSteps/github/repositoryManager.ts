@@ -1,23 +1,28 @@
 import { execSync, spawnSync } from 'child_process';
-import inquirer from 'inquirer';
+import Enquirer from 'enquirer';
 import chalk from 'chalk';
-import { logger } from 'stplr-utils';
+import { LEFT_PADDING, logger } from 'stplr-utils';
 import { execAsync } from '../../../utils/execAsync';
 import { InstallMachineContext } from '../../../types';
 import { fetchOrganizations } from './fetchOrganizations';
+
+export interface ProjectChoice {
+  name: string;
+  value: string;
+}
 
 const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   const cleanBaseName = baseName.replace(/-\d+$/, ''); // Clean base name
 
   try {
     await execAsync(`gh repo view ${cleanBaseName}`);
-    logger.log('github', `Repository "${cleanBaseName}" already exists.`);
+    logger.log(`Repository "${cleanBaseName}" already exists.`);
     let counter = 2;
     while (true) {
       const candidateName = `${cleanBaseName}-v${counter}`;
       try {
         await execAsync(`gh repo view ${candidateName}`);
-        logger.log('github', `Repository "${candidateName}" already exists.`);
+        logger.log(`Repository "${candidateName}" already exists.`);
         counter++;
       } catch {
         return candidateName;
@@ -100,14 +105,16 @@ export const createGitHubRepository = async (
   ];
 
   // Prompt the user to select an account or organization
-  const { selectedAccount } = await inquirer.prompt([
+  const enquirer = new Enquirer();
+  const { selectedAccount } = (await enquirer.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'selectedAccount',
       message: 'Select the account or organization to create the repository under:',
       choices: accountChoices,
+      prefix: LEFT_PADDING,
     },
-  ]);
+  ])) as { selectedAccount: string };
   stateData.selectedAccount = selectedAccount; // Update state with selected account
 
   await logger.withSpinner('github', 'Checking if repository already exists...', async (spinner) => {
@@ -118,14 +125,16 @@ export const createGitHubRepository = async (
       if (repoExists) {
         spinner.stop();
         const newRepoName = await generateUniqueRepoName(projectName);
-        const { confirmedName } = await inquirer.prompt([
+        const enquirer = new Enquirer();
+        const { confirmedName } = (await enquirer.prompt([
           {
             type: 'input',
             name: 'confirmedName',
             message: 'The repository already exists. Please confirm or modify the repository name:',
-            default: newRepoName,
+            initial: newRepoName,
+            prefix: LEFT_PADDING,
           },
-        ]);
+        ])) as { confirmedName: string };
         repoName = confirmedName;
         stateData.githubCandidateName = confirmedName; // Update state with confirmed name
       }
@@ -139,15 +148,25 @@ export const createGitHubRepository = async (
   await logger.withSpinner('github', `Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
     try {
       spinner.stop();
-      const { repositoryVisibility } = await inquirer.prompt([
+      const enquirer = new Enquirer();
+      const questions = [
         {
-          type: 'list',
+          type: 'select' as const,
           name: 'repositoryVisibility',
           message: 'Choose the repository visibility:',
-          choices: ['public', 'private'],
-          default: 'public',
+          choices: [
+            { name: 'public', value: 'public' },
+            { name: 'private', value: 'private' },
+          ],
+          initial: 'public',
         },
-      ]);
+      ];
+
+      const response = (await enquirer.prompt(questions)) as { repositoryVisibility: string };
+      console.log(response);
+
+      const { repositoryVisibility } = response;
+
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
       const command = `gh repo create ${selectedAccount}/${repoName} ${visibilityFlag}`;
       await execAsync(command);
