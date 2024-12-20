@@ -43,7 +43,7 @@ export const isGitHubAuthenticated = (): boolean => {
 };
 
 export const authenticateGitHub = async () => {
-  await logger.withSpinner('github', 'Attempting to authenticate...', async (spinner) => {
+  await logger.withSpinner('Attempting to authenticate...', async (spinner) => {
     try {
       spinner.start('Authenticating...');
       const isAuthenticated = isGitHubAuthenticated();
@@ -96,10 +96,11 @@ export const createGitHubRepository = async (
   // Fetch organizations and build choices for the prompt
   const organizations = await fetchOrganizations();
   const accountChoices = [
-    { name: `${username} (personal account)`, value: username },
+    { name: username, value: username, message: `${username} (personal account)` },
     ...organizations.map((org: { writable: any; name: any }) => ({
-      name: org.writable ? org.name : chalk.gray(`${org.name} (read-only)`),
+      name: org.name,
       value: org.name,
+      message: org.writable ? org.name : chalk.gray(`${org.name} (read-only)`),
       disabled: org.writable ? false : 'No write access',
     })),
   ];
@@ -115,9 +116,10 @@ export const createGitHubRepository = async (
       prefix: LEFT_PADDING,
     },
   ])) as { selectedAccount: string };
+
   stateData.selectedAccount = selectedAccount; // Update state with selected account
 
-  await logger.withSpinner('github', 'Checking if repository already exists...', async (spinner) => {
+  await logger.withSpinner('Checking if repository already exists...', async (spinner) => {
     try {
       const repoNameJSON = await execAsync(`echo "$(gh repo view ${selectedAccount}/${projectName} --json name)"`);
       const repoExists = repoNameJSON.stdout.trim().includes(`{"name":"${projectName}"}`);
@@ -145,7 +147,7 @@ export const createGitHubRepository = async (
     }
   });
 
-  await logger.withSpinner('github', `Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
+  await logger.withSpinner(`Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
     try {
       spinner.stop();
       const enquirer = new Enquirer();
@@ -154,6 +156,7 @@ export const createGitHubRepository = async (
           type: 'select' as const,
           name: 'repositoryVisibility',
           message: 'Choose the repository visibility:',
+          prefix: LEFT_PADDING,
           choices: [
             { name: 'public', value: 'public' },
             { name: 'private', value: 'private' },
@@ -163,7 +166,6 @@ export const createGitHubRepository = async (
       ];
 
       const response = (await enquirer.prompt(questions)) as { repositoryVisibility: string };
-      console.log(response);
 
       const { repositoryVisibility } = response;
 
@@ -194,7 +196,7 @@ const executeCommands = async (commands: string[]) => {
 };
 
 export const setupGitRepository = async () => {
-  await logger.withSpinner('github', `Setting up Git for the repository...`, async (spinner) => {
+  await logger.withSpinner(`Setting up Git for the repository...`, async (spinner) => {
     const commands = [`git init`, `git add .`];
     await executeCommands(commands);
     spinner.succeed('Git setup complete.');
@@ -202,7 +204,7 @@ export const setupGitRepository = async () => {
 };
 
 export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
-  await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
+  await logger.withSpinner('Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
       `git branch -M main`,

@@ -46,7 +46,7 @@ const installSupabaseCLI = async (): Promise<boolean> => {
 };
 
 export const checkSupabaseCLI = async () => {
-  await logger.withSpinner('supabase', 'Checking if Supabase CLI is installed...', async (spinner) => {
+  await logger.withSpinner('Checking if Supabase CLI is installed...', async (spinner) => {
     if (!isSupabaseCLIInstalled()) {
       logger.log('Supabase CLI is not installed.');
 

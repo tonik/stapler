@@ -18,6 +18,7 @@ type Name =
   | 'cms'
   | 'git'
   | 'db'
+  | 'auth'
   | 'stapler'
   | 'turborepo'
   | 'supabase'
@@ -40,6 +41,7 @@ const labels: Record<Name, LabelConfig> = {
   cms: { text: 'cms' },
   git: { text: 'git' },
   db: { text: 'db' },
+  auth: { text: 'auth' },
   stapler: { text: 'stplr' },
   turborepo: { text: 'turbo' },
   supabase: { text: 'supa' },
@@ -109,15 +111,16 @@ const createSpinner = (initialText?: string): Ora => {
     text: initialText,
     spinner: spinner,
     color: 'yellow',
-    indent: 6,
+    indent: LABEL_WIDTH + SPACING,
   });
 };
 
-const withSpinner = async <T>(name: Name, initialText: string, action: (spinner: Ora) => Promise<T>): Promise<T> => {
+const withSpinner = async <T>(initialText: string, action: (spinner: Ora) => Promise<T>): Promise<T> => {
   const spinner = createSpinner(initialText);
   try {
     spinner.start();
     const result = await action(spinner);
+    spinner.succeed();
     return result;
   } catch (error) {
     spinner.fail();

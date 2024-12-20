@@ -2,7 +2,7 @@ import Enquirer from 'enquirer';
 import { LEFT_PADDING, logger } from 'stplr-utils';
 
 export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
-  return await logger.withSpinner('deployment', 'Deciding next steps...', async (spinner) => {
+  return await logger.withSpinner('Deciding next steps...', async (spinner) => {
     if (!shouldContinue) {
       spinner.succeed('Local deployment completed');
       return false;

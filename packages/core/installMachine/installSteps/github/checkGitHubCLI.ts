@@ -3,7 +3,7 @@ import { LEFT_PADDING, logger } from 'stplr-utils';
 import { isGitHubCLIInstalled, installGitHubCLI } from './ghInstaller';
 
 export const checkGitHubCLI = async () => {
-  await logger.withSpinner('github', 'Checking if GitHub CLI is installed...', async (spinner) => {
+  await logger.withSpinner('Checking if GitHub CLI is installed...', async (spinner) => {
     if (!isGitHubCLIInstalled()) {
       logger.log('GitHub CLI is not installed.');
       const enquirer = new Enquirer();

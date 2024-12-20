@@ -2,7 +2,7 @@ import { execSync } from 'child_process';
 import { logger } from 'stplr-utils';
 
 export const prettify = async () => {
-  await logger.withSpinner('prettier', 'Prettifying...', async (spinner) => {
+  await logger.withSpinner('Prettifying...', async (spinner) => {
     try {
       const ignorePatterns = [
         'node_modules/',

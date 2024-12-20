@@ -98,19 +98,19 @@ const createAction = async (options: Flags) => {
       }
 
       // Clear the directory if overwrite is confirmed
-      logger.withSpinner('dir', 'Clearing existing directory...', async () => {
-        fs.rmSync(projectDir, { recursive: true, force: true });
-      });
+      fs.rmSync(projectDir, { recursive: true, force: true });
       logger.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
     }
 
     // Skip Payload if specified by the flag
-    logger.withLabel('cms', 'Want to use Payload?');
+    logger.withLabel('cms', 'CMS setup');
     const payloadAnswer = options.skipPayload ? { usePayload: false } : await shouldUsePayloadPrompt();
 
     const finalOptions = { name: projectName, shouldDeploy, ...payloadAnswer };
     if (shouldDeploy) {
+      logger.withLabel('auth', 'Authentication status');
       await checkAuthentication();
+      logger.withLabel('stapler', 'Tooling status');
       await checkTools();
     }
 

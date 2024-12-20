@@ -7,7 +7,7 @@ const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
 export const removeTurboFlag = async () => {
-  await logger.withSpinner('payload', 'Removing --turbo flag from dev script...', async (spinner) => {
+  await logger.withSpinner('Removing --turbo flag from dev script...', async (spinner) => {
     const packageJsonPath = path.join(process.cwd(), 'package.json');
 
     try {

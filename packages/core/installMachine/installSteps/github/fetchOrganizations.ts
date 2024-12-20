@@ -2,7 +2,7 @@ import { execAsync } from '../../../utils/execAsync';
 import { logger } from 'stplr-utils';
 
 export const fetchOrganizations = async (): Promise<{ name: string; writable: boolean }[]> => {
-  return await logger.withSpinner('github', 'Fetching organizations you belong to...', async (spinner) => {
+  return await logger.withSpinner('Fetching organizations you belong to...', async (spinner) => {
     try {
       // Fetch all organizations the user belongs to
       const orgsOutput = await execAsync(`gh api user/orgs --jq '[.[] | {name: .login, repos_url: .repos_url}]'`);

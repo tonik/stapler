@@ -23,7 +23,7 @@ const installVercelCLI = async (): Promise<boolean> => {
 };
 
 export const checkVercelCLI = async () => {
-  await logger.withSpinner('vercel', 'Checking if Vercel CLI is installed...', async (spinner) => {
+  await logger.withSpinner('Checking if Vercel CLI is installed...', async (spinner) => {
     if (!isVercelCLIInstalled()) {
       logger.log('Vercel CLI is not installed.');
 

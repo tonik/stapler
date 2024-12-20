@@ -5,7 +5,7 @@ import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
 import { type InstallMachineContext } from '../../../types';
 
 export const deployVercelProject = async (stateData: InstallMachineContext['stateData']) => {
-  await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
+  await logger.withSpinner('Connecting Vercel to Git...', async (spinner) => {
     try {
       // Execute 'vercel git connect' and capture the output
       await execAsync('npx vercel git connect');

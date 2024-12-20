@@ -10,8 +10,8 @@ import { LEFT_PADDING } from 'stplr-utils';
  **/
 
 export const shouldUsePayloadPrompt = async (): Promise<{ usePayload: boolean }> => {
-  const enquirer = new Enquirer();
-  const response = (await enquirer.prompt({
+  const payloadEnquirer = new Enquirer();
+  const response = (await payloadEnquirer.prompt({
     type: 'confirm',
     name: 'usePayload',
     message: 'Would you like to use Payload?',

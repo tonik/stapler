@@ -2,7 +2,7 @@ import { logger } from 'stplr-utils';
 import { execAsync } from '../../../utils/execAsync';
 
 export const moveFilesToAppDir = async () => {
-  await logger.withSpinner('payload', 'Moving files to (app) directory...', async (spinner) => {
+  await logger.withSpinner('Moving files to (app) directory...', async (spinner) => {
     try {
       await execAsync(
         `mkdir -p ./app/\\(app\\) && find ./app -maxdepth 1 ! -path './app' ! -path './app/\\(app\\)' -exec mv {} ./app/\\(app\\)/ \\;`,
