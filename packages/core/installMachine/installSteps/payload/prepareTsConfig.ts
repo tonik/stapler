@@ -7,7 +7,7 @@ const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
 export const prepareTsConfig = async () => {
-  await logger.withSpinner('payload', 'Preparing TypeScript config..', async (spinner) => {
+  await logger.withSpinner('Preparing TypeScript config..', async (spinner) => {
     const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
 
     try {

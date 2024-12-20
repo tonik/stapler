@@ -3,7 +3,7 @@ import { execAsync } from '../../../utils/execAsync';
 import { logger } from 'stplr-utils/logger';
 
 export const authenticateSupabase = async () => {
-  await logger.withSpinner('supabase', 'Checking Supabase authentication...', async (spinner) => {
+  await logger.withSpinner('Checking Supabase authentication...', async (spinner) => {
     try {
       await execAsync('npx supabase projects list');
       spinner.succeed('Logged in');

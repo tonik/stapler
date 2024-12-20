@@ -35,14 +35,15 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
+    "enquirer": "^2.4.1",
     "gradient-string": "^3.0.0",
     "inquirer": "^10.2.2"
   },
   "devDependencies": {
-    "stplr-core": "workspace:*",
-    "stplr-utils": "workspace:*",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^22.5.4",
+    "stplr-core": "workspace:*",
+    "stplr-utils": "workspace:*",
     "tsup": "^8.2.4",
     "typescript": "^5.6.2"
   }

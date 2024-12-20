@@ -23,7 +23,7 @@ const installTailwindPackage = async (currentDir: string) => {
 };
 
 export const installTailwind = async (currentDir: string) => {
-  await logger.withSpinner('tailwind', 'Adding Tailwind...', async (spinner) => {
+  await logger.withSpinner('Adding Tailwind...', async (spinner) => {
     try {
       await installTailwindPackage(currentDir);
       copyTailwindFiles(currentDir);

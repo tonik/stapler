@@ -27,28 +27,28 @@ const installSupabaseCLI = async (): Promise<boolean> => {
         'scoop bucket add supabase https://github.com/supabase/scoop-bucket.git && scoop install supabase';
       break;
     default:
-      logger.log('supabase', [
+      logger.log([
         'Automatic installation is not supported for your operating system.',
         '\nPlease visit https://supabase.com/docs/guides/cli/getting-started for installation instructions.',
       ]);
       return false;
   }
 
-  logger.log('supabase', 'Installing Supabase CLI...');
+  logger.log('Installing Supabase CLI...');
   try {
     await execAsync(installCommand);
     return true;
   } catch (error) {
     console.error('Failed to install Supabase CLI.');
-    logger.log('supabase', 'Please install it manually from: https://supabase.com/docs/guides/cli/getting-started');
+    logger.log('Please install it manually from: https://supabase.com/docs/guides/cli/getting-started');
     return false;
   }
 };
 
 export const checkSupabaseCLI = async () => {
-  await logger.withSpinner('supabase', 'Checking if Supabase CLI is installed...', async (spinner) => {
+  await logger.withSpinner('Checking if Supabase CLI is installed...', async (spinner) => {
     if (!isSupabaseCLIInstalled()) {
-      logger.log('supabase', 'Supabase CLI is not installed.');
+      logger.log('Supabase CLI is not installed.');
 
       const installed = await installSupabaseCLI();
       if (!installed) {

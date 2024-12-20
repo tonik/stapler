@@ -9,7 +9,7 @@ vi.mock('../../../../utils/generator/generator');
 vi.mock('../../../../utils/getTemplateDirectory');
 vi.mock('../../../../utils/logger', () => ({
   logger: {
-    withSpinner: vi.fn((_, __, callback) => callback({ succeed: vi.fn(), fail: vi.fn() })),
+    withSpinner: vi.fn((__, callback) => callback({ succeed: vi.fn(), fail: vi.fn() })),
   },
 }));
 

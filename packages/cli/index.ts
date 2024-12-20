@@ -2,15 +2,9 @@
 import fs from 'fs';
 import chalk from 'chalk';
 import { Command } from 'commander';
+import { logger } from 'stplr-utils';
 import { createProject } from 'stplr-core';
-import {
-  checkAuthentication,
-  checkTools,
-  displayHeader,
-  findUnfinishedProjects,
-  getProjectChoices,
-  UnfinishedProject,
-} from './utils';
+import { checkAuthentication, checkTools, findUnfinishedProjects, getProjectChoices, UnfinishedProject } from './utils';
 import {
   getProjectNamePrompt,
   overwriteDirectoryPrompt,
@@ -33,7 +27,7 @@ program
   )
   .version('0.1.0')
   .hook('preAction', () => {
-    displayHeader();
+    logger.displayHeader();
   })
   .option('-n, --name <name>', 'Set the name of the project')
   .option(
@@ -53,6 +47,7 @@ const createAction = async (options: Flags) => {
 
   const unfinishedProjects: UnfinishedProject[] = findUnfinishedProjects(currentDir);
 
+  logger.withLabel('dir', 'Your project name and location');
   // If no project name is provided, and there are unfinished projects, we prompt the user to resume one of them
   if (!options.name && unfinishedProjects.length > 0) {
     const projectChoices = getProjectChoices(unfinishedProjects);
@@ -104,15 +99,18 @@ const createAction = async (options: Flags) => {
 
       // Clear the directory if overwrite is confirmed
       fs.rmSync(projectDir, { recursive: true, force: true });
-      console.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
+      logger.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
     }
 
     // Skip Payload if specified by the flag
+    logger.withLabel('cms', 'CMS setup');
     const payloadAnswer = options.skipPayload ? { usePayload: false } : await shouldUsePayloadPrompt();
 
     const finalOptions = { name: projectName, shouldDeploy, ...payloadAnswer };
     if (shouldDeploy) {
+      logger.withLabel('auth', 'Authentication status');
       await checkAuthentication();
+      logger.withLabel('stapler', 'Tooling status');
       await checkTools();
     }
 

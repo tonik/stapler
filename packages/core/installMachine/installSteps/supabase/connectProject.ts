@@ -11,7 +11,7 @@ import { delay } from '../../../utils/delay';
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
     // Get project information
-    const newProject = await logger.withSpinner('supabase', 'Getting project information...', async (spinner) => {
+    const newProject = await logger.withSpinner('Getting project information...', async (spinner) => {
       const { stdout: projectsList } = await execAsync('npx supabase projects list');
       const projects = parseProjectsList(projectsList);
       const project = projects.find((p) => p.name === projectName);
@@ -28,27 +28,23 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     });
 
     // Get API keys
-    const { anonKey, serviceRoleKey } = await logger.withSpinner(
-      'supabase',
-      'Getting project API keys...',
-      async (spinner) => {
-        const { stdout: projectAPIKeys } = await execAsync(
-          `npx supabase projects api-keys --project-ref ${newProject.refId}`,
-        );
+    const { anonKey, serviceRoleKey } = await logger.withSpinner('Getting project API keys...', async (spinner) => {
+      const { stdout: projectAPIKeys } = await execAsync(
+        `npx supabase projects api-keys --project-ref ${newProject.refId}`,
+      );
 
-        const keys = getSupabaseKeys(projectAPIKeys);
-        if (!keys.anonKey || !keys.serviceRoleKey) {
-          spinner.fail('Failed to retrieve API keys');
-          throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
-        }
+      const keys = getSupabaseKeys(projectAPIKeys);
+      if (!keys.anonKey || !keys.serviceRoleKey) {
+        spinner.fail('Failed to retrieve API keys');
+        throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
+      }
 
-        spinner.succeed('API keys retrieved.');
-        return keys;
-      },
-    );
+      spinner.succeed('API keys retrieved.');
+      return keys;
+    });
 
     // Link project
-    logger.log('supabase', 'Linking project...');
+    logger.log('Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, {
       stdio: 'inherit',
     });
@@ -74,7 +70,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     );
 
     // Countdown and open dashboard
-    const spinner = logger.createSpinner('supabase', 'Preparing to open dashboard');
+    const spinner = logger.createSpinner('Preparing to open dashboard');
     spinner.start();
 
     for (let i = 3; i > 0; i--) {
@@ -87,7 +83,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     spinner.succeed('Dashboard opened.');
 
     // Check Vercel integration
-    await logger.withSpinner('vercel', 'Checking integration...', async (spinner) => {
+    await logger.withSpinner('Checking integration...', async (spinner) => {
       const token = await getVercelTokenFromAuthFile();
       const { projectId: vercelProjectId, orgId: vercelTeamId } = await getDataFromVercelConfig();
       let attempts = 0;
@@ -140,7 +136,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       return false;
     });
   } catch (error) {
-    logger.log('error', error instanceof Error ? error.message : 'An unknown error occurred');
+    logger.log(error instanceof Error ? error.message : 'An unknown error occurred', false);
     throw error;
   }
 };
