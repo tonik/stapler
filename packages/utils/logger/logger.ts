@@ -119,6 +119,14 @@ const withSpinner = async <T>(initialText: string, action: (spinner: Ora) => Pro
   const spinner = createSpinner(initialText);
   try {
     spinner.start();
+
+    // overwrite success checkmark
+    spinner.succeed = (text: string) => {
+      return spinner.stopAndPersist({
+        text,
+        symbol: chalk.hex(CHECK_MARK_COLOR)('✔'),
+      });
+    };
     const result = await action(spinner);
     spinner.succeed();
     return result;
