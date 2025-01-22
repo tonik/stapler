@@ -1,8 +1,8 @@
 import Enquirer from 'enquirer';
 
-import { ProjectChoice, UnfinishedProject } from '../utils/findUnfinishedProjects';
-import { LABEL_BG_COLOR, LEFT_PADDING } from 'stplr-utils';
 import chalk from 'chalk';
+import { CHECK_MARK_COLOR, LEFT_PADDING, QUESTION_MARK } from 'stplr-utils';
+import { ProjectChoice, UnfinishedProject } from '../utils/findUnfinishedProjects';
 
 export type UnfinishedProjectsChoiceAnswers = {
   resume: boolean;
@@ -32,7 +32,7 @@ export const unfinishedProjectsChoice = async (
     return {
       name: choice.name,
       value: choice.name,
-      message: `${chalk.hex(LABEL_BG_COLOR)(LEFT_PADDING + choice.name)}`,
+      message: chalk.whiteBright(choice.name),
     };
   });
 
@@ -40,11 +40,16 @@ export const unfinishedProjectsChoice = async (
   const shouldResume = (await enquirer.prompt({
     type: 'confirm',
     name: 'resume',
-    message: `We found the following unfinished project(s):\n${unfinishedProjects
-      .map((p) => `${LEFT_PADDING} - ${p.projectName}`)
-      .join('\n')}\n${LEFT_PADDING} Would you like to resume one of them?`,
+    message: chalk.whiteBright(
+      `We found the following unfinished project(s):\n${unfinishedProjects
+        .map((p) => `${LEFT_PADDING} - ${p.projectName}`)
+        .join('\n')}\n ${LEFT_PADDING}${QUESTION_MARK} Would you like to resume one of them?`,
+    ),
     initial: true,
     prefix: LEFT_PADDING,
+    format(value) {
+      return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
+    },
   })) as { resume: boolean };
 
   if (!shouldResume.resume) {
@@ -57,9 +62,9 @@ export const unfinishedProjectsChoice = async (
   const selectProjectAnswer = (await enquirer.prompt({
     type: 'select',
     name: 'unfinishedSelectedProject',
-    message: 'Select a project to resume:',
+    message: chalk.whiteBright('Select a project to resume:'),
     choices: formattedProjectChoices,
-    prefix: LEFT_PADDING,
+    prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
     // use it only when we want to resume a project
     skip: (state: unknown) => {
       if (typeof state === 'object' && state !== null && 'resume' in state) {
@@ -68,6 +73,9 @@ export const unfinishedProjectsChoice = async (
       }
       console.log('state', state);
       return false; // default fallback if not sure
+    },
+    format(value) {
+      return chalk.hex(CHECK_MARK_COLOR)(value);
     },
   })) as UnfinishedProjectsChoiceAnswers;
 

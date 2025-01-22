@@ -6,12 +6,21 @@ export const SPACING = 2;
 export const LABEL_WIDTH = 9;
 export const LABEL_BG_COLOR = '#FAD400';
 export const LABEL_TEXT_COLOR = '#000000';
+export const LABEL_SECONDARY_TEXT_COLOR = '#FAD400';
 export const DIMMED_COLOR = '#5C4D00';
 export const CHECK_MARK_COLOR = '#FAD400';
 export const ACTIVE_TEXT_COLOR = '#FFFFFF';
 export const COMPLETED_TEXT_COLOR = '#666666';
+export const BORDER_COLOR = '#FAD400';
 
 export const LEFT_PADDING = ' '.repeat(SPACING + LABEL_WIDTH - 1);
+export const QUESTION_MARK = chalk.hex(CHECK_MARK_COLOR)('?');
+export const BOXEN_SETTINGS = {
+  padding: 1,
+  margin: { left: 11, right: 11, top: 1, bottom: 1 },
+  borderStyle: 'round',
+  borderColor: BORDER_COLOR,
+};
 
 type Name =
   | 'dir'

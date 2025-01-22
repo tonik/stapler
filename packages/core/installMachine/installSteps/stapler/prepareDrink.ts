@@ -1,6 +1,6 @@
 import chalk from 'chalk';
+import { CHECK_MARK_COLOR, LABEL_WIDTH, SPACING } from 'stplr-utils';
 import { delay } from '../../../utils/delay';
-import { LABEL_WIDTH, SPACING } from 'stplr-utils';
 
 const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: boolean) => {
   const messages = [
@@ -8,12 +8,12 @@ const getMessages = (name: string, prettyDeploymentUrl: string, shouldDeploy: bo
     '🍸 Adding gin and lime juice...',
     `🍸 Topping with ${chalk.blue('Tonik')}...`,
     '🍸 Garnishing with lime wedge...',
-    `🍸 ${chalk.green(`Your Stapled ${name} is ready!`)}`,
-    `🍸 Ready to explore? Jump into your project with: ${chalk.cyan(`cd ${name} && pnpm dev`)}`,
+    `🍸 ${chalk.hex(CHECK_MARK_COLOR)(`Your Stapled ${chalk.hex(CHECK_MARK_COLOR)(name)} is ready!`)}`,
+    `🍸 Ready to explore? Jump into your project with: ${chalk.hex(CHECK_MARK_COLOR)(`cd ${name} && pnpm dev`)}`,
   ];
 
   if (shouldDeploy) {
-    messages.push(`🍸 Prefer to see it online? Check it out here: ${chalk.cyan(prettyDeploymentUrl)}`);
+    messages.push(`🍸 Prefer to see it online? Check it out here: ${chalk.hex(CHECK_MARK_COLOR)(prettyDeploymentUrl)}`);
   } else {
     messages.push('🍸 Want to deploy your project? Run `stplr` within your project directory.');
   }

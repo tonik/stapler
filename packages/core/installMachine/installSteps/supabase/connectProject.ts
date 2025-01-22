@@ -1,12 +1,12 @@
-import { execSync } from 'child_process';
+import boxen, { Options } from 'boxen';
 import chalk from 'chalk';
-import boxen from 'boxen';
-import { getSupabaseKeys, parseProjectsList } from './utils';
-import { logger } from 'stplr-utils';
-import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
-import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
-import { execAsync } from '../../../utils/execAsync';
+import { execSync } from 'child_process';
+import { BOXEN_SETTINGS, LABEL_SECONDARY_TEXT_COLOR, logger } from 'stplr-utils';
 import { delay } from '../../../utils/delay';
+import { execAsync } from '../../../utils/execAsync';
+import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
+import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
+import { getSupabaseKeys, parseProjectsList } from './utils';
 
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
@@ -53,19 +53,14 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     console.log(
       boxen(
         chalk.bold('Supabase Integration Setup\n\n') +
-          chalk.hex('#259764')('1.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('1.') +
           ' You will be redirected to your project dashboard\n' +
-          chalk.hex('#259764')('2.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('2.') +
           ' Connect Vercel: "Add new project connection"\n' +
-          chalk.hex('#259764')('3.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('3.') +
           ' (Optional) Connect GitHub: "Add new project connection"\n\n' +
           chalk.dim('Tip: Keep this terminal open to track the integration status'),
-        {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'round',
-          borderColor: '#3ABC82',
-        },
+        BOXEN_SETTINGS as Options,
       ),
     );
 

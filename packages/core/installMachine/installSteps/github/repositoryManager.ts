@@ -1,9 +1,9 @@
+import chalk from 'chalk';
 import { execSync, spawnSync } from 'child_process';
 import Enquirer from 'enquirer';
-import chalk from 'chalk';
-import { LEFT_PADDING, logger } from 'stplr-utils';
-import { execAsync } from '../../../utils/execAsync';
+import { CHECK_MARK_COLOR, LEFT_PADDING, logger, QUESTION_MARK } from 'stplr-utils';
 import { InstallMachineContext } from '../../../types';
+import { execAsync } from '../../../utils/execAsync';
 import { fetchOrganizations } from './fetchOrganizations';
 
 export interface ProjectChoice {
@@ -96,11 +96,11 @@ export const createGitHubRepository = async (
   // Fetch organizations and build choices for the prompt
   const organizations = await fetchOrganizations();
   const accountChoices = [
-    { name: username, value: username, message: `${username} (personal account)` },
+    { name: username, value: username, message: chalk.whiteBright(username + 'personal account') },
     ...organizations.map((org: { writable: any; name: any }) => ({
       name: org.name,
-      value: org.name,
-      message: org.writable ? org.name : chalk.gray(`${org.name} (read-only)`),
+      value: chalk.hex(CHECK_MARK_COLOR)(LEFT_PADDING + org.name),
+      message: org.writable ? chalk.whiteBright(org.name) : chalk.gray(`${org.name} (read-only)`),
       disabled: org.writable ? false : 'No write access',
     })),
   ];
@@ -111,9 +111,12 @@ export const createGitHubRepository = async (
     {
       type: 'select',
       name: 'selectedAccount',
-      message: 'Select the account or organization to create the repository under:',
+      message: chalk.whiteBright('Select the account or organization to create the repository under:'),
       choices: accountChoices,
-      prefix: LEFT_PADDING,
+      prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+      format(value) {
+        return chalk.hex(CHECK_MARK_COLOR)(value);
+      },
     },
   ])) as { selectedAccount: string };
 
@@ -132,9 +135,12 @@ export const createGitHubRepository = async (
           {
             type: 'input',
             name: 'confirmedName',
-            message: 'The repository already exists. Please confirm or modify the repository name:',
+            message: chalk.whiteBright('The repository already exists. Please confirm or modify the repository name:'),
             initial: newRepoName,
             prefix: LEFT_PADDING,
+            format(value) {
+              return chalk.hex(CHECK_MARK_COLOR)(value);
+            },
           },
         ])) as { confirmedName: string };
         repoName = confirmedName;
@@ -155,13 +161,16 @@ export const createGitHubRepository = async (
         {
           type: 'select' as const,
           name: 'repositoryVisibility',
-          message: 'Choose the repository visibility:',
+          message: chalk.whiteBright('Choose the repository visibility:'),
           prefix: LEFT_PADDING,
           choices: [
-            { name: 'public', value: 'public' },
-            { name: 'private', value: 'private' },
+            { name: 'public', value: 'public', message: chalk.whiteBright('public') },
+            { name: 'private', value: 'private', message: chalk.whiteBright('private') },
           ],
           initial: 'public',
+          format(value: string) {
+            return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
+          },
         },
       ];
 

@@ -1,5 +1,6 @@
+import chalk from 'chalk';
 import Enquirer from 'enquirer';
-import { LEFT_PADDING, logger } from 'stplr-utils';
+import { CHECK_MARK_COLOR, logger, QUESTION_MARK } from 'stplr-utils';
 
 export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
   return await logger.withSpinner('Deciding next steps...', async (spinner) => {
@@ -15,10 +16,26 @@ export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> =>
         {
           type: 'confirm',
           name: 'continue',
-          message:
+          message: chalk.whiteBright(
             'Local installation completed. Would you like to continue with remote setup (GitHub, Supabase, Vercel)?',
+          ),
           initial: true,
-          prefix: LEFT_PADDING,
+          prefix: QUESTION_MARK,
+          format(value) {
+            return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
+          },
+          result(value) {
+            process.stdout.write('\x1B[1A');
+            process.stdout.write('\x1B[2K');
+            process.stdout.write('\x1B[1A');
+            process.stdout.write('\x1B[2K');
+
+            logger.log(
+              `Local installation completed. Would you like to continue with remote setup (GitHub, Supabase, Vercel)? (Y/n) · ${chalk.hex(CHECK_MARK_COLOR)(value)}`,
+            );
+
+            return value;
+          },
         },
       ])) as { continue: boolean };
 
