@@ -23,7 +23,7 @@ export const installGitHubCLI = async (): Promise<boolean> => {
     case 'linux': // Linux
       const linuxDistro = await getLinuxDistro();
       if (linuxDistro === 'unknown') {
-        logger.log('github', 'Automatic installation is not supported for your Linux distribution.');
+        logger.log('Automatic installation is not supported for your Linux distribution.');
       }
       if (linuxDistro === 'ubuntu' || linuxDistro === 'debian') {
         installCommand =
@@ -32,7 +32,7 @@ export const installGitHubCLI = async (): Promise<boolean> => {
         installCommand =
           'sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo && sudo dnf install gh';
       } else {
-        logger.log('github', [
+        logger.log([
           'Automatic installation is not supported for your Linux distribution.',
           '\n Please visit https://github.com/cli/cli#installation for installation instructions.',
         ]);
@@ -43,20 +43,20 @@ export const installGitHubCLI = async (): Promise<boolean> => {
       installCommand = 'winget install --id GitHub.cli';
       break;
     default:
-      logger.log('github', [
+      logger.log([
         'Automatic installation is not supported for your operating system.',
         '\nPlease visit https://github.com/cli/cli#installation for installation instructions.',
       ]);
       return false;
   }
 
-  logger.log('github', 'Installing GitHub CLI...');
+  logger.log('Installing GitHub CLI...');
   try {
     await execAsync(installCommand);
     return true;
   } catch (error) {
     console.error('Failed to install GitHub CLI.');
-    logger.log('github', 'Please install it manually from: https://github.com/cli/cli#installation');
+    logger.log('Please install it manually from: https://github.com/cli/cli#installation');
     return false;
   }
 };

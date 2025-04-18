@@ -1,4 +1,6 @@
-import inquirer from 'inquirer';
+import chalk from 'chalk';
+import Enquirer from 'enquirer';
+import { CHECK_MARK_COLOR, LEFT_PADDING } from 'stplr-utils';
 
 /**
  * Prompts the user to confirm whether they want to overwrite an existing project directory.
@@ -8,12 +10,18 @@ import inquirer from 'inquirer';
  *
  **/
 
-export const overwriteDirectoryPrompt = async (projectName: string): Promise<{ overwrite: boolean }> =>
-  await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'overwrite',
-      message: `The directory "${projectName}" already exists. Do you want to overwrite it?`,
-      default: false,
+export const overwriteDirectoryPrompt = async (projectName: string): Promise<{ overwrite: boolean }> => {
+  const enquirer = new Enquirer();
+  const response = (await enquirer.prompt({
+    type: 'confirm',
+    name: 'overwrite',
+    message: chalk.whiteBright(`The directory "${projectName}" already exists. Do you want to overwrite it?`),
+    initial: false,
+    prefix: LEFT_PADDING,
+    format(value) {
+      return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
     },
-  ]);
+  })) as { overwrite: boolean };
+
+  return response;
+};

@@ -1,17 +1,17 @@
-import { execSync } from 'child_process';
+import boxen, { Options } from 'boxen';
 import chalk from 'chalk';
-import boxen from 'boxen';
-import { getSupabaseKeys, parseProjectsList } from './utils';
-import { logger } from 'stplr-utils';
-import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
-import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
-import { execAsync } from '../../../utils/execAsync';
+import { execSync } from 'child_process';
+import { BOXEN_SETTINGS, CHECK_MARK_COLOR, LABEL_SECONDARY_TEXT_COLOR, logger } from 'stplr-utils';
 import { delay } from '../../../utils/delay';
+import { execAsync } from '../../../utils/execAsync';
+import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
+import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
+import { getSupabaseKeys, parseProjectsList } from './utils';
 
 export const connectSupabaseProject = async (projectName: string, currentDir: string) => {
   try {
     // Get project information
-    const newProject = await logger.withSpinner('supabase', 'Getting project information...', async (spinner) => {
+    const newProject = await logger.withSpinner('Getting project information...', async (spinner) => {
       const { stdout: projectsList } = await execAsync('npx supabase projects list');
       const projects = parseProjectsList(projectsList);
       const project = projects.find((p) => p.name === projectName);
@@ -28,27 +28,23 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     });
 
     // Get API keys
-    const { anonKey, serviceRoleKey } = await logger.withSpinner(
-      'supabase',
-      'Getting project API keys...',
-      async (spinner) => {
-        const { stdout: projectAPIKeys } = await execAsync(
-          `npx supabase projects api-keys --project-ref ${newProject.refId}`,
-        );
+    const { anonKey, serviceRoleKey } = await logger.withSpinner('Getting project API keys...', async (spinner) => {
+      const { stdout: projectAPIKeys } = await execAsync(
+        `npx supabase projects api-keys --project-ref ${newProject.refId}`,
+      );
 
-        const keys = getSupabaseKeys(projectAPIKeys);
-        if (!keys.anonKey || !keys.serviceRoleKey) {
-          spinner.fail('Failed to retrieve API keys');
-          throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
-        }
+      const keys = getSupabaseKeys(projectAPIKeys);
+      if (!keys.anonKey || !keys.serviceRoleKey) {
+        spinner.fail('Failed to retrieve API keys');
+        throw new Error('Failed to retrieve Supabase API keys. Please check your project configuration.');
+      }
 
-        spinner.succeed('API keys retrieved.');
-        return keys;
-      },
-    );
+      spinner.succeed('API keys retrieved.');
+      return keys;
+    });
 
     // Link project
-    logger.log('supabase', 'Linking project...');
+    logger.log('Linking project...');
     execSync(`npx supabase link --project-ref ${newProject.refId}`, {
       stdio: 'inherit',
     });
@@ -57,24 +53,19 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
     console.log(
       boxen(
         chalk.bold('Supabase Integration Setup\n\n') +
-          chalk.hex('#259764')('1.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('1.') +
           ' You will be redirected to your project dashboard\n' +
-          chalk.hex('#259764')('2.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('2.') +
           ' Connect Vercel: "Add new project connection"\n' +
-          chalk.hex('#259764')('3.') +
+          chalk.hex(LABEL_SECONDARY_TEXT_COLOR)('3.') +
           ' (Optional) Connect GitHub: "Add new project connection"\n\n' +
           chalk.dim('Tip: Keep this terminal open to track the integration status'),
-        {
-          padding: 1,
-          margin: 1,
-          borderStyle: 'round',
-          borderColor: '#3ABC82',
-        },
+        BOXEN_SETTINGS as Options,
       ),
     );
 
     // Countdown and open dashboard
-    const spinner = logger.createSpinner('supabase', 'Preparing to open dashboard');
+    const spinner = logger.createSpinner('Preparing to open dashboard');
     spinner.start();
 
     for (let i = 3; i > 0; i--) {
@@ -84,10 +75,13 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     spinner.text = 'Opening dashboard in your browser...';
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
-    spinner.succeed('Dashboard opened.');
+    spinner.stopAndPersist({
+      text: 'Dashboard opened.',
+      symbol: chalk.hex(CHECK_MARK_COLOR)('✔'),
+    });
 
     // Check Vercel integration
-    await logger.withSpinner('vercel', 'Checking integration...', async (spinner) => {
+    await logger.withSpinner('Checking integration...', async (spinner) => {
       const token = await getVercelTokenFromAuthFile();
       const { projectId: vercelProjectId, orgId: vercelTeamId } = await getDataFromVercelConfig();
       let attempts = 0;
@@ -140,7 +134,7 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
       return false;
     });
   } catch (error) {
-    logger.log('error', error instanceof Error ? error.message : 'An unknown error occurred');
+    logger.log(error instanceof Error ? error.message : 'An unknown error occurred', false);
     throw error;
   }
 };

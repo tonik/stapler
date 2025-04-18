@@ -2,7 +2,7 @@ import { execAsync } from '../../../utils/execAsync';
 import { logger } from 'stplr-utils';
 
 const checkPnpmVersion = async () => {
-  await logger.withSpinner('turborepo', 'Checking pnpm version...', async (spinner) => {
+  await logger.withSpinner('Checking pnpm version...', async (spinner) => {
     try {
       // Run the command to check the pnpm version
       const { stdout } = await execAsync('pnpm --version');
@@ -15,7 +15,7 @@ const checkPnpmVersion = async () => {
 };
 
 export const createTurbo = async (name: string) => {
-  await logger.withSpinner('turborepo', 'Initializing...', async (spinner) => {
+  await logger.withSpinner('Initializing...', async (spinner) => {
     try {
       // Check the pnpm version
       await checkPnpmVersion();

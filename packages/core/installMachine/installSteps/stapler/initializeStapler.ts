@@ -2,7 +2,7 @@ import { execAsync } from '../../../utils/execAsync';
 import { logger } from 'stplr-utils';
 
 export const initializeStapler = async (name: string) => {
-  await logger.withSpinner('stapler', 'Initializing...', async (spinner) => {
+  await logger.withSpinner('Initializing...', async (spinner) => {
     try {
       await execAsync(`mkdir ${name}`);
       spinner.succeed('Initialized.');

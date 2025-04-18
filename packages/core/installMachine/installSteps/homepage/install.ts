@@ -4,7 +4,7 @@ import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 import { logger } from 'stplr-utils';
 
 export const modifyHomepage = async (destinationDirectory: string) => {
-  await logger.withSpinner('tailwind', 'Setting up your welcome homepage...', async (spinner) => {
+  await logger.withSpinner('Setting up your welcome homepage...', async (spinner) => {
     try {
       const templateDirectory = getTemplateDirectory(`/templates/homepage/files/`);
       templateGenerator(homepageFiles, templateDirectory, destinationDirectory);

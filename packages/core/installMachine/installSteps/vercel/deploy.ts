@@ -5,7 +5,7 @@ import { getShortestVercelAlias } from './utils/getShortestVercelAlias';
 import { type InstallMachineContext } from '../../../types';
 
 export const deployVercelProject = async (stateData: InstallMachineContext['stateData']) => {
-  await logger.withSpinner('vercel', 'Connecting Vercel to Git...', async (spinner) => {
+  await logger.withSpinner('Connecting Vercel to Git...', async (spinner) => {
     try {
       // Execute 'vercel git connect' and capture the output
       await execAsync('npx vercel git connect');
@@ -17,7 +17,7 @@ export const deployVercelProject = async (stateData: InstallMachineContext['stat
     }
   });
 
-  logger.log('vercel', 'Creating production deployment...');
+  logger.log('Creating production deployment...');
 
   const productionUrl = execSync('npx vercel --prod', {
     stdio: ['inherit', 'pipe', 'inherit'],
@@ -26,7 +26,7 @@ export const deployVercelProject = async (stateData: InstallMachineContext['stat
 
   const shortestVercelAlias = await getShortestVercelAlias(productionUrl);
 
-  if (!productionUrl) logger.log('vercel', 'Failed to create production deployment.');
+  if (!productionUrl) logger.log('Failed to create production deployment.');
 
   stateData.prettyDeploymentUrl = productionUrl;
 

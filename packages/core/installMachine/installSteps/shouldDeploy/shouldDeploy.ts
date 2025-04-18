@@ -1,33 +1,37 @@
-import inquirer from 'inquirer';
-import { logger } from 'stplr-utils';
+import chalk from 'chalk';
+import Enquirer from 'enquirer';
+import { CHECK_MARK_COLOR, LEFT_PADDING, logger, QUESTION_MARK } from 'stplr-utils';
 
 export const shouldDeploy = async (shouldContinue: boolean): Promise<boolean> => {
-  return await logger.withSpinner('deployment', 'Deciding next steps...', async (spinner) => {
-    if (!shouldContinue) {
-      spinner.succeed('Local deployment completed');
-      return false;
-    }
+  if (!shouldContinue) {
+    logger.log('Local deployment completed');
+    return false;
+  }
 
-    try {
-      spinner.stop();
-      const answers = (await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'continue',
-          message:
-            'Local installation completed. Would you like to continue with remote setup (GitHub, Supabase, Vercel)?',
-          default: true,
+  try {
+    const enquirer = new Enquirer();
+    const answers = (await enquirer.prompt([
+      {
+        type: 'confirm',
+        name: 'continue',
+        message: chalk.whiteBright(
+          'Local installation completed. Would you like to continue with remote setup (GitHub, Supabase, Vercel)?',
+        ),
+        initial: true,
+        prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+        format(value) {
+          return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
         },
-      ])) as { continue: boolean };
-      spinner.start();
-      const spinnerMessage = answers.continue ? 'Continuing with remote setup...' : 'Local deployment completed';
-      spinner.succeed(spinnerMessage);
+      },
+    ])) as { continue: boolean };
 
-      return answers.continue;
-    } catch (error) {
-      spinner.fail('Local deployment failed');
-      console.error('Error during local deployment:', error);
-      return false;
-    }
-  });
+    const spinnerMessage = answers.continue ? 'Continuing with remote setup...' : 'Local deployment completed';
+    logger.log(spinnerMessage);
+
+    return answers.continue;
+  } catch (error) {
+    logger.log('Local deployment failed');
+    console.error('Error during local deployment:', error);
+    return false;
+  }
 };

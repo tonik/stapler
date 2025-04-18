@@ -6,7 +6,7 @@ import { getTemplateDirectory } from '../../../utils/getTemplateDirectory';
 import { logger } from 'stplr-utils';
 
 export const addTemplateFiles = async (destinationDirectory: string) => {
-  await logger.withSpinner('supabase', 'Adding files from template...', async (spinner) => {
+  await logger.withSpinner('Adding files from template...', async (spinner) => {
     const templateDirectory = getTemplateDirectory(`/templates/supabase/files/`);
     templateGenerator(supabaseFiles, templateDirectory, destinationDirectory);
 

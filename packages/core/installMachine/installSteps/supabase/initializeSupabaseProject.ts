@@ -2,7 +2,7 @@ import { execAsync } from '../../../utils/execAsync';
 import { logger } from 'stplr-utils';
 
 export const initializeSupabaseProject = async () => {
-  await logger.withSpinner('supabase', 'Initializing project...', async (spinner) => {
+  await logger.withSpinner('Initializing project...', async (spinner) => {
     try {
       await execAsync(`npx supabase init`);
       spinner.succeed('Project initialized.');

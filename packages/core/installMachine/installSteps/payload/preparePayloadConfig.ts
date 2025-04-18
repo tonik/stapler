@@ -11,7 +11,7 @@ export const preparePayloadConfig = async () => {
     return;
   }
 
-  await logger.withSpinner('payload', 'Preparing config...', async (spinner) => {
+  await logger.withSpinner('Preparing config...', async (spinner) => {
     try {
       // Read the payload.config.ts file
       const data = await fs.readFile(payloadConfigPath, 'utf8');

@@ -2,7 +2,7 @@ import { logger } from 'stplr-utils';
 import { authenticateGitHub, isGitHubAuthenticated } from './repositoryManager';
 
 export const ensureGitHubAuthentication = async () => {
-  await logger.withSpinner('github', 'Checking authentication status...', async (spinner) => {
+  await logger.withSpinner('Checking authentication status...', async (spinner) => {
     if (isGitHubAuthenticated()) {
       spinner.succeed('Logged in');
       return;

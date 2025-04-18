@@ -7,7 +7,7 @@ const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
 export const modifyGitignore = async (entry: string) => {
-  await logger.withSpinner('stapler', `Adding entries to .gitignore..`, async (spinner) => {
+  await logger.withSpinner(`Adding entries to .gitignore..`, async (spinner) => {
     const gitignorePath = path.join(process.cwd(), '.gitignore');
 
     try {

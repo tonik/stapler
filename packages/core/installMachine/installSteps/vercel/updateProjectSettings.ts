@@ -3,7 +3,7 @@ import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig'
 import { getVercelTokenFromAuthFile } from '../../../utils/getVercelTokenFromAuthFile';
 
 export const updateVercelProjectSettings = async () => {
-  await logger.withSpinner('vercel', 'Changing project settings...', async (spinner) => {
+  await logger.withSpinner('Changing project settings...', async (spinner) => {
     try {
       const token = await getVercelTokenFromAuthFile();
       if (!token) {

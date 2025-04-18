@@ -1,31 +1,37 @@
-import { execSync, spawnSync } from 'child_process';
-import inquirer from 'inquirer';
 import chalk from 'chalk';
-import { logger } from 'stplr-utils';
-import { execAsync } from '../../../utils/execAsync';
+import { execSync, spawnSync } from 'child_process';
+import Enquirer from 'enquirer';
+import { CHECK_MARK_COLOR, LABEL_SECONDARY_TEXT_COLOR, LEFT_PADDING, logger, QUESTION_MARK } from 'stplr-utils';
 import { InstallMachineContext } from '../../../types';
+import { execAsync } from '../../../utils/execAsync';
 import { fetchOrganizations } from './fetchOrganizations';
+
+export interface ProjectChoice {
+  name: string;
+  value: string;
+}
 
 const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   const cleanBaseName = baseName.replace(/-\d+$/, ''); // Clean base name
 
-  try {
-    await execAsync(`gh repo view ${cleanBaseName}`);
-    logger.log('github', `Repository "${cleanBaseName}" already exists.`);
-    let counter = 2;
-    while (true) {
-      const candidateName = `${cleanBaseName}-v${counter}`;
-      try {
-        await execAsync(`gh repo view ${candidateName}`);
-        logger.log('github', `Repository "${candidateName}" already exists.`);
-        counter++;
-      } catch {
-        return candidateName;
+  const uniqueRepoName = await logger.withSpinner('Generating unique repo name...', async (spinner) => {
+    try {
+      await execAsync(`gh repo view ${cleanBaseName}`);
+      let counter = 2;
+      while (true) {
+        const candidateName = `${cleanBaseName}-v${counter}`;
+        try {
+          await execAsync(`gh repo view ${candidateName}`);
+          counter++;
+        } catch {
+          return candidateName;
+        }
       }
+    } catch (error) {
+      return cleanBaseName;
     }
-  } catch {
-    return cleanBaseName;
-  }
+  });
+  return uniqueRepoName;
 };
 
 export const isGitHubAuthenticated = (): boolean => {
@@ -38,7 +44,7 @@ export const isGitHubAuthenticated = (): boolean => {
 };
 
 export const authenticateGitHub = async () => {
-  await logger.withSpinner('github', 'Attempting to authenticate...', async (spinner) => {
+  await logger.withSpinner('Attempting to authenticate...', async (spinner) => {
     try {
       spinner.start('Authenticating...');
       const isAuthenticated = isGitHubAuthenticated();
@@ -91,67 +97,88 @@ export const createGitHubRepository = async (
   // Fetch organizations and build choices for the prompt
   const organizations = await fetchOrganizations();
   const accountChoices = [
-    { name: `${username} (personal account)`, value: username },
+    { name: username, value: username, message: chalk.whiteBright(username + 'personal account') },
     ...organizations.map((org: { writable: any; name: any }) => ({
-      name: org.writable ? org.name : chalk.gray(`${org.name} (read-only)`),
-      value: org.name,
+      name: org.name,
+      value: chalk.hex(CHECK_MARK_COLOR)(LEFT_PADDING + org.name),
+      message: org.writable ? chalk.whiteBright(org.name) : chalk.gray(`${org.name} (read-only)`),
       disabled: org.writable ? false : 'No write access',
     })),
   ];
 
   // Prompt the user to select an account or organization
-  const { selectedAccount } = await inquirer.prompt([
+  const enquirer = new Enquirer();
+  const { selectedAccount } = (await enquirer.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'selectedAccount',
-      message: 'Select the account or organization to create the repository under:',
+      message: chalk.whiteBright('Select the account or organization to create the repository under:'),
       choices: accountChoices,
+      prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+      format(value) {
+        return chalk.hex(CHECK_MARK_COLOR)(value);
+      },
     },
-  ]);
+  ])) as { selectedAccount: string };
+
   stateData.selectedAccount = selectedAccount; // Update state with selected account
 
-  await logger.withSpinner('github', 'Checking if repository already exists...', async (spinner) => {
+  const repoExists = await logger.withSpinner('Checking repository...', async (spinner) => {
     try {
       const repoNameJSON = await execAsync(`echo "$(gh repo view ${selectedAccount}/${projectName} --json name)"`);
       const repoExists = repoNameJSON.stdout.trim().includes(`{"name":"${projectName}"}`);
-
-      if (repoExists) {
-        spinner.stop();
-        const newRepoName = await generateUniqueRepoName(projectName);
-        const { confirmedName } = await inquirer.prompt([
-          {
-            type: 'input',
-            name: 'confirmedName',
-            message: 'The repository already exists. Please confirm or modify the repository name:',
-            default: newRepoName,
-          },
-        ]);
-        repoName = confirmedName;
-        stateData.githubCandidateName = confirmedName; // Update state with confirmed name
-      }
-      spinner.stop();
+      return repoExists;
     } catch (error) {
-      spinner.fail('Error checking repository existence.');
-      console.error(error);
+      spinner.fail('Failed to update project settings.');
+      console.error('Error during Vercel project settings update:', error);
     }
   });
 
-  await logger.withSpinner('github', `Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
-    try {
-      spinner.stop();
-      const { repositoryVisibility } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'repositoryVisibility',
-          message: 'Choose the repository visibility:',
-          choices: ['public', 'private'],
-          default: 'public',
+  if (repoExists) {
+    const newRepoName = await generateUniqueRepoName(projectName);
+    const enquirer = new Enquirer();
+    const { confirmedName } = (await enquirer.prompt([
+      {
+        type: 'input',
+        name: 'confirmedName',
+        message: chalk.whiteBright('The repository already exists. Please confirm or modify the repository name:'),
+        initial: newRepoName,
+        prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+        format(value) {
+          return chalk.hex(CHECK_MARK_COLOR)(value);
         },
-      ]);
+      },
+    ])) as { confirmedName: string };
+    repoName = confirmedName;
+    stateData.githubCandidateName = confirmedName; // Update state with confirmed name
+  }
+  const questions = [
+    {
+      type: 'select' as const,
+      name: 'repositoryVisibility',
+      message: chalk.whiteBright('Choose the repository visibility:'),
+      prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+      choices: [
+        { name: 'public', value: 'public', message: chalk.whiteBright('public') },
+        { name: 'private', value: 'private', message: chalk.whiteBright('private') },
+      ],
+      initial: 'public',
+      format(value: string) {
+        return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
+      },
+    },
+  ];
+
+  const response = (await enquirer.prompt(questions)) as { repositoryVisibility: string };
+
+  const { repositoryVisibility } = response;
+
+  await logger.withSpinner(`Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
+    try {
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
       const command = `gh repo create ${selectedAccount}/${repoName} ${visibilityFlag}`;
       await execAsync(command);
-      spinner.succeed(`Repository created: ${chalk.cyan(repoName)}`);
+      spinner.succeed(`Repository created: ${chalk.hex(LABEL_SECONDARY_TEXT_COLOR)(repoName)}`);
       return repoName;
     } catch (error) {
       spinner.fail('Failed to create repository.');
@@ -175,7 +202,7 @@ const executeCommands = async (commands: string[]) => {
 };
 
 export const setupGitRepository = async () => {
-  await logger.withSpinner('github', `Setting up Git for the repository...`, async (spinner) => {
+  await logger.withSpinner(`Setting up Git for the repository...`, async (spinner) => {
     const commands = [`git init`, `git add .`];
     await executeCommands(commands);
     spinner.succeed('Git setup complete.');
@@ -183,7 +210,7 @@ export const setupGitRepository = async () => {
 };
 
 export const pushToGitHub = async (selectedAccount: string, githubCandidateName: string) => {
-  await logger.withSpinner('github', 'Pushing changes...', async (spinner) => {
+  await logger.withSpinner('Pushing changes...', async (spinner) => {
     const commands = [
       `git add .`,
       `git branch -M main`,

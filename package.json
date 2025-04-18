@@ -57,5 +57,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "pnpm": {
+    "patchedDependencies": {
+      "ansi-colors@4.1.3": "patches/ansi-colors@4.1.3.patch"
+    }
+  }
 }
