@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import fs from 'fs';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import { logger } from 'stplr-utils';
+import fs from 'fs';
 import { createProject } from 'stplr-core';
-import { checkAuthentication, checkTools, findUnfinishedProjects, getProjectChoices, UnfinishedProject } from './utils';
+import { logger } from 'stplr-utils';
 import {
   getProjectNamePrompt,
   overwriteDirectoryPrompt,
   shouldUsePayloadPrompt,
   unfinishedProjectsChoice,
 } from './command-prompts';
+import { checkAuthentication, checkTools, findUnfinishedProjects, getProjectChoices, UnfinishedProject } from './utils';
 
 interface Flags {
   deploy?: boolean;
@@ -99,7 +99,7 @@ const createAction = async (options: Flags) => {
 
       // Clear the directory if overwrite is confirmed
       fs.rmSync(projectDir, { recursive: true, force: true });
-      logger.log(chalk.yellow(`The directory "${projectName}" has been cleared.`));
+      logger.log(`The directory "${projectName}" has been cleared.`);
     }
 
     // Skip Payload if specified by the flag

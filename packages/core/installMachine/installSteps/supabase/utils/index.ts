@@ -12,7 +12,7 @@ export const parseProjectsList = (output: string): SupabaseProjectInfo[] => {
   lines.splice(0, 2);
 
   return lines.map((line) => {
-    const [linked, org_id, refId, name, region, created_at] = line.split('│').map((item) => item.trim());
+    const [linked, org_id, refId, name, region, created_at] = line.split('|').map((item) => item.trim());
     return {
       linked: linked !== '',
       org_id,
@@ -27,17 +27,19 @@ export const parseProjectsList = (output: string): SupabaseProjectInfo[] => {
 export const getSupabaseKeys = (input: string) => {
   const lines = input.split('\n');
 
-  const anonKey = lines
-    .find((line) => line.replace(/\x1B\[[0-9;]*[JKmsu]/g, '').includes('anon'))
-    ?.split('│')[1]
-    .trim();
-  const serviceRoleKey = lines
-    .find((line) => line.replace(/\x1B\[[0-9;]*[JKmsu]/g, '').includes('service_role'))
-    ?.split('│')[1]
-    .trim();
+  const tokens: { anon: string; service_role: string } = { anon: '', service_role: '' };
+
+  lines.forEach((line) => {
+    if (line.includes('|')) {
+      const [key, value] = line.split('|').map((s) => s.trim());
+      if (key === 'anon' || key === 'service_role') {
+        tokens[key] = value;
+      }
+    }
+  });
 
   return {
-    anonKey,
-    serviceRoleKey,
+    anonKey: tokens.anon,
+    serviceRoleKey: tokens.service_role,
   };
 };

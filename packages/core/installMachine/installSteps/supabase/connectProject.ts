@@ -1,7 +1,7 @@
 import boxen, { Options } from 'boxen';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
-import { BOXEN_SETTINGS, LABEL_SECONDARY_TEXT_COLOR, logger } from 'stplr-utils';
+import { BOXEN_SETTINGS, CHECK_MARK_COLOR, LABEL_SECONDARY_TEXT_COLOR, logger } from 'stplr-utils';
 import { delay } from '../../../utils/delay';
 import { execAsync } from '../../../utils/execAsync';
 import { getDataFromVercelConfig } from '../../../utils/getDataFromVercelConfig';
@@ -75,7 +75,10 @@ export const connectSupabaseProject = async (projectName: string, currentDir: st
 
     spinner.text = 'Opening dashboard in your browser...';
     await execAsync(`open https://supabase.com/dashboard/project/${newProject.refId}/settings/integrations`);
-    spinner.succeed('Dashboard opened.');
+    spinner.stopAndPersist({
+      text: 'Dashboard opened.',
+      symbol: chalk.hex(CHECK_MARK_COLOR)('✔'),
+    });
 
     // Check Vercel integration
     await logger.withSpinner('Checking integration...', async (spinner) => {

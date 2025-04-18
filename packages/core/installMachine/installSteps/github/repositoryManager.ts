@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { execSync, spawnSync } from 'child_process';
 import Enquirer from 'enquirer';
-import { CHECK_MARK_COLOR, LEFT_PADDING, logger, QUESTION_MARK } from 'stplr-utils';
+import { CHECK_MARK_COLOR, LABEL_SECONDARY_TEXT_COLOR, LEFT_PADDING, logger, QUESTION_MARK } from 'stplr-utils';
 import { InstallMachineContext } from '../../../types';
 import { execAsync } from '../../../utils/execAsync';
 import { fetchOrganizations } from './fetchOrganizations';
@@ -14,23 +14,24 @@ export interface ProjectChoice {
 const generateUniqueRepoName = async (baseName: string): Promise<string> => {
   const cleanBaseName = baseName.replace(/-\d+$/, ''); // Clean base name
 
-  try {
-    await execAsync(`gh repo view ${cleanBaseName}`);
-    logger.log(`Repository "${cleanBaseName}" already exists.`);
-    let counter = 2;
-    while (true) {
-      const candidateName = `${cleanBaseName}-v${counter}`;
-      try {
-        await execAsync(`gh repo view ${candidateName}`);
-        logger.log(`Repository "${candidateName}" already exists.`);
-        counter++;
-      } catch {
-        return candidateName;
+  const uniqueRepoName = await logger.withSpinner('Generating unique repo name...', async (spinner) => {
+    try {
+      await execAsync(`gh repo view ${cleanBaseName}`);
+      let counter = 2;
+      while (true) {
+        const candidateName = `${cleanBaseName}-v${counter}`;
+        try {
+          await execAsync(`gh repo view ${candidateName}`);
+          counter++;
+        } catch {
+          return candidateName;
+        }
       }
+    } catch (error) {
+      return cleanBaseName;
     }
-  } catch {
-    return cleanBaseName;
-  }
+  });
+  return uniqueRepoName;
 };
 
 export const isGitHubAuthenticated = (): boolean => {
@@ -122,66 +123,62 @@ export const createGitHubRepository = async (
 
   stateData.selectedAccount = selectedAccount; // Update state with selected account
 
-  await logger.withSpinner('Checking if repository already exists...', async (spinner) => {
+  const repoExists = await logger.withSpinner('Checking repository...', async (spinner) => {
     try {
       const repoNameJSON = await execAsync(`echo "$(gh repo view ${selectedAccount}/${projectName} --json name)"`);
       const repoExists = repoNameJSON.stdout.trim().includes(`{"name":"${projectName}"}`);
-
-      if (repoExists) {
-        spinner.stop();
-        const newRepoName = await generateUniqueRepoName(projectName);
-        const enquirer = new Enquirer();
-        const { confirmedName } = (await enquirer.prompt([
-          {
-            type: 'input',
-            name: 'confirmedName',
-            message: chalk.whiteBright('The repository already exists. Please confirm or modify the repository name:'),
-            initial: newRepoName,
-            prefix: LEFT_PADDING,
-            format(value) {
-              return chalk.hex(CHECK_MARK_COLOR)(value);
-            },
-          },
-        ])) as { confirmedName: string };
-        repoName = confirmedName;
-        stateData.githubCandidateName = confirmedName; // Update state with confirmed name
-      }
-      spinner.stop();
+      return repoExists;
     } catch (error) {
-      spinner.fail('Error checking repository existence.');
-      console.error(error);
+      spinner.fail('Failed to update project settings.');
+      console.error('Error during Vercel project settings update:', error);
     }
   });
 
+  if (repoExists) {
+    const newRepoName = await generateUniqueRepoName(projectName);
+    const enquirer = new Enquirer();
+    const { confirmedName } = (await enquirer.prompt([
+      {
+        type: 'input',
+        name: 'confirmedName',
+        message: chalk.whiteBright('The repository already exists. Please confirm or modify the repository name:'),
+        initial: newRepoName,
+        prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+        format(value) {
+          return chalk.hex(CHECK_MARK_COLOR)(value);
+        },
+      },
+    ])) as { confirmedName: string };
+    repoName = confirmedName;
+    stateData.githubCandidateName = confirmedName; // Update state with confirmed name
+  }
+  const questions = [
+    {
+      type: 'select' as const,
+      name: 'repositoryVisibility',
+      message: chalk.whiteBright('Choose the repository visibility:'),
+      prefix: ' ' + LEFT_PADDING + QUESTION_MARK,
+      choices: [
+        { name: 'public', value: 'public', message: chalk.whiteBright('public') },
+        { name: 'private', value: 'private', message: chalk.whiteBright('private') },
+      ],
+      initial: 'public',
+      format(value: string) {
+        return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
+      },
+    },
+  ];
+
+  const response = (await enquirer.prompt(questions)) as { repositoryVisibility: string };
+
+  const { repositoryVisibility } = response;
+
   await logger.withSpinner(`Creating repository: ${selectedAccount}/${repoName}...`, async (spinner) => {
     try {
-      spinner.stop();
-      const enquirer = new Enquirer();
-      const questions = [
-        {
-          type: 'select' as const,
-          name: 'repositoryVisibility',
-          message: chalk.whiteBright('Choose the repository visibility:'),
-          prefix: LEFT_PADDING,
-          choices: [
-            { name: 'public', value: 'public', message: chalk.whiteBright('public') },
-            { name: 'private', value: 'private', message: chalk.whiteBright('private') },
-          ],
-          initial: 'public',
-          format(value: string) {
-            return `${chalk.hex(CHECK_MARK_COLOR)(value)}`;
-          },
-        },
-      ];
-
-      const response = (await enquirer.prompt(questions)) as { repositoryVisibility: string };
-
-      const { repositoryVisibility } = response;
-
       const visibilityFlag = repositoryVisibility === 'public' ? '--public' : '--private';
       const command = `gh repo create ${selectedAccount}/${repoName} ${visibilityFlag}`;
       await execAsync(command);
-      spinner.succeed(`Repository created: ${chalk.cyan(repoName)}`);
+      spinner.succeed(`Repository created: ${chalk.hex(LABEL_SECONDARY_TEXT_COLOR)(repoName)}`);
       return repoName;
     } catch (error) {
       spinner.fail('Failed to create repository.');
